@@ -9,18 +9,21 @@ import {
   FileText,
   SlidersHorizontal,
   Terminal,
-  Activity
+  Activity,
+  Zap
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
 
 interface OverviewDashboardProps {
   onNavigateTab: (tab: NavigationTab) => void;
   onInvestigateSignal: (signalId: string) => void;
+  onOpenChaosSimulator?: () => void;
 }
 
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   onNavigateTab,
   onInvestigateSignal,
+  onOpenChaosSimulator,
 }) => {
   const [streamFilter, setStreamFilter] = useState<'ALL' | 'CRITICAL' | 'RESOLVED'>('ALL');
 
@@ -58,8 +61,18 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center justify-between sm:justify-end gap-4 text-xs font-mono-tech text-[#525252] pt-1 sm:pt-0">
-          <span>SYNCED: <strong className="text-[#8A8A8A]">8 MIN AGO</strong></span>
+        <div className="flex items-center justify-between sm:justify-end gap-3 text-xs font-mono-tech pt-1 sm:pt-0">
+          {onOpenChaosSimulator && (
+            <button
+              onClick={onOpenChaosSimulator}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-[#EF4444]/15 hover:bg-[#EF4444]/25 text-[#EF4444] border border-[#EF4444]/30 cursor-pointer transition-colors"
+              title="Test real-time bank outage failover"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span className="font-bold">Chaos Simulator</span>
+            </button>
+          )}
+
           <button
             onClick={() => onNavigateTab('signals')}
             className="text-[#0066FF] hover:text-[#1A75FF] transition-colors cursor-pointer py-1"
@@ -121,7 +134,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         >
           <div className="flex items-center gap-2 min-w-0">
             <Terminal className="w-3.5 h-3.5 text-[#0066FF] flex-shrink-0" />
-            <span className="truncate text-[11px] sm:text-xs">AI Copilot</span>
+            <span className="truncate text-[11px] sm:text-xs">AI Copilot & SQL</span>
           </div>
           <ArrowRight className="w-3 h-3 text-[#525252] group-hover:text-[#0066FF] flex-shrink-0 ml-1" />
         </button>
@@ -153,19 +166,17 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         <div className="p-4 sm:p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between text-[10px] font-mono-tech text-[#8A8A8A] mb-2">
-              <span>DAY-7 RETENTION</span>
-              <span className="text-[#10B981] font-semibold flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" /> +2.4%
-              </span>
+              <span>ACTIVE ANOMALY VELOCITY</span>
+              <span className="text-[#F59E0B] font-semibold">ELEVATED</span>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl sm:text-4xl font-bold font-mono-tech text-[#F5F5F0]">41.8%</span>
-              <span className="text-xs font-mono-tech text-[#525252]">steady benchmark</span>
+              <span className="text-3xl sm:text-4xl font-bold font-mono-tech text-[#F59E0B]">5</span>
+              <span className="text-xs font-mono-tech text-[#525252]">unresolved signals</span>
             </div>
           </div>
           <div className="mt-4 pt-3 border-t border-[#161616] text-[10px] sm:text-[11px] font-mono-tech text-[#8A8A8A] flex items-center justify-between">
-            <span>P2P TRANS BOOST</span>
-            <span className="text-[#10B981]">+1,200 USERS</span>
+            <span>CRITICAL SEVERITY</span>
+            <span className="text-[#EF4444]">3 SPIKES</span>
           </div>
         </div>
 
@@ -216,10 +227,20 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           </div>
         </div>
 
-        <div className="w-full sm:w-auto flex-shrink-0 pt-2 sm:pt-0">
+        <div className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-shrink-0 pt-2 sm:pt-0">
+          {onOpenChaosSimulator && (
+            <button
+              onClick={onOpenChaosSimulator}
+              className="flex items-center justify-center gap-1.5 px-4 py-3.5 rounded-[3px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#EF4444]/30 text-[#EF4444] text-xs font-mono-tech cursor-pointer transition-colors min-h-[44px]"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>Simulate Outage</span>
+            </button>
+          )}
+
           <button
             onClick={() => onInvestigateSignal('sig-001')}
-            className="btn-magnetic w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/25 min-h-[44px]"
+            className="btn-magnetic flex items-center justify-center gap-2 px-6 py-3.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/25 min-h-[44px]"
           >
             <span>Investigate signal →</span>
           </button>
@@ -240,9 +261,9 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               <button
                 key={tab}
                 onClick={() => setStreamFilter(tab)}
-                className={`px-2.5 py-1.5 rounded-[2px] cursor-pointer transition-colors min-h-[36px] min-w-[44px] ${
+                className={`px-2.5 py-1 rounded-[2px] transition-colors cursor-pointer ${
                   streamFilter === tab
-                    ? 'bg-[#141414] text-[#0066FF] border border-[#0066FF]/40 font-bold'
+                    ? 'bg-[#141414] text-[#F5F5F0] border border-[#2E2E2E]'
                     : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
                 }`}
               >
@@ -252,33 +273,24 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-col divide-y divide-[#141414]">
+        <div className="divide-y divide-[#161616] text-xs font-mono-tech">
           {filteredStream.map((item, idx) => (
-            <div
-              key={idx}
-              onClick={() => onInvestigateSignal(item.signalId)}
-              className="py-3 px-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#121214] rounded-[3px] transition-colors cursor-pointer group"
-            >
-              <div className="flex items-start sm:items-center gap-2.5">
-                <span className="text-[10px] font-mono-tech text-[#525252] w-12 flex-shrink-0 pt-0.5 sm:pt-0">
-                  {item.time}
-                </span>
-                <span className={`text-[9px] font-mono-tech px-1.5 py-0.2 rounded-[2px] font-bold flex-shrink-0 ${
-                  item.status === 'CRITICAL'
-                    ? 'bg-[#EF4444]/20 text-[#EF4444]'
-                    : 'bg-[#10B981]/20 text-[#10B981]'
+            <div key={idx} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 hover:bg-[#0D0D0D] px-2 -mx-2 rounded transition-colors">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="text-[11px] text-[#525252] flex-shrink-0">{item.time}</span>
+                <span className={`text-[9px] px-1.5 py-0.2 rounded-[2px] font-bold flex-shrink-0 ${
+                  item.status === 'CRITICAL' ? 'bg-[#EF4444]/20 text-[#EF4444]' : 'bg-[#10B981]/20 text-[#10B981]'
                 }`}>
                   {item.category}
                 </span>
-                <span className="text-xs text-[#F5F5F0] group-hover:text-white transition-colors line-clamp-2 sm:line-clamp-1">
-                  {item.title}
-                </span>
+                <span className="text-[#F5F5F0] truncate">{item.title}</span>
               </div>
-
-              <div className="flex items-center justify-end gap-2 text-xs font-mono-tech text-[#0066FF] opacity-80 group-hover:opacity-100 self-end sm:self-center">
-                <span>View</span>
-                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-              </div>
+              <button
+                onClick={() => onInvestigateSignal(item.signalId)}
+                className="text-[#0066FF] hover:text-[#1A75FF] transition-colors cursor-pointer self-start sm:self-auto flex-shrink-0 py-1"
+              >
+                Analyze →
+              </button>
             </div>
           ))}
         </div>

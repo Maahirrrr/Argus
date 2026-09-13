@@ -13,6 +13,8 @@ import {
   Terminal,
   Settings,
   LayoutDashboard,
+  Compass,
+  Zap,
   X
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
@@ -112,6 +114,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       tab: 'settings' as NavigationTab,
       category: 'Configuration',
     },
+        {
+      id: 'cmd-tutorial',
+      icon: Compass,
+      title: 'Start Interactive Feature Tutorial.',
+      subtitle: 'Step-by-step onboarding walkthrough of all Argus modules, tools, and shortcuts',
+      tab: 'overview' as NavigationTab,
+      category: 'Tutorial',
+    },
+    {
+      id: 'cmd-chaos',
+      icon: Zap,
+      title: 'Simulate Bank Gateway Outage (Live Chaos).',
+      subtitle: 'Inject simulated latency spike, trigger dynamic failover, and view salvaged GMV',
+      tab: 'overview' as NavigationTab,
+      category: 'Simulation',
+    },
     {
       id: 'cmd-case-study',
       icon: BookOpen,
@@ -153,7 +171,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (filtered[selectedIndex]) {
-          onSelectAction(filtered[selectedIndex].tab);
+          onSelectAction(filtered[selectedIndex].tab, filtered[selectedIndex].id);
           onClose();
         }
       }

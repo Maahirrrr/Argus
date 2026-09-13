@@ -3,8 +3,11 @@ import {
   Copy,
   Check,
   Sparkles,
-  FlaskConical
-} from 'lucide-react';
+  FlaskConical,
+  GitCompare,
+      Plus,
+  Minus,
+  } from 'lucide-react';
 import type { NavigationTab, PRDDocument } from '../../types/argus';
 import { DEMO_PRD } from '../../data/demoData';
 
@@ -19,7 +22,7 @@ export const PrdWorkspace: React.FC<PrdWorkspaceProps> = ({
 }) => {
   const [prd] = useState<PRDDocument>(DEMO_PRD);
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<'specs' | 'stories' | 'rollout'>('specs');
+  const [activeTab, setActiveTab] = useState<'specs' | 'stories' | 'rollout' | 'diff'>('specs');
   const [aiAssistLog, setAiAssistLog] = useState<string | null>(null);
 
   const handleCopy = () => {
@@ -36,6 +39,7 @@ Goals: ${prd.goals.join(', ')}
   const handleAiAssist = (action: string) => {
     if (action === 'edge_cases') {
       setAiAssistLog('AI identified 3 unhandled edge cases: (1) Dual SIM 4G data switch mid-payment, (2) Rooted OS bypass of biometric prompt, (3) Concurrent merchant QR scan.');
+      setActiveTab('diff');
     } else if (action === 'stories') {
       setAiAssistLog('Refined Gherkin stories to include negative test scenarios for Bank U69 network congestion.');
     } else if (action === 'metrics') {
@@ -50,7 +54,7 @@ Goals: ${prd.goals.join(', ')}
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
-              PRD WORKSPACE · SPEC EDITOR
+              PRD WORKSPACE · SPEC & DIFF EDITOR
             </span>
             <span className="text-[9px] sm:text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25">
               {prd.status.toUpperCase()}
@@ -118,6 +122,15 @@ Goals: ${prd.goals.join(', ')}
               }`}
             >
               Rollout Plan
+            </button>
+            <button
+              onClick={() => setActiveTab('diff')}
+              className={`px-3 py-2 rounded-[2px] transition-colors cursor-pointer flex-shrink-0 min-h-[38px] flex items-center gap-1.5 ${
+                activeTab === 'diff' ? 'bg-[#0066FF]/20 text-[#0066FF] font-bold border border-[#0066FF]/40' : 'text-[#8A8A8A] hover:text-[#0066FF]'
+              }`}
+            >
+              <GitCompare className="w-3.5 h-3.5" />
+              <span>AI Version Diff (v1 vs v2)</span>
             </button>
           </div>
 
@@ -202,17 +215,18 @@ Goals: ${prd.goals.join(', ')}
 
           {activeTab === 'stories' && (
             <div className="flex flex-col gap-4">
-              <span className="text-[10px] font-mono-tech uppercase text-[#0066FF] font-bold block">
-                ACCEPTANCE CRITERIA (GHERKIN & STORIES)
+              <span className="text-[10px] font-mono-tech uppercase text-[#8A8A8A] font-bold block">
+                BDD ACCEPTANCE CRITERIA (GHERKIN SYNTAX)
               </span>
-              <div className="space-y-3">
-                {prd.userStories.map((story, i) => (
-                  <div key={i} className="p-3.5 sm:p-4 rounded-[3px] bg-[#050505] border border-[#161616] font-mono-tech text-xs">
-                    <span className="text-[10px] text-[#0066FF] font-bold block mb-1">USER STORY {i + 1}</span>
-                    <p className="text-[#F5F5F0] mb-2">As a {story.asA}, I want to {story.iWantTo}, so that {story.soThat}.</p>
-                    <div className="pt-2 border-t border-[#141414] space-y-1 text-[#8A8A8A]">
-                      {story.acceptanceCriteria.map((ac, j) => (
-                        <p key={j}>• {ac}</p>
+              <div className="flex flex-col gap-3">
+                {prd.userStories.map((story, idx) => (
+                  <div key={idx} className="p-3.5 bg-[#050505] border border-[#161616] rounded-[3px] font-mono-tech text-xs">
+                    <span className="text-[10px] text-[#0066FF] font-bold block mb-1">STORY #0{idx + 1}</span>
+                    <p className="text-[#F5F5F0] mb-1 font-medium">As a {story.asA}</p>
+                    <p className="text-[#8A8A8A] text-[11px] mb-2">I want to {story.iWantTo}, so that {story.soThat}</p>
+                    <div className="space-y-1 text-[11px] pl-2 border-l border-[#1D1D1D] text-[#8A8A8A]">
+                      {story.acceptanceCriteria.map((crit, cIdx) => (
+                        <p key={cIdx}><span className="text-[#10B981]">✓</span> {crit}</p>
                       ))}
                     </div>
                   </div>
@@ -223,66 +237,154 @@ Goals: ${prd.goals.join(', ')}
 
           {activeTab === 'rollout' && (
             <div className="flex flex-col gap-4">
-              <span className="text-[10px] font-mono-tech uppercase text-[#0066FF] font-bold block">
-                PHASED ROLLOUT STRATEGY
+              <span className="text-[10px] font-mono-tech uppercase text-[#8A8A8A] font-bold block">
+                PHASED ROLLOUT TIMELINE & GUARDRAILS
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {prd.rolloutPlan.map((step, i) => (
-                  <div key={i} className="p-3.5 sm:p-4 rounded-[3px] bg-[#050505] border border-[#161616] flex flex-col justify-between h-28 sm:h-32">
-                    <span className="text-[10px] font-mono-tech text-[#0066FF] font-bold">PHASE {i + 1}</span>
+              <div className="space-y-3">
+                {prd.rolloutPlan.map((step, idx) => (
+                  <div key={idx} className="p-3.5 bg-[#050505] border border-[#161616] rounded-[3px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono-tech">
                     <div>
-                      <p className="text-sm font-bold text-[#F5F5F0]">{step.phase}</p>
-                      <p className="text-[10px] font-mono-tech text-[#8A8A8A]">{step.audience}</p>
+                      <span className="text-[#0066FF] font-bold block sm:inline mr-2">{step.phase}</span>
+                      <span className="text-[#F5F5F0]">{step.audience}</span>
                     </div>
-                    <span className="text-[9px] font-mono-tech text-[#10B981]">{step.criteria}</span>
+                    <span className="text-[#8A8A8A] text-[11px] bg-[#101010] px-2 py-1 rounded-[2px] border border-[#1D1D1D]">
+                      Exit Criteria: {step.criteria}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           )}
+
+          {/* ADVANCED FEATURE: AI VERSION & DIFF INSPECTOR */}
+          {activeTab === 'diff' && (
+            <div className="flex flex-col gap-5 animate-fade-in">
+              <div className="p-4 rounded-[3px] bg-[#0E1626] border border-[#0066FF]/30">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <GitCompare className="w-4 h-4 text-[#0066FF]" />
+                    <span className="text-xs font-bold text-[#F5F5F0] font-display">
+                      PRD Version Comparison · v1.0 (PM Draft) ➔ v2.0 (Critic Refined)
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[2px] bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30 font-bold">
+                    +4 HARDENED RULES
+                  </span>
+                </div>
+                <p className="text-xs text-[#8AB4F8] leading-relaxed">
+                  The Adversarial AI Critic reviewed your initial draft against 4.2M transactional failure edge cases and injected 4 critical engineering safeguards:
+                </p>
+              </div>
+
+              {/* Diff Cards */}
+              <div className="flex flex-col gap-3 font-mono-tech text-xs">
+                {/* Diff Item 1 */}
+                <div className="p-3.5 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
+                  <span className="text-[10px] text-[#8A8A8A] uppercase font-bold block mb-2">
+                    EDGE CASE 1: UPI AUTOPAY TIMEOUT FALLBACK
+                  </span>
+                  <div className="space-y-1.5">
+                    <div className="p-2 rounded-[2px] bg-[#220B0B] text-[#FCA5A5] flex items-start gap-2">
+                      <Minus className="w-3.5 h-3.5 text-[#EF4444] flex-shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        v1.0: "If payment times out, display retry button and re-trigger payment via same bank acquiring rail."
+                      </span>
+                    </div>
+                    <div className="p-2 rounded-[2px] bg-[#092415] text-[#86EFAC] flex items-start gap-2">
+                      <Plus className="w-3.5 h-3.5 text-[#10B981] flex-shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        v2.0: "If response latency &gt; 3,500ms on HDFC switch, throttle auto-retries to max 2 attempts with exponential backoff (2s, 6s) and offer 1-tap fallback to secondary ICICI Direct rail."
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Diff Item 2 */}
+                <div className="p-3.5 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
+                  <span className="text-[10px] text-[#8A8A8A] uppercase font-bold block mb-2">
+                    EDGE CASE 2: CONCURRENT MERCHANT QR LOCK
+                  </span>
+                  <div className="space-y-1.5">
+                    <div className="p-2 rounded-[2px] bg-[#220B0B] text-[#FCA5A5] flex items-start gap-2">
+                      <Minus className="w-3.5 h-3.5 text-[#EF4444] flex-shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        v1.0: "Wait indefinitely for webhook before clearing pending UI session."
+                      </span>
+                    </div>
+                    <div className="p-2 rounded-[2px] bg-[#092415] text-[#86EFAC] flex items-start gap-2">
+                      <Plus className="w-3.5 h-3.5 text-[#10B981] flex-shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        v2.0: "Enforce 15s P99 client timeout. If webhook pending, trigger active background polling while maintaining redis merchant idempotent lock to prevent double-debit."
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Diff Item 3 */}
+                <div className="p-3.5 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
+                  <span className="text-[10px] text-[#8A8A8A] uppercase font-bold block mb-2">
+                    CIRCUIT BREAKER GUARDRAIL ADDED
+                  </span>
+                  <div className="p-2 rounded-[2px] bg-[#092415] text-[#86EFAC] flex items-start gap-2">
+                    <Plus className="w-3.5 h-3.5 text-[#10B981] flex-shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">
+                      v2.0: "Automated kill-switch: Sever traffic and rollback flag within 500ms if partner gateway 5xx error rate exceeds 3.0% over 200 contiguous transactions."
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Right Column: Embedded AI Critic Toolbar */}
-        <div className="lg:col-span-4 flex flex-col gap-4">
-          <div className="p-4 sm:p-6 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] flex flex-col gap-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-[#1D1D1D]">
-              <Sparkles className="w-4 h-4 text-[#0066FF]" />
-              <span className="text-xs font-mono-tech font-bold uppercase text-[#0066FF]">
-                AI PRD ASSIST & CRITIC
-              </span>
+        {/* Right Column: Embedded AI PM Critic */}
+        <div className="lg:col-span-4 flex flex-col gap-4 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] p-4 sm:p-5">
+          <div className="flex items-center gap-2 pb-3 border-b border-[#1D1D1D]">
+            <Sparkles className="w-4 h-4 text-[#0066FF]" />
+            <span className="text-xs font-bold text-[#F5F5F0] font-display uppercase tracking-wider">
+              AI ADVERSARIAL CRITIC
+            </span>
+          </div>
+
+          <p className="text-xs text-[#8A8A8A] leading-relaxed">
+            Run automated stress-tests on this PRD to surface blind spots, missing edge cases, and compliance loopholes before engineering reviews.
+          </p>
+
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => handleAiAssist('edge_cases')}
+              className="p-3 rounded-[3px] bg-[#101010] hover:bg-[#161616] border border-[#1D1D1D] text-left text-xs font-mono-tech text-[#F5F5F0] cursor-pointer transition-colors"
+            >
+              <span className="text-[#0066FF] font-bold block mb-0.5">⚡ Surface Edge Cases</span>
+              <span className="text-[11px] text-[#8A8A8A]">Identify dual-SIM, device timeout, and network churn risks.</span>
+            </button>
+
+            <button
+              onClick={() => handleAiAssist('stories')}
+              className="p-3 rounded-[3px] bg-[#101010] hover:bg-[#161616] border border-[#1D1D1D] text-left text-xs font-mono-tech text-[#F5F5F0] cursor-pointer transition-colors"
+            >
+              <span className="text-[#10B981] font-bold block mb-0.5">✓ Harden Gherkin Criteria</span>
+              <span className="text-[11px] text-[#8A8A8A]">Add negative acceptance scenarios for banking switch congestion.</span>
+            </button>
+
+            <button
+              onClick={() => handleAiAssist('metrics')}
+              className="p-3 rounded-[3px] bg-[#101010] hover:bg-[#161616] border border-[#1D1D1D] text-left text-xs font-mono-tech text-[#F5F5F0] cursor-pointer transition-colors"
+            >
+              <span className="text-[#F59E0B] font-bold block mb-0.5">🛡️ Stress-Test Guardrails</span>
+              <span className="text-[11px] text-[#8A8A8A]">Validate P99 latency thresholds and rollback triggers.</span>
+            </button>
+          </div>
+
+          {aiAssistLog && (
+            <div className="p-3 rounded-[3px] bg-[#050505] border border-[#0066FF]/30 text-xs font-mono-tech text-[#8AB4F8] leading-relaxed animate-fade-in">
+              <span className="text-[10px] text-[#0066FF] font-bold block mb-1">CRITIC FEEDBACK</span>
+              {aiAssistLog}
             </div>
+          )}
 
-            <p className="text-xs text-[#8A8A8A] font-mono-tech leading-relaxed">
-              Tap below to challenge assumptions, add unhandled edge cases, or refine acceptance tests:
-            </p>
-
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={() => handleAiAssist('edge_cases')}
-                className="w-full text-left p-2.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer transition-colors min-h-[44px] flex items-center"
-              >
-                + Find Unhandled Edge Cases
-              </button>
-              <button
-                onClick={() => handleAiAssist('stories')}
-                className="w-full text-left p-2.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer transition-colors min-h-[44px] flex items-center"
-              >
-                + Add Negative Testing Scenarios
-              </button>
-              <button
-                onClick={() => handleAiAssist('metrics')}
-                className="w-full text-left p-2.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer transition-colors min-h-[44px] flex items-center"
-              >
-                + Suggest Metric Guardrails
-              </button>
-            </div>
-
-            {aiAssistLog && (
-              <div className="p-3 rounded-[3px] bg-[#0D0E14] border border-[#0066FF]/30 text-xs font-mono-tech text-[#F5F5F0] leading-relaxed mt-2 animate-fade-in">
-                <span className="text-[10px] text-[#0066FF] font-bold block mb-1">AI Output:</span>
-                {aiAssistLog}
-              </div>
-            )}
+          <div className="pt-3 border-t border-[#1D1D1D] text-[10px] font-mono-tech text-[#525252]">
+            MODEL: CLAUDE 3.5 SONNET · ADVERSARIAL CRITIC
           </div>
         </div>
       </div>

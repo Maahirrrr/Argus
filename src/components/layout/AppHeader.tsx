@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   Search,
-  BookOpen,
-  ArrowUpRight,
+    ArrowUpRight,
   Terminal,
   Keyboard,
-  Menu
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  Compass
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
 
@@ -18,6 +20,11 @@ interface AppHeaderProps {
   onToggleMobileDrawer: () => void;
   isLandingMode: boolean;
   onToggleMode: () => void;
+  canGoBack?: boolean;
+  canGoForward?: boolean;
+  onGoBack?: () => void;
+  onGoForward?: () => void;
+  onOpenTutorial?: () => void;
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({
@@ -29,6 +36,11 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onToggleMobileDrawer,
   isLandingMode,
   onToggleMode,
+  canGoBack = false,
+  canGoForward = false,
+  onGoBack,
+  onGoForward,
+  onOpenTutorial,
 }) => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -59,15 +71,15 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
   return (
     <header
-      className={`sticky top-0 z-40 h-[64px] sm:h-[68px] transition-all duration-200 ${
-        scrolled || !isLandingMode
+      className={`sticky top-0 z-40 h-14 sm:h-16 transition-all duration-200 select-none ${
+        scrolled
           ? 'bg-[#050505]/95 backdrop-blur-xl border-b border-[#1D1D1D]'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 h-full flex items-center justify-between gap-2 sm:gap-4">
-        {/* Brand & Breadcrumb */}
-        <div className="flex items-center gap-3 sm:gap-6 min-w-0">
+        {/* Brand & History & Breadcrumb */}
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <button
             onClick={() => onSelectTab(isLandingMode ? 'landing' : 'overview')}
             className="flex items-center gap-2 cursor-pointer group text-left flex-shrink-0"
@@ -78,9 +90,37 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             </span>
           </button>
 
+          {/* In-App Back & Forward History Controls */}
+          <div className="flex items-center gap-0.5 pl-1 border-l border-[#1D1D1D]/70">
+            <button
+              onClick={onGoBack}
+              disabled={!canGoBack}
+              className={`p-1.5 rounded-[2px] transition-colors flex items-center justify-center min-h-[34px] min-w-[34px] ${
+                canGoBack
+                  ? 'text-[#CCCCCC] hover:text-white bg-[#101010] hover:bg-[#181818] border border-[#1D1D1D] cursor-pointer'
+                  : 'text-[#383838] bg-transparent border border-transparent cursor-not-allowed opacity-40'
+              }`}
+              title="Go Back in History (Alt+Left)"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onGoForward}
+              disabled={!canGoForward}
+              className={`p-1.5 rounded-[2px] transition-colors flex items-center justify-center min-h-[34px] min-w-[34px] ${
+                canGoForward
+                  ? 'text-[#CCCCCC] hover:text-white bg-[#101010] hover:bg-[#181818] border border-[#1D1D1D] cursor-pointer'
+                  : 'text-[#383838] bg-transparent border border-transparent cursor-not-allowed opacity-40'
+              }`}
+              title="Go Forward in History (Alt+Right)"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
           {/* Landing Mode Desktop Links */}
           {isLandingMode ? (
-            <nav className="hidden md:flex items-center gap-6 text-xs text-[#8A8A8A] font-mono-tech">
+            <nav className="hidden md:flex items-center gap-6 text-xs text-[#8A8A8A] font-mono-tech pl-2">
               <a href="#problem" className="hover:text-[#F5F5F0] transition-colors">
                 The Problem
               </a>
@@ -96,7 +136,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             </nav>
           ) : (
             /* App Mode Breadcrumb */
-            <div className="hidden sm:flex items-center gap-2 text-xs font-mono-tech text-[#8A8A8A] pl-4 border-l border-[#1D1D1D] truncate">
+            <div className="hidden sm:flex items-center gap-2 text-xs font-mono-tech text-[#8A8A8A] pl-3 border-l border-[#1D1D1D] truncate">
               <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse-dot flex-shrink-0" />
               <span className="tracking-wider truncate">{getBreadcrumb(activeTab)}</span>
             </div>
@@ -104,7 +144,19 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
+          {/* Interactive Feature Tutorial Trigger */}
+          {onOpenTutorial && (
+            <button
+              onClick={onOpenTutorial}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[3px] bg-[#0066FF]/10 hover:bg-[#0066FF]/20 border border-[#0066FF]/30 text-xs text-[#0066FF] hover:text-[#3B82F6] cursor-pointer transition-colors min-h-[40px]"
+              title="Feature Tutorial & Onboarding Guide (T)"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline font-mono-tech text-[11px] font-bold">Tutorial</span>
+            </button>
+          )}
+
           {/* Command Palette Trigger */}
           <button
             onClick={onOpenCommandPalette}
@@ -118,52 +170,41 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             </kbd>
           </button>
 
-          {/* Keyboard Shortcuts Trigger */}
-          <button
-            onClick={onOpenKeyboardShortcuts}
-            className="hidden sm:flex items-center p-2 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors min-h-[40px] min-w-[40px] justify-center"
-            title="Keyboard Shortcuts (?)"
-          >
-            <Keyboard className="w-3.5 h-3.5" />
-          </button>
-
-          {/* Portfolio Case Study */}
-          <button
-            onClick={onOpenCaseStudy}
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors min-h-[40px]"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-[#0066FF]" />
-            <span>AI PM Case Study</span>
-          </button>
-
-          {/* Primary Action Button (Launch App / Exit) */}
+          {/* Mode Switcher: Landing vs OS Mode */}
           <button
             onClick={onToggleMode}
-            className="btn-magnetic flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-semibold cursor-pointer shadow-sm transition-all min-h-[40px]"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors min-h-[40px]"
           >
             {isLandingMode ? (
               <>
-                <span>Launch App</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <Terminal className="w-3.5 h-3.5 text-[#0066FF]" />
+                <span>Open OS</span>
               </>
             ) : (
               <>
-                <Terminal className="w-3.5 h-3.5 text-[#0066FF]" />
-                <span className="hidden xs:inline sm:inline">Exit to Landing</span>
-                <span className="xs:hidden sm:hidden">Exit</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+                <span>Landing</span>
               </>
             )}
           </button>
 
-          {/* Mobile Drawer Trigger */}
-          {!isLandingMode && (
-            <button
-              onClick={onToggleMobileDrawer}
-              className="md:hidden p-2 rounded-[3px] bg-[#101010] border border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0] min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
-            >
-              <Menu className="w-4 h-4" />
-            </button>
-          )}
+          {/* Keyboard Shortcuts Trigger (Desktop only) */}
+          <button
+            onClick={onOpenKeyboardShortcuts}
+            className="hidden sm:flex p-2 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors min-h-[40px] min-w-[40px] items-center justify-center"
+            title="Keyboard Shortcuts (?)"
+          >
+            <Keyboard className="w-4 h-4" />
+          </button>
+
+          {/* Mobile Navigation Drawer Trigger (Visible < 768px) */}
+          <button
+            onClick={onToggleMobileDrawer}
+            className="md:hidden p-2 rounded-[3px] bg-[#101010] border border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors"
+            title="Open Mobile Navigation Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </header>
