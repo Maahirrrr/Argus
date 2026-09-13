@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldAlert, Trophy, Layers } from 'lucide-react';
+import { ShieldAlert, Trophy, Layers, Crown, Medal, Award } from 'lucide-react';
 import type { SwipeRecommendation } from '../lib/types';
 
 interface ComparisonMatrixProps {
@@ -38,8 +38,8 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
         <table className="w-full text-left">
           <thead>
             <tr className="border-b border-white/[0.06] bg-[#09090c]/70">
-              <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500 w-16">
-                Rank
+              <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500 w-24">
+                Rank & Tier
               </th>
               <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500">
                 Card & Issuer
@@ -59,6 +59,7 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
             {comparison.map((item, index) => {
               const isWinner = index === 0;
               const isRunnerUp = index === 1;
+              const isThird = index === 2;
               const isExclusion = item.isExclusion;
               const barWidth = max > 0 ? Math.max(0, (item.ratePercent / max) * 100) : 0;
 
@@ -67,24 +68,50 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
                   key={item.card.id}
                   className={`transition-colors animate-float-up ${
                     isWinner
-                      ? 'bg-[#d4af37]/[0.06] hover:bg-[#d4af37]/[0.09] winner-glow'
+                      ? 'bg-[#d4af37]/[0.08] hover:bg-[#d4af37]/[0.12] winner-glow'
+                      : isRunnerUp
+                      ? 'bg-slate-300/[0.04] hover:bg-slate-300/[0.07]'
+                      : isThird
+                      ? 'bg-amber-900/[0.04] hover:bg-amber-900/[0.07]'
                       : 'hover:bg-white/[0.02]'
                   }`}
                   style={{ animationDelay: `${index * 60}ms` }}
                 >
-                  {/* Rank Badge */}
+                  {/* Rank & Tier Badge */}
                   <td className="py-4 px-6">
-                    <span
-                      className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold font-display ${
-                        isWinner
-                          ? 'bg-gradient-to-br from-[#f3e5ab] via-[#d4af37] to-[#aa8c2c] text-[#060608] shadow-md shadow-[#d4af37]/20 font-black'
-                          : isRunnerUp
-                          ? 'bg-gradient-to-br from-white via-slate-200 to-slate-400 text-[#060608] shadow-sm font-black'
-                          : 'bg-white/[0.04] text-zinc-400 border border-white/[0.08]'
-                      }`}
-                    >
-                      {index + 1}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold font-display ${
+                          isWinner
+                            ? 'bg-gradient-to-br from-[#f3e5ab] via-[#d4af37] to-[#aa8c2c] text-[#060608] shadow-md shadow-[#d4af37]/20 font-black'
+                            : isRunnerUp
+                            ? 'bg-gradient-to-br from-white via-slate-200 to-slate-400 text-[#060608] shadow-sm font-black'
+                            : isThird
+                            ? 'bg-gradient-to-br from-[#f59e0b] via-[#b45309] to-[#78350f] text-white shadow-sm font-black'
+                            : 'bg-white/[0.04] text-zinc-400 border border-white/[0.08]'
+                        }`}
+                      >
+                        {index + 1}
+                      </span>
+                      {isWinner && (
+                        <span className="hidden xl:inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full tier-badge-gold">
+                          <Crown className="w-3 h-3 text-amber-300" />
+                          Gold
+                        </span>
+                      )}
+                      {isRunnerUp && (
+                        <span className="hidden xl:inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full tier-badge-silver">
+                          <Medal className="w-3 h-3 text-slate-200" />
+                          Silver
+                        </span>
+                      )}
+                      {isThird && (
+                        <span className="hidden xl:inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full tier-badge-bronze">
+                          <Award className="w-3 h-3 text-amber-500" />
+                          Bronze
+                        </span>
+                      )}
+                    </div>
                   </td>
 
                   {/* Card Name & Metadata */}
@@ -188,26 +215,40 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
         {comparison.map((item, index) => {
           const isWinner = index === 0;
           const isRunnerUp = index === 1;
+          const isThird = index === 2;
           const isExclusion = item.isExclusion;
 
           return (
             <div
               key={item.card.id}
               className={`p-4 flex items-center gap-3.5 ${
-                isWinner ? 'bg-[#d4af37]/[0.06]' : ''
+                isWinner
+                  ? 'bg-[#d4af37]/[0.08]'
+                  : isRunnerUp
+                  ? 'bg-slate-300/[0.04]'
+                  : isThird
+                  ? 'bg-amber-900/[0.04]'
+                  : ''
               }`}
             >
-              <span
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold font-display flex-shrink-0 ${
-                  isWinner
-                    ? 'bg-gradient-to-br from-[#f3e5ab] via-[#d4af37] to-[#aa8c2c] text-[#060608] shadow-sm font-black'
-                    : isRunnerUp
-                    ? 'bg-slate-300 text-[#060608] font-black'
-                    : 'bg-white/[0.04] text-zinc-400 border border-white/[0.08]'
-                }`}
-              >
-                {index + 1}
-              </span>
+              <div className="flex flex-col items-center gap-1 flex-shrink-0">
+                <span
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold font-display ${
+                    isWinner
+                      ? 'bg-gradient-to-br from-[#f3e5ab] via-[#d4af37] to-[#aa8c2c] text-[#060608] shadow-sm font-black'
+                      : isRunnerUp
+                      ? 'bg-gradient-to-br from-white via-slate-200 to-slate-400 text-[#060608] font-black'
+                      : isThird
+                      ? 'bg-gradient-to-br from-[#f59e0b] via-[#b45309] to-[#78350f] text-white font-black'
+                      : 'bg-white/[0.04] text-zinc-400 border border-white/[0.08]'
+                  }`}
+                >
+                  {index + 1}
+                </span>
+                {isWinner && <Crown className="w-3 h-3 text-amber-300" />}
+                {isRunnerUp && <Medal className="w-3 h-3 text-slate-300" />}
+                {isThird && <Award className="w-3 h-3 text-amber-500" />}
+              </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">

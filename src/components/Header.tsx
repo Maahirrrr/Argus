@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { CreditCard as CardIcon, Lock, Zap } from 'lucide-react';
+import { CreditCard as CardIcon } from 'lucide-react';
 
 interface HeaderProps {
   walletCount: number;
@@ -40,11 +40,11 @@ export const Header: React.FC<HeaderProps> = ({ walletCount, onOpenDeck }) => {
           </div>
         </div>
 
-        {/* Center: Live indicator */}
+        {/* Center: Live indicator & Tagline */}
         <div className="hidden md:flex items-center gap-2">
-          {/* Unified Tagline */}
-          <span className="live-badge font-syne">
-            TapWise India Engine – Sub‑second • Zero KYC • 100 % Local
+          <span className="live-badge">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            TapWise India Engine • Sub-second • Zero KYC • 100% Local
           </span>
         </div>
 

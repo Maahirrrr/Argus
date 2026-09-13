@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
 @import "tailwindcss";
 
 /* ───── CRED / American Express Luxury Dark Tokens ───── */
@@ -357,8 +357,6 @@ body {
 }
 
 /* ----- Typography: Syne editorial headlines ----- */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
-
 .font-syne {
   font-family: 'Syne', sans-serif;
 }
@@ -547,27 +545,48 @@ body {
 
 /* ----- Tier & Animation Utilities ----- */
 
-/* Tier colors */
+/* Tier Card Glows & Borders */
 .tier-gold {
-  border-color: #d4af37;
-  box-shadow: 0 0 20px rgba(212,175,55,0.6);
+  border-color: #d4af37 !important;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.45), inset 0 0 15px rgba(212, 175, 55, 0.15) !important;
 }
 .tier-silver {
-  border-color: #cbd5e1;
-  box-shadow: 0 0 15px rgba(203,213,225,0.5);
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 0 20px rgba(203, 213, 225, 0.35), inset 0 0 12px rgba(255, 255, 255, 0.1) !important;
 }
 .tier-bronze {
-  border-color: #b87333;
-  box-shadow: 0 0 15px rgba(184,115,51,0.5);
+  border-color: #cd7f32 !important;
+  box-shadow: 0 0 20px rgba(205, 127, 50, 0.35), inset 0 0 12px rgba(205, 127, 50, 0.1) !important;
+}
+
+/* Tier Badges */
+.tier-badge-gold {
+  background: linear-gradient(135deg, rgba(243, 229, 171, 0.22) 0%, rgba(212, 175, 55, 0.28) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.6);
+  color: #fce79a;
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.25);
+}
+.tier-badge-silver {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(203, 213, 225, 0.24) 100%);
+  border: 1px solid rgba(203, 213, 225, 0.55);
+  color: #f1f5f9;
+  box-shadow: 0 2px 10px rgba(203, 213, 225, 0.2);
+}
+.tier-badge-bronze {
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.22) 0%, rgba(184, 115, 51, 0.26) 100%);
+  border: 1px solid rgba(205, 127, 50, 0.55);
+  color: #fdba74;
+  box-shadow: 0 2px 10px rgba(205, 127, 50, 0.2);
 }
 
 @keyframes card-out {
-  from { opacity: 0; transform: translateY(30px) rotateZ(0deg); }
-  to { opacity: 1; transform: translateY(0) rotateZ(0deg); }
+  0% { opacity: 0; transform: translateY(48px) scale(0.92); }
+  60% { opacity: 0.9; transform: translateY(-6px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .animate-card-out {
-  animation: card-out 0.6s ease-out both;
+  animation: card-out 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes scan-beam {
@@ -576,11 +595,12 @@ body {
 }
 
 .animate-scan-beam {
-  background: linear-gradient(90deg, transparent, rgba(0,240,255,0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.7), transparent);
   background-size: 200% 100%;
   animation: scan-beam 1.4s linear infinite;
 }
 
 .tier-fade {
-  animation: fade-in-scale 0.6s ease both;
+  animation: fade-in-scale 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
