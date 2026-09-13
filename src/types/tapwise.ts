@@ -1,12 +1,14 @@
 export type NavigationTab =
   | 'landing'
   | 'overview'
+  | 'signals'
   | 'insights'
   | 'opportunities'
   | 'prioritize'
   | 'prds'
   | 'experiments'
   | 'analytics'
+  | 'ai_copilot'
   | 'weekly_review'
   | 'data_sources'
   | 'settings';

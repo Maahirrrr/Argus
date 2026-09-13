@@ -1,4 +1,4 @@
-import type { PrioritizationInitiative } from '../types/finpilot';
+import type { PrioritizationInitiative } from '../types/tapwise';
 
 export type ScoringMethod = 'RICE' | 'ICE' | 'MoSCoW';
 

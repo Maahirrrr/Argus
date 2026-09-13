@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import {
   Sparkles,
   Inbox,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck,
+  HelpCircle,
+  X
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/finpilot';
+import type { NavigationTab } from '../../types/tapwise';
 
 interface InsightsModuleProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -16,8 +19,8 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
   onCreateOpportunityFromInsight,
 }) => {
   const [hoveredDataPoint, setHoveredDataPoint] = useState<any | null>(null);
+  const [isTrustLayerOpen, setIsTrustLayerOpen] = useState(false);
 
-  // 24 Interactive Failure Curve Points: Transaction Amount vs Failure Rate
   const curvePoints = [
     { amount: '₹500', failureRate: 2.1, bank: 'HDFC', device: 'Android 14', time: '14:20', status: 'Healthy' },
     { amount: '₹1,500', failureRate: 2.8, bank: 'ICICI', device: 'iOS 18', time: '16:05', status: 'Healthy' },
@@ -30,7 +33,7 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
 
   return (
     <div className="flex flex-col gap-8 max-w-7xl mx-auto py-8 px-4 sm:px-6 select-none">
-      {/* 23 Investigation Header */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -48,20 +51,28 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
             Payment failures are clustering around high-value transactions.
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            Empirical synthesis across 4.2M ClickHouse telemetry events & NPCI gateway logs
+            Empirical synthesis across 4.2M ClickHouse telemetry events & NPCI gateway logs.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => onNavigateTab('overview')}
-            className="px-3.5 py-2.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
+            onClick={() => onNavigateTab('signals')}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
           >
-            ← Back to Cockpit
+            ← Signals Queue
           </button>
           <button
+            onClick={() => setIsTrustLayerOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-[#0066FF]" />
+            <span>Why am I seeing this?</span>
+          </button>
+
+          <button
             onClick={() => onCreateOpportunityFromInsight('ins-001')}
-            className="btn-magnetic flex items-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/20"
+            className="btn-magnetic flex items-center gap-2 px-5 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/20"
           >
             <Inbox className="w-3.5 h-3.5" />
             <span>Create Opportunity →</span>
@@ -69,7 +80,7 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
         </div>
       </div>
 
-      {/* Key Anomaly Metrics Row */}
+      {/* Metrics Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-4 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px]">
           <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">FAILURE SURGE</span>
@@ -93,23 +104,20 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
         </div>
       </div>
 
-      {/* 24 Interactive Evidence Visualization: Transaction Amount vs Failure Rate */}
+      {/* Interactive Failure Curve */}
       <div className="p-6 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] flex flex-col gap-4">
         <div className="flex items-center justify-between pb-3 border-b border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A]">
-          <span>INTERACTIVE CORRELATION: TRANSACTION AMOUNT VS FAILURE PROBABILITY</span>
-          <span>HOVER DATA POINTS FOR TELEMETRY INSPECTION</span>
+          <span>CORRELATION: TRANSACTION AMOUNT VS FAILURE PROBABILITY</span>
+          <span>HOVER BARS TO INSPECT TELEMETRY BUCKET</span>
         </div>
 
-        {/* Visual Graph representation */}
         <div className="relative h-56 w-full flex items-end justify-between pt-8 pb-4 px-4 bg-[#050505] border border-[#161616] rounded-[3px]">
-          {/* Background gridlines */}
           <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-20">
             <div className="border-b border-[#2E2E2E] w-full text-[9px] font-mono-tech text-[#8A8A8A]">25% Failure</div>
             <div className="border-b border-[#2E2E2E] w-full text-[9px] font-mono-tech text-[#8A8A8A]">15% Failure</div>
             <div className="border-b border-[#2E2E2E] w-full text-[9px] font-mono-tech text-[#8A8A8A]">5% Failure</div>
           </div>
 
-          {/* Bar / Point markers */}
           {curvePoints.map((pt, i) => {
             const heightPercent = (pt.failureRate / 25) * 100;
             const isCritical = pt.failureRate > 10;
@@ -140,14 +148,14 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
           })}
         </div>
 
-        {/* Hover telemetry inspection card */}
+        {/* Telemetry Inspection readout */}
         <div className="p-3 bg-[#101010] border border-[#1D1D1D] rounded-[3px] flex items-center justify-between text-xs font-mono-tech">
           {hoveredDataPoint ? (
             <div className="flex flex-wrap items-center gap-4 text-[#F5F5F0]">
-              <span>AMOUNT: <strong className="text-[#0066FF]">{hoveredDataPoint.amount}</strong></span>
+              <span>TIER: <strong className="text-[#0066FF]">{hoveredDataPoint.amount}</strong></span>
               <span>FAILURE RATE: <strong className="text-[#EF4444]">{hoveredDataPoint.failureRate}%</strong></span>
-              <span>BANK CLUSTER: <strong>{hoveredDataPoint.bank}</strong></span>
-              <span>OS CLUSTER: <strong>{hoveredDataPoint.device}</strong></span>
+              <span>BANK: <strong>{hoveredDataPoint.bank}</strong></span>
+              <span>OS: <strong>{hoveredDataPoint.device}</strong></span>
               <span>WINDOW: <strong>{hoveredDataPoint.time}</strong></span>
               <span>STATUS: <strong className="text-[#EF4444]">{hoveredDataPoint.status}</strong></span>
             </div>
@@ -159,7 +167,7 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
         </div>
       </div>
 
-      {/* 25 AI EXPLANATION: WHY TAPWISE THINKS THIS MATTERS (4 Structured Evidence Pillars) */}
+      {/* 4 Structured Evidence Pillars */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#0066FF]">
@@ -223,7 +231,7 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
         </div>
       </div>
 
-      {/* 25 AI Strategic Recommendation Banner */}
+      {/* AI Strategic Recommendation Banner */}
       <div className="p-6 bg-[#0E1017] border border-[#0066FF]/35 rounded-[4px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3">
           <Sparkles className="w-5 h-5 text-[#0066FF] flex-shrink-0 mt-0.5" />
@@ -245,6 +253,56 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
+
+      {/* "Why am I seeing this?" AI Trust Layer Modal */}
+      {isTrustLayerOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm select-none">
+          <div className="w-full max-w-xl bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1D1D1D]">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#0066FF]" />
+                <h2 className="text-sm font-bold text-[#F5F5F0] font-mono-tech uppercase tracking-wider">
+                  AI TRUST LAYER: MODEL AUDIT TRAIL
+                </h2>
+              </div>
+              <button onClick={() => setIsTrustLayerOpen(false)} className="text-[#8A8A8A] hover:text-[#F5F5F0]">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs font-mono-tech">
+              <div className="p-3 bg-[#050505] border border-[#161616] rounded-[3px]">
+                <span className="text-[10px] text-[#525252] uppercase block">EVALUATED TELEMETRY WINDOW</span>
+                <p className="text-[#F5F5F0] mt-0.5">Last 7 Calendar Days · 4,281,940 events across ClickHouse, NPCI Gateway & Zendesk</p>
+              </div>
+
+              <div className="p-3 bg-[#050505] border border-[#161616] rounded-[3px]">
+                <span className="text-[10px] text-[#525252] uppercase block">MODEL REASONING METHODOLOGY</span>
+                <p className="text-[#F5F5F0] mt-0.5">Multivariate Poisson variance decomposition isolates Bank X response latency &gt;30s from frontend crash rates.</p>
+              </div>
+
+              <div className="p-3 bg-[#050505] border border-[#161616] rounded-[3px]">
+                <span className="text-[10px] text-[#EF4444] uppercase block font-bold">ALTERNATIVE HYPOTHESES REJECTED</span>
+                <p className="text-[#8A8A8A] mt-0.5">Checkout UI crash ruled out with 98% confidence (app crash rate stayed flat at 0.02%).</p>
+              </div>
+
+              <div className="p-3 bg-[#050505] border border-[#161616] rounded-[3px]">
+                <span className="text-[10px] text-[#10B981] uppercase block font-bold">BAYESIAN CONFIDENCE SCORE</span>
+                <p className="text-[#F5F5F0] mt-0.5">91% Posterior Probability that routing patch will recover ≥ ₹14.5L/wk GMV.</p>
+              </div>
+            </div>
+
+            <div className="pt-2 text-right">
+              <button
+                onClick={() => setIsTrustLayerOpen(false)}
+                className="px-4 py-1.5 rounded-[3px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer"
+              >
+                Close Audit Trail
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

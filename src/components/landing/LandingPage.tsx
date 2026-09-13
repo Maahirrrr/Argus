@@ -4,7 +4,7 @@ import {
   Sparkles,
   BookOpen
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/finpilot';
+import type { NavigationTab } from '../../types/tapwise';
 import { HeroStreamVisualization } from './HeroStreamVisualization';
 
 interface LandingPageProps {

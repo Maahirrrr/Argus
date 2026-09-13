@@ -5,7 +5,7 @@ import {
   Terminal,
   Inbox
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/finpilot';
+import type { NavigationTab } from '../../types/tapwise';
 
 interface AnalyticsCopilotProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -18,6 +18,9 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
 }) => {
   const [query, setQuery] = useState('Why did payment success drop last week?');
   const [showSql, setShowSql] = useState(false);
+  const [isQuerying, setIsQuerying] = useState(false);
+  const [rowsScanned, setRowsScanned] = useState('4,281,940');
+  const [executionMs, setExecutionMs] = useState(34);
 
   const prompts = [
     'Why did payment success drop last week?',
@@ -28,51 +31,63 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
     'Show me the top reasons users contact support.',
   ];
 
+  const handleRunQuery = (qText: string) => {
+    setQuery(qText);
+    setIsQuerying(true);
+    setTimeout(() => {
+      setIsQuerying(false);
+      setRowsScanned((Math.floor(Math.random() * 800000) + 4000000).toLocaleString());
+      setExecutionMs(Math.floor(Math.random() * 25) + 20);
+    }, 450);
+  };
+
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto py-6 px-4 sm:px-6">
+    <div className="flex flex-col gap-8 max-w-7xl mx-auto py-8 px-4 sm:px-6 select-none">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">
+            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
               CLICKHOUSE WAREHOUSE COPILOT
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] text-zinc-400 border border-white/[0.08]">
-              Natural Language → Telemetry SQL
+            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25">
+              TELEMETRY SQL GENERATOR
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-            Product Analytics Copilot
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
+            CLICKHOUSE ANALYTICS
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
-            Ask FinPilot anything about your product, payment funnels, or user cohorts.
+          <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
+            Query 4.2M daily transactional events in natural language. TapWise synthesizes ClickHouse SQL and returns structured root-cause telemetry.
           </p>
         </div>
 
         <button
           onClick={() => setShowSql(!showSql)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-zinc-300 cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
         >
-          <Terminal className="w-3.5 h-3.5 text-blue-400" />
+          <Terminal className="w-3.5 h-3.5 text-[#0066FF]" />
           <span>{showSql ? 'Hide SQL' : 'Inspect SQL'}</span>
         </button>
       </div>
 
       {/* Prompt Search Box */}
-      <div className="p-2 rounded-xl bg-[#090a0d] border border-white/[0.1] focus-within:border-blue-500/50 flex items-center gap-2">
-        <Search className="w-4 h-4 text-zinc-500 ml-2" />
+      <div className="p-2 bg-[#0A0A0A] border border-[#1D1D1D] focus-within:border-[#0066FF] rounded-[4px] flex items-center gap-2">
+        <Search className="w-4 h-4 text-[#525252] ml-2 flex-shrink-0" />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') handleRunQuery(query); }}
           placeholder="Ask anything: 'Why did payment success drop?', 'Top churn reasons'..."
-          className="flex-1 bg-transparent px-2 py-1 text-sm text-white placeholder:text-zinc-600 outline-none font-medium"
+          className="flex-1 bg-transparent px-2 py-1.5 text-xs sm:text-sm text-[#F5F5F0] placeholder:text-[#525252] outline-none font-mono-tech"
         />
         <button
-          onClick={() => {}}
-          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold cursor-pointer"
+          onClick={() => handleRunQuery(query)}
+          disabled={isQuerying}
+          className="btn-magnetic px-4 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer disabled:opacity-50"
         >
-          Investigate
+          {isQuerying ? 'Scanning...' : 'Investigate'}
         </button>
       </div>
 
@@ -81,11 +96,11 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
         {prompts.map((p, idx) => (
           <button
             key={idx}
-            onClick={() => setQuery(p)}
-            className={`text-xs px-3 py-1.5 rounded-lg cursor-pointer transition-all ${
+            onClick={() => handleRunQuery(p)}
+            className={`text-xs font-mono-tech px-3 py-1.5 rounded-[3px] cursor-pointer transition-colors ${
               query === p
-                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-medium'
-                : 'bg-white/[0.03] hover:bg-white/[0.06] text-zinc-400 border border-white/[0.06]'
+                ? 'bg-[#0066FF]/20 text-[#0066FF] border border-[#0066FF]/40 font-bold'
+                : 'bg-[#0A0A0A] hover:bg-[#141414] text-[#8A8A8A] hover:text-[#F5F5F0] border border-[#1D1D1D]'
             }`}
           >
             {p}
@@ -93,26 +108,28 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
         ))}
       </div>
 
-      {/* AI Structured Answer Card */}
-      <div className="p-6 rounded-2xl bg-[#090a0d] border border-white/[0.08] shadow-xl space-y-6">
-        <div className="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30 flex items-start gap-3">
-          <Sparkles className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+      {/* AI Answer & Root Cause Breakdown */}
+      <div className="p-6 sm:p-8 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] space-y-6">
+        <div className="p-4 bg-[#0D0E14] border border-[#0066FF]/30 rounded-[3px] flex items-start gap-3">
+          <Sparkles className="w-4 h-4 text-[#0066FF] flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-300 block">
-              AI Answer & Root Cause Breakdown
+            <span className="text-[10px] font-mono-tech font-bold uppercase tracking-wider text-[#0066FF] block">
+              AI TELEMETRY SYNTHESIS
             </span>
-            <p className="text-xs sm:text-sm text-zinc-200 font-mono">
-              Payment success fell from <strong>94.8% → 90.1%</strong> between 8–10 PM this week across high-value transactions.
+            <p className="text-xs sm:text-sm text-[#F5F5F0] font-mono-tech">
+              Payment success fell from <strong className="text-[#EF4444]">94.8% → 90.1%</strong> between 8:00–10:30 PM this week across transactions exceeding ₹10,000.
             </p>
           </div>
         </div>
 
+        {/* Generated SQL Drawer */}
         {showSql && (
-          <div className="p-4 rounded-xl bg-black border border-white/[0.08] font-mono text-xs">
-            <span className="text-[10px] text-zinc-500 block mb-1">
-              GENERATED CLICKHOUSE SQL (Execution time: 34ms · 4.2M rows scanned)
-            </span>
-            <pre className="text-blue-300 overflow-x-auto">
+          <div className="p-4 rounded-[3px] bg-[#050505] border border-[#161616] font-mono-tech text-xs">
+            <div className="flex items-center justify-between text-[10px] text-[#525252] mb-2">
+              <span>GENERATED CLICKHOUSE SQL</span>
+              <span>Execution: {executionMs}ms · {rowsScanned} rows scanned</span>
+            </div>
+            <pre className="text-[#0066FF] overflow-x-auto leading-relaxed">
 {`SELECT 
     toStartOfHour(timestamp) as hour,
     bank_node,
@@ -125,43 +142,43 @@ ORDER BY failure_pct DESC LIMIT 10;`}
           </div>
         )}
 
-        {/* Breakdown bars */}
-        <div>
-          <span className="text-[10px] font-mono uppercase text-zinc-400 font-bold block mb-3">
-            Top Failure Contributors:
+        {/* Top Failure Contributors */}
+        <div className="space-y-3">
+          <span className="text-[10px] font-mono-tech uppercase text-[#8A8A8A] font-bold block">
+            TOP FAILURE CONTRIBUTORS:
           </span>
-          <div className="space-y-3">
+          <div className="space-y-2 font-mono-tech text-xs">
             {[
               { label: 'Bank timeout (code U30)', share: 42 },
               { label: 'Android 15 intent drop', share: 27 },
-              { label: 'Cellular network errors', share: 18 },
+              { label: 'Cellular network errors (4G handoff)', share: 18 },
               { label: 'Other edge gateways', share: 13 },
             ].map((item, i) => (
-              <div key={i} className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-white font-medium">{item.label}</span>
-                  <span className="font-mono text-blue-400 font-bold">{item.share}%</span>
+              <div key={i} className="p-3 rounded-[3px] bg-[#050505] border border-[#161616]">
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="text-[#F5F5F0]">{item.label}</span>
+                  <span className="text-[#0066FF] font-bold">{item.share}%</span>
                 </div>
-                <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${item.share}%` }} />
+                <div className="h-1.5 w-full bg-[#1D1D1D] rounded-[2px] overflow-hidden">
+                  <div className="h-full bg-[#0066FF] rounded-[2px]" style={{ width: `${item.share}%` }} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Recommended Next Step */}
-        <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
+        {/* Action Row */}
+        <div className="pt-4 border-t border-[#1D1D1D] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <span className="text-[10px] font-mono uppercase text-zinc-400 block">Recommended Next Step</span>
-            <p className="text-xs text-white font-semibold">Investigate Bank X routing & create opportunity ticket.</p>
+            <span className="text-[10px] font-mono-tech uppercase text-[#525252] block">Recommended Next Step</span>
+            <p className="text-xs text-[#F5F5F0] font-mono-tech">Investigate Bank X routing & create opportunity ticket.</p>
           </div>
           <button
             onClick={() => {
               onCreateOpportunity();
               onNavigateTab('opportunities');
             }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold cursor-pointer shadow-sm shadow-blue-600/30"
+            className="btn-magnetic flex items-center gap-1.5 px-4 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-md shadow-[#0066FF]/20"
           >
             <Inbox className="w-3.5 h-3.5" />
             <span>Create Opportunity →</span>

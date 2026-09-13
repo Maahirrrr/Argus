@@ -5,7 +5,7 @@ import {
   Sparkles,
   FlaskConical
 } from 'lucide-react';
-import type { NavigationTab, PRDDocument } from '../../types/finpilot';
+import type { NavigationTab, PRDDocument } from '../../types/tapwise';
 import { DEMO_PRD } from '../../data/demoData';
 
 interface PrdWorkspaceProps {
