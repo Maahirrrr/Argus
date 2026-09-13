@@ -1,9 +1,9 @@
 import React from 'react';
 
-export const EmvChip: React.FC<{ variant?: 'gold' | 'silver' }> = ({ variant = 'gold' }) => {
+export const EmvChip: React.FC<{ variant?: 'gold' | 'silver'; className?: string }> = ({ variant = 'gold', className = '' }) => {
   const isGold = variant === 'gold';
   return (
-    <div className="relative w-11 h-8 rounded-md overflow-hidden shadow-inner flex items-center justify-center p-[2px]"
+    <div className={`relative w-11 h-8 rounded-md overflow-hidden shadow-inner flex items-center justify-center p-[2px] ${className}`}
       style={{
         background: isGold
           ? 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 50%, #f3e5ab 100%)'

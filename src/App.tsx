@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Header } from './components/Header';
 import { WalletDeck } from './components/WalletDeck';
 import { SearchOptimizer } from './components/SearchOptimizer';
-import { RecommendationCard } from './components/RecommendationCard';
+import { WalletSwipeShowdown } from './components/WalletSwipeShowdown';
 import { ComparisonMatrix } from './components/ComparisonMatrix';
 import { getSavedWallet, saveWallet } from './lib/storage';
 import { calculateBestSwipe } from './lib/optimizer';
@@ -133,11 +133,13 @@ export function App() {
         {/* Results */}
         {recommendation ? (
           <div className="flex flex-col gap-6">
-            <RecommendationCard
+            <WalletSwipeShowdown
               recommendation={recommendation}
+              activeCards={activeCards}
               rawQuery={query}
               spendAmount={amount || 1000}
               channel={selectedChannel === 'auto' ? 'online' : selectedChannel}
+              onOpenDeck={() => setIsWalletOpen(true)}
             />
             <ComparisonMatrix
               comparison={recommendation.comparison}
