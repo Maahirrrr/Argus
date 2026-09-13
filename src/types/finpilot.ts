@@ -1,36 +1,57 @@
-export type ModuleType = 
-  | 'intelligence'
-  | 'prioritization'
-  | 'prd'
-  | 'experiment'
+export type NavigationTab =
+  | 'landing'
+  | 'overview'
+  | 'insights'
+  | 'opportunities'
+  | 'prioritize'
+  | 'prds'
+  | 'experiments'
   | 'analytics'
-  | 'weekly_agent'
-  | 'brain_feed';
+  | 'weekly_review'
+  | 'data_sources'
+  | 'settings';
 
-export interface Contributor {
-  label: string;
-  impact: string;
-  sharePercent: number;
-  type: 'bank' | 'os' | 'tier' | 'time' | 'gateway';
-  severity: 'critical' | 'high' | 'medium';
-  detail: string;
-}
-
-export interface ProductProblem {
+export interface ProductSignal {
   id: string;
   title: string;
-  metric: string;
-  baseline: string;
-  current: string;
+  severity: 'HIGH' | 'MEDIUM' | 'LOW';
   delta: string;
-  status: 'critical' | 'warning' | 'resolved';
-  detectedAt: string;
-  scope: string;
-  summary: string;
-  contributors: Contributor[];
+  metric: string;
+  usersAffected: string;
+  likelyCause: string;
+  description: string;
+  timestamp: string;
+  status: 'active' | 'investigated' | 'resolved';
+}
+
+export interface ProductInsight {
+  id: string;
+  signalId: string;
+  signalTitle: string;
+  evidence: {
+    label: string;
+    value: string;
+    sharePercent: number;
+  }[];
+  impact: string;
+  impactGmv: string;
+  confidence: number;
+  recommendation: string;
+  targetOpportunityId: string;
+}
+
+export interface Opportunity {
+  id: string;
+  number: string;
+  title: string;
+  source: ('Product Analytics' | 'Support Tickets' | 'Transaction Data' | 'Customer Feedback')[];
+  potentialImpact: 'HIGH' | 'MEDIUM' | 'LOW';
+  confidence: number;
+  usersAffected: string;
+  estimatedOpportunity: string;
+  evidence: string[];
   aiRecommendation: string;
-  strategicAction: string;
-  defaultPrdSlug: string;
+  status: 'inbox' | 'prioritized' | 'dismissed';
 }
 
 export interface PrioritizationInitiative {
@@ -38,150 +59,114 @@ export interface PrioritizationInitiative {
   title: string;
   category: 'Reliability' | 'Growth' | 'Monetization' | 'CX' | 'Retention';
   description: string;
-  reach: number; // in thousands/millions e.g. 1500 (1.5M users)
+  reach: string;
+  reachCount: number; // in thousands e.g. 82
   impact: number; // 1 to 10
-  confidence: number; // 1 to 10
-  effort: number; // 1 to 10 (Person-weeks or sprint points)
+  confidence: number; // in percent e.g. 91
+  effort: number; // in sprints e.g. 5
   riceScore: number;
   iceScore: number;
-  moscow: 'Must-Have' | 'Should-Have' | 'Could-Have' | "Won't-Have";
-  suggestedBy: string;
+  status: 'Active' | 'Under Review' | 'Backlog';
   whyRanking: string;
-}
-
-export interface UserStory {
-  id: string;
-  title: string;
-  asA: string;
-  iWantTo: string;
-  soThat: string;
-  acceptanceCriteria: string[]; // Given / When / Then
 }
 
 export interface PRDDocument {
   id: string;
   title: string;
-  author: string;
   version: string;
-  lastUpdated: string;
-  status: 'Draft' | 'In Review' | 'Approved' | 'Ready for Dev';
-  targetRelease: string;
-  problemStatement: string;
+  status: 'Draft' | 'In Review' | 'Approved';
+  targetSprint: string;
+  author: string;
+  problem: string;
   userImpact: string;
+  evidence: string[];
   goals: string[];
   nonGoals: string[];
+  userStories: {
+    asA: string;
+    iWantTo: string;
+    soThat: string;
+    acceptanceCriteria: string[];
+  }[];
   requirements: {
     id: string;
     title: string;
     priority: 'P0' | 'P1' | 'P2';
     description: string;
   }[];
-  userStories: UserStory[];
-  edgeCases: {
-    scenario: string;
-    expectedBehavior: string;
-  }[];
-  successMetrics: {
-    metric: string;
+  metrics: {
+    name: string;
     current: string;
     target: string;
-    window: string;
   }[];
-  risksAndMitigations: {
+  risks: {
     risk: string;
     mitigation: string;
   }[];
   rolloutPlan: {
     phase: string;
     audience: string;
-    duration: string;
-    exitCriteria: string;
+    criteria: string;
   }[];
 }
 
-export interface ExperimentConfig {
+export interface PRDChallenge {
+  potentialWeakness: string;
+  confidenceNote: string;
+  missingConsiderations: string[];
+  suggestedExperiment: string;
+}
+
+export interface ExperimentItem {
   id: string;
   title: string;
-  problemRef: string;
+  status: 'Draft' | 'Running' | 'Completed';
   hypothesis: string;
-  status: 'Draft' | 'Running' | 'Concluded';
-  trafficSplit: string; // e.g. "50% / 50%"
-  sampleSize: string;
-  estimatedDuration: string;
-  variants: {
-    name: string;
-    type: 'Control' | 'Variant A' | 'Variant B';
-    description: string;
-    mockVisual: string;
-  }[];
   primaryMetric: {
     name: string;
     baseline: string;
     expectedLift: string;
     mde: string;
   };
-  guardrailMetrics: {
+  secondaryMetrics: string[];
+  control: {
+    name: string;
+    description: string;
+  };
+  treatment: {
+    name: string;
+    description: string;
+  };
+  expectedOutcome: string;
+  duration: string;
+  sampleSize: string;
+  trafficSplit: number; // e.g. 50
+  guardrails: {
     name: string;
     threshold: string;
   }[];
-  decisionFramework: {
-    shipRule: string;
-    killSwitch: string;
-  };
+  decisionRule: string;
 }
 
-export interface AnalyticsQueryPreset {
+export interface DataSourceItem {
   id: string;
-  query: string;
-  category: 'conversion' | 'failures' | 'retention' | 'competitors';
-  answer: string;
-  chartType: 'funnel' | 'heatmap' | 'bar' | 'line';
-  dataPoints: { label: string; value: number; secondary?: number }[];
+  name: string;
+  type: string;
+  status: 'Connected' | 'Not connected';
+  lastSync: string;
+  eventCount: string;
+  description: string;
 }
 
-export interface WeeklyProductReview {
-  weekDate: string;
-  overallHealth: 'Critical' | 'Warning' | 'Healthy';
-  overallScore: number;
+export interface WeeklyReviewData {
+  week: string;
+  dateRange: string;
+  healthScore: number;
+  healthGrade: 'GOOD' | 'WARNING' | 'CRITICAL';
   executiveSummary: string;
-  keyMetricShifts: {
-    name: string;
-    previous: string;
-    current: string;
-    delta: string;
-    trend: 'up' | 'down';
-    isGood: boolean;
-  }[];
-  whatMatters: {
-    headline: string;
-    evidence: string;
-    affectedCohort: string;
-  };
-  rootHypothesis: string;
-  recommendedExperiment: {
-    title: string;
-    description: string;
-    expectedOutcome: string;
-    effortEstimate: string;
-  };
-}
-
-export interface CustomerVoiceItem {
-  id: string;
-  source: 'PlayStore' | 'Twitter' | 'Zendesk' | 'Interview';
-  userTier: string;
-  quote: string;
-  sentiment: 'negative' | 'neutral' | 'positive';
-  category: string;
-  timeAgo: string;
-  cluster: string;
-}
-
-export interface CompetitorIntel {
-  competitor: 'PhonePe' | 'Google Pay' | 'Paytm' | 'CRED' | 'Razorpay';
-  featureName: string;
-  recentMove: string;
-  impactOnUs: string;
-  recommendedResponse: string;
-  statusDate: string;
+  whatImproved: { metric: string; delta: string; detail: string }[];
+  whatWorsened: { metric: string; delta: string; detail: string }[];
+  biggestOpportunity: { title: string; impact: string };
+  biggestRisk: { title: string; impact: string };
+  recommendedPriorities: string[];
 }

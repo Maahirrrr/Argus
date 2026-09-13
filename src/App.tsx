@@ -1,206 +1,252 @@
-import React, { useState } from 'react';
-import {
-  Activity,
-  SlidersHorizontal,
-  FileText,
-  FlaskConical,
-  BarChart3,
-  Bot,
-  Layers,
-  ChevronRight
-} from 'lucide-react';
+import { useState } from 'react';
+import type { NavigationTab, Opportunity, PrioritizationInitiative } from './types/finpilot';
+import { DEMO_OPPORTUNITIES, DEMO_INITIATIVES } from './data/demoData';
 
-import type { ModuleType, ProductProblem, PrioritizationInitiative } from './types/finpilot';
-import { FINTECH_PROBLEMS, COMPETING_INITIATIVES } from './data/fintechScenarios';
+import { AppHeader } from './components/layout/AppHeader';
+import { Navigation } from './components/layout/Navigation';
+import { CommandPalette } from './components/layout/CommandPalette';
+import { CaseStudyModal } from './components/layout/CaseStudyModal';
 
-import { Header } from './components/Header';
-import { ProductIntelligence } from './components/ProductIntelligence';
-import { PrioritizationEngine } from './components/PrioritizationEngine';
-import { PrdCopilot } from './components/PrdCopilot';
-import { ExperimentDesigner } from './components/ExperimentDesigner';
-import { AnalyticsCopilot } from './components/AnalyticsCopilot';
-import { WeeklyAgentReview } from './components/WeeklyAgentReview';
-import { FintechBrainFeed } from './components/FintechBrainFeed';
+import { LandingPage } from './components/landing/LandingPage';
+import { OverviewDashboard } from './components/modules/OverviewDashboard';
+import { InsightsModule } from './components/modules/InsightsModule';
+import { OpportunitiesInbox } from './components/modules/OpportunitiesInbox';
+import { PrioritizationModule } from './components/modules/PrioritizationModule';
+import { PrdWorkspace } from './components/modules/PrdWorkspace';
+import { ExperimentLab } from './components/modules/ExperimentLab';
+import { AnalyticsCopilot } from './components/modules/AnalyticsCopilot';
+import { WeeklyReviewPage } from './components/modules/WeeklyReviewPage';
+import { DataSourcesPage } from './components/modules/DataSourcesPage';
+import { SettingsPage } from './components/modules/SettingsPage';
 
 export function App() {
-  const [activeModule, setActiveModule] = useState<ModuleType>('intelligence');
-  const [selectedProblem, setSelectedProblem] = useState<ProductProblem>(FINTECH_PROBLEMS[0]);
-  const [selectedInitiative, setSelectedInitiative] = useState<PrioritizationInitiative | null>(COMPETING_INITIATIVES[0]);
+  const [activeTab, setActiveTab] = useState<NavigationTab>('landing');
+  const [isLandingMode, setIsLandingMode] = useState<boolean>(true);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
+  const [isCaseStudyOpen, setIsCaseStudyOpen] = useState<boolean>(false);
 
-  // Stepper definition for the PM Decision Loop
-  const workflowSteps: { id: ModuleType; label: string; icon: React.FC<{ className?: string }> }[] = [
-    { id: 'intelligence', label: '1. Incident Discovery', icon: Activity },
-    { id: 'prioritization', label: '2. AI Prioritization', icon: SlidersHorizontal },
-    { id: 'prd', label: '3. PRD Copilot', icon: FileText },
-    { id: 'experiment', label: '4. Experiment A/B', icon: FlaskConical },
-    { id: 'analytics', label: '5. Telemetry Chat', icon: BarChart3 },
-    { id: 'weekly_agent', label: '6. Weekly Health Brief', icon: Bot },
-    { id: 'brain_feed', label: '7. Voice & Competitors', icon: Layers },
-  ];
+  const [opportunities, setOpportunities] = useState<Opportunity[]>(DEMO_OPPORTUNITIES);
+  const [initiatives] = useState<PrioritizationInitiative[]>(DEMO_INITIATIVES);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleOpenApp = (targetTab: NavigationTab = 'overview') => {
+    setIsLandingMode(false);
+    setActiveTab(targetTab);
+  };
+
+  const handleToggleMode = () => {
+    if (isLandingMode) {
+      setIsLandingMode(false);
+      setActiveTab('overview');
+    } else {
+      setIsLandingMode(true);
+      setActiveTab('landing');
+    }
+  };
+
+  // ───── INTERACTIVE DEMO WORKFLOW HANDLERS (Section 35) ─────
+  const handleInvestigateSignal = (_signalId?: string) => {
+    setIsLandingMode(false);
+    setActiveTab('insights');
+    showToast('Signal investigated: 4.2M events analyzed across ClickHouse telemetry.');
+  };
+
+  const handleCreateOpportunityFromInsight = (_insightId?: string) => {
+    setActiveTab('opportunities');
+    showToast('Opportunity #014 added to Discovery Inbox with empirical evidence.');
+  };
+
+  const handlePrioritizeOpportunity = (_oppId?: string) => {
+    setActiveTab('prioritize');
+    showToast('Opportunity prioritized at #1 on RICE roadmap.');
+  };
+
+  const handleDismissOpportunity = (oppId: string) => {
+    setOpportunities(prev => prev.filter(o => o.id !== oppId));
+    showToast('Opportunity dismissed from inbox.');
+  };
+
+  const handleSelectInitiativeForPrd = (init: PrioritizationInitiative) => {
+    setActiveTab('prds');
+    showToast(`PRD generated for "${init.title}". AI Critic ready.`);
+  };
+
+  const handleDeployExperiment = () => {
+    showToast('A/B experiment configured. Guardrail circuit breakers active.');
+  };
+
+  const handleSelectCommandAction = (tab: NavigationTab, _payload?: any) => {
+    if (tab === 'landing') {
+      setIsCaseStudyOpen(true);
+      return;
+    }
+    setIsLandingMode(false);
+    setActiveTab(tab);
+  };
 
   return (
-    <div className="min-h-screen bg-[#060608] text-zinc-100 flex flex-col font-sans selection:bg-cyan-500/20 selection:text-cyan-200">
-      {/* Background Decorative Gradients */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] bg-indigo-600/10 blur-[130px] rounded-full" />
-        <div className="absolute top-[40%] right-[-5%] w-[500px] h-[500px] bg-cyan-600/8 blur-[140px] rounded-full" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-600/8 blur-[150px] rounded-full" />
-      </div>
+    <div className="min-h-screen bg-[#07080a] text-zinc-100 flex flex-col font-sans selection:bg-blue-600/30 selection:text-white">
+      {/* Toast Notification Banner */}
+      {toastMessage && (
+        <div className="fixed top-16 right-6 z-50 p-3 rounded-xl bg-blue-950 border border-blue-500/40 text-xs font-mono text-blue-200 shadow-2xl flex items-center gap-2 animate-fade-in">
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
-      {/* Navigation Header */}
-      <Header
-        activeModule={activeModule}
-        onSelectModule={setActiveModule}
-        selectedProblem={selectedProblem}
-        onSelectProblem={setSelectedProblem}
+      {/* Main Header */}
+      <AppHeader
+        activeTab={activeTab}
+        onSelectTab={(tab) => {
+          if (tab === 'landing') {
+            setIsLandingMode(true);
+            setActiveTab('landing');
+          } else {
+            setIsLandingMode(false);
+            setActiveTab(tab);
+          }
+        }}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+        onOpenCaseStudy={() => setIsCaseStudyOpen(true)}
+        isLandingMode={isLandingMode}
+        onToggleMode={handleToggleMode}
       />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 relative z-10 flex flex-col gap-6">
+      {/* OS Navigation Tabs (shown when in app mode) */}
+      {!isLandingMode && (
+        <Navigation
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          unresolvedSignalsCount={5}
+          unresolvedOpportunitiesCount={opportunities.filter(o => o.status === 'inbox').length}
+        />
+      )}
 
-        {/* PM Lifecycle Step Ribbon */}
-        <div className="p-3 rounded-2xl bg-[#090a0f]/90 border border-white/[0.08] backdrop-blur-xl flex items-center justify-between gap-2 overflow-x-auto scroll-x shadow-xl">
-          <div className="flex items-center gap-1.5 flex-1 min-w-max">
-            {workflowSteps.map((step, idx) => {
-              const Icon = step.icon;
-              const isActive = activeModule === step.id;
-              return (
-                <React.Fragment key={step.id}>
-                  <button
-                    onClick={() => setActiveModule(step.id)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all ${
-                      isActive
-                        ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-md shadow-indigo-600/30'
-                        : 'text-zinc-400 hover:text-white hover:bg-white/[0.04]'
-                    }`}
-                  >
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-zinc-500'}`} />
-                    <span>{step.label}</span>
-                  </button>
-                  {idx < workflowSteps.length - 1 && (
-                    <ChevronRight className="w-3.5 h-3.5 text-zinc-700 flex-shrink-0" />
-                  )}
-                </React.Fragment>
-              );
-            })}
-          </div>
+      {/* Main Screen Router */}
+      <main className="flex-1 w-full relative z-10">
+        {isLandingMode ? (
+          <LandingPage
+            onOpenApp={handleOpenApp}
+            onOpenCaseStudy={() => setIsCaseStudyOpen(true)}
+            onInvestigateSignal={handleInvestigateSignal}
+          />
+        ) : (
+          <>
+            {activeTab === 'overview' && (
+              <OverviewDashboard
+                onNavigateTab={setActiveTab}
+                onInvestigateSignal={handleInvestigateSignal}
+              />
+            )}
 
-          <div className="hidden lg:flex items-center gap-2 pl-3 border-l border-white/[0.08] text-[11px] font-mono text-zinc-400 flex-shrink-0">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>ClickHouse Live · 4.2M events</span>
-          </div>
-        </div>
+            {activeTab === 'insights' && (
+              <InsightsModule
+                onNavigateTab={setActiveTab}
+                onCreateOpportunityFromInsight={handleCreateOpportunityFromInsight}
+              />
+            )}
 
-        {/* Quick Scenario Preset Strip */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400">
-              Active Incident:
-            </span>
-            <span className="text-xs font-bold text-white font-syne">
-              {selectedProblem.title}
-            </span>
-            <span className="text-[10px] font-mono text-rose-400 font-bold px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/25">
-              {selectedProblem.baseline} → {selectedProblem.current} ({selectedProblem.delta})
-            </span>
-          </div>
+            {activeTab === 'opportunities' && (
+              <OpportunitiesInbox
+                opportunities={opportunities}
+                onNavigateTab={setActiveTab}
+                onPrioritizeOpportunity={handlePrioritizeOpportunity}
+                onDismissOpportunity={handleDismissOpportunity}
+              />
+            )}
 
-          <div className="flex items-center gap-1.5 overflow-x-auto">
-            <span className="text-[10px] font-mono text-zinc-500 mr-1 hidden sm:inline">Switch Incident:</span>
-            {FINTECH_PROBLEMS.map((p) => {
-              const isSelected = selectedProblem.id === p.id;
-              return (
-                <button
-                  key={p.id}
-                  onClick={() => setSelectedProblem(p)}
-                  className={`text-[11px] px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
-                    isSelected
-                      ? 'bg-indigo-600/30 text-indigo-200 border border-indigo-500/50 font-bold'
-                      : 'bg-white/[0.02] text-zinc-400 hover:text-zinc-200 border border-white/[0.04]'
-                  }`}
-                >
-                  {p.metric}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+            {activeTab === 'prioritize' && (
+              <PrioritizationModule
+                initiatives={initiatives}
+                onNavigateTab={setActiveTab}
+                onSelectInitiativeForPrd={handleSelectInitiativeForPrd}
+              />
+            )}
 
-        {/* Active Module Content */}
-        <div className="transition-all duration-300">
-          {activeModule === 'intelligence' && (
-            <ProductIntelligence
-              problem={selectedProblem}
-              onNavigateToModule={setActiveModule}
-            />
-          )}
+            {activeTab === 'prds' && (
+              <PrdWorkspace
+                onNavigateTab={setActiveTab}
+                onDeployExperiment={handleDeployExperiment}
+              />
+            )}
 
-          {activeModule === 'prioritization' && (
-            <PrioritizationEngine
-              onSelectPrdInitiative={setSelectedInitiative}
-              onNavigateToModule={setActiveModule}
-            />
-          )}
+            {activeTab === 'experiments' && (
+              <ExperimentLab
+                onNavigateTab={setActiveTab}
+              />
+            )}
 
-          {activeModule === 'prd' && (
-            <PrdCopilot
-              selectedInitiative={selectedInitiative}
-              onNavigateToModule={setActiveModule}
-            />
-          )}
+            {activeTab === 'analytics' && (
+              <AnalyticsCopilot
+                onNavigateTab={setActiveTab}
+                onCreateOpportunity={() => handleCreateOpportunityFromInsight('ins-001')}
+              />
+            )}
 
-          {activeModule === 'experiment' && (
-            <ExperimentDesigner
-              onNavigateToModule={setActiveModule}
-            />
-          )}
+            {activeTab === 'weekly_review' && (
+              <WeeklyReviewPage
+                onNavigateTab={setActiveTab}
+              />
+            )}
 
-          {activeModule === 'analytics' && (
-            <AnalyticsCopilot
-              onNavigateToModule={setActiveModule}
-            />
-          )}
+            {activeTab === 'data_sources' && (
+              <DataSourcesPage />
+            )}
 
-          {activeModule === 'weekly_agent' && (
-            <WeeklyAgentReview
-              onNavigateToModule={setActiveModule}
-            />
-          )}
-
-          {activeModule === 'brain_feed' && (
-            <FintechBrainFeed
-              onNavigateToModule={setActiveModule}
-            />
-          )}
-        </div>
+            {activeTab === 'settings' && (
+              <SettingsPage />
+            )}
+          </>
+        )}
       </main>
 
-      {/* Footer */}
-      <footer className="mt-12 border-t border-white/[0.06] py-8 px-4 sm:px-6 bg-[#07080b]/80 relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center">
-              <span className="font-mono font-bold text-[10px] text-cyan-300">FP</span>
-            </div>
-            <div>
-              <span className="font-syne font-bold text-sm text-white">FinPilot AI</span>
-              <span className="text-zinc-500 text-xs ml-2">Copilot for Fintech Product Managers</span>
-            </div>
-          </div>
+      {/* Global Command Palette (⌘K) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectAction={handleSelectCommandAction}
+      />
 
+      {/* AI PM Portfolio Case Study Modal */}
+      <CaseStudyModal
+        isOpen={isCaseStudyOpen}
+        onClose={() => setIsCaseStudyOpen(false)}
+      />
+
+      {/* Footer */}
+      <footer className="mt-16 border-t border-white/[0.06] py-6 px-4 sm:px-6 bg-[#050608] text-xs text-zinc-500 font-mono">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            {['Problem Discovery', 'RICE Matrix', 'Automated PRD', 'A/B Guardrails', 'ClickHouse SQL'].map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-white/[0.02] border border-white/[0.06] text-zinc-400"
-              >
-                {tag}
-              </span>
-            ))}
+            <span className="font-bold text-zinc-300">FinPilot OS</span>
+            <span>· AI Operating System for Fintech Teams</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsCaseStudyOpen(true)}
+              className="text-zinc-400 hover:text-white cursor-pointer"
+            >
+              AI PM Case Study
+            </button>
+            <button
+              onClick={() => {
+                setIsLandingMode(!isLandingMode);
+                setActiveTab(isLandingMode ? 'overview' : 'landing');
+              }}
+              className="text-zinc-400 hover:text-white cursor-pointer"
+            >
+              {isLandingMode ? 'Switch to App' : 'Switch to Landing'}
+            </button>
+            <span>Linear × Stripe × Bloomberg Design</span>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+
 export default App;
