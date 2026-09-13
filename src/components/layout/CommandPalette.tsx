@@ -5,16 +5,15 @@ import {
   SlidersHorizontal,
   FileText,
   FlaskConical,
-  BarChart3,
   BookOpen,
   ArrowRight,
   Inbox,
   AlertTriangle,
   Radio,
   Terminal,
-  Database,
   Settings,
-  LayoutDashboard
+  LayoutDashboard,
+  X
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/tapwise';
 
@@ -98,34 +97,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       category: 'Execution',
     },
     {
-      id: 'cmd-analytics',
-      icon: BarChart3,
-      title: 'Query ClickHouse Telemetry.',
-      subtitle: 'Natural language to ClickHouse SQL across 4.2M transactions',
-      tab: 'analytics' as NavigationTab,
-      category: 'Deep Systems',
-    },
-    {
       id: 'cmd-copilot',
       icon: Terminal,
-      title: 'Open Contextual AI Copilot.',
-      subtitle: 'Ask TapWise anything: decisions, trade-offs, metrics, or causal factors',
+      title: 'Open AI Copilot & SQL Studio.',
+      subtitle: 'Ask TapWise anything or run ClickHouse SQL queries across 4.2M events',
       tab: 'ai_copilot' as NavigationTab,
-      category: 'Deep Systems',
-    },
-    {
-      id: 'cmd-data',
-      icon: Database,
-      title: 'Inspect Data Sources.',
-      subtitle: '5 active telemetry feeds: ClickHouse, NPCI, Zendesk, Segment, Statsig',
-      tab: 'data_sources' as NavigationTab,
-      category: 'Configuration',
+      category: 'Copilot',
     },
     {
       id: 'cmd-settings',
       icon: Settings,
-      title: 'Configure Sentry Settings.',
-      subtitle: 'Anomaly sensitivity, confidence floors, and alert webhooks',
+      title: 'Configure Settings & Sources.',
+      subtitle: 'Anomaly sensitivity, confidence floors, alert webhooks & telemetry pipelines',
       tab: 'settings' as NavigationTab,
       category: 'Configuration',
     },
@@ -182,10 +165,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/85 backdrop-blur-sm select-none">
-      <div className="w-full max-w-2xl bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-10 sm:pt-24 px-3 sm:px-4 bg-black/85 backdrop-blur-sm select-none">
+      <div className="w-full max-w-2xl bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Search Input */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#1D1D1D] bg-[#0A0A0A]">
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[#1D1D1D] bg-[#0A0A0A]">
           <Search className="w-4 h-4 text-[#8A8A8A] flex-shrink-0" />
           <input
             type="text"
@@ -193,20 +176,21 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Type a command or search actions..."
-            className="flex-1 bg-transparent text-sm text-[#F5F5F0] placeholder:text-[#525252] outline-none font-mono-tech"
+            className="flex-1 bg-transparent text-xs sm:text-sm text-[#F5F5F0] placeholder:text-[#525252] outline-none font-mono-tech min-h-[38px]"
           />
           <button
             onClick={onClose}
-            className="text-[#8A8A8A] hover:text-[#F5F5F0] text-xs font-mono-tech px-2 py-0.5 rounded-[2px] border border-[#2E2E2E] cursor-pointer"
+            className="text-[#8A8A8A] hover:text-[#F5F5F0] text-xs font-mono-tech p-1.5 rounded-[2px] border border-[#2E2E2E] cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
           >
-            ESC
+            <X className="w-4 h-4 sm:hidden" />
+            <span className="hidden sm:inline">ESC</span>
           </button>
         </div>
 
         {/* Suggestion list */}
-        <div className="max-h-96 overflow-y-auto p-2 flex flex-col gap-1">
+        <div className="overflow-y-auto p-2 flex flex-col gap-1 flex-1 no-scrollbar">
           <span className="text-[10px] font-mono-tech uppercase tracking-wider text-[#525252] px-3 py-1.5">
-            COMMANDS & SHORTCUT ACTIONS ({filtered.length})
+            COMMANDS & ACTIONS ({filtered.length})
           </span>
           {filtered.map((item, idx) => {
             const Icon = item.icon;
@@ -219,7 +203,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   onClose();
                 }}
                 onMouseEnter={() => setSelectedIndex(idx)}
-                className={`flex items-start gap-3 p-3 rounded-[3px] text-left cursor-pointer transition-colors ${
+                className={`flex items-start gap-3 p-3 rounded-[3px] text-left cursor-pointer transition-colors min-h-[48px] ${
                   isSelected ? 'bg-[#141414] border-l-2 border-[#0066FF]' : 'hover:bg-[#0E0E0E]'
                 }`}
               >
@@ -232,12 +216,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 </div>
                 <div className="flex-1 min-w-0 font-mono-tech">
                   <div className="flex items-center gap-2">
-                    <p className={`text-xs font-bold transition-colors ${
+                    <p className={`text-xs font-bold transition-colors truncate ${
                       isSelected ? 'text-[#F5F5F0]' : 'text-[#8A8A8A]'
                     }`}>
                       {item.title}
                     </p>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-[2px] bg-[#141414] text-[#525252]">
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-[2px] bg-[#141414] text-[#525252] flex-shrink-0">
                       {item.category}
                     </span>
                   </div>
@@ -253,8 +237,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
         {/* Footer */}
         <div className="px-4 py-2.5 bg-[#050505] border-t border-[#1D1D1D] flex items-center justify-between text-[10px] font-mono-tech text-[#525252]">
-          <span>Navigate with ↑ ↓ and ↵ to execute</span>
-          <span className="text-[#8A8A8A]">TAPWISE COMMAND PALETTE</span>
+          <span>Tap to select or use ↑ ↓ ↵</span>
+          <span className="text-[#8A8A8A]">TAPWISE COMMANDS</span>
         </div>
       </div>
     </div>

@@ -33,19 +33,19 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
   });
 
   return (
-    <div className="flex flex-col gap-8 max-w-7xl mx-auto py-8 px-4 sm:px-6 select-none">
+    <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto py-5 sm:py-8 px-4 sm:px-6 select-none pb-24 md:pb-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-5 border-b border-[#1D1D1D] gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
               DISCOVERY PIPELINE
             </span>
-            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#0066FF]/15 text-[#0066FF] border border-[#0066FF]/30">
-              {opportunities.filter((o) => o.status === 'inbox').length} OPPORTUNITIES IN INBOX
+            <span className="text-[9px] sm:text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#0066FF]/15 text-[#0066FF] border border-[#0066FF]/30">
+              {opportunities.filter((o) => o.status === 'inbox').length} INBOX
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
             OPPORTUNITIES INBOX
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
@@ -55,10 +55,10 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
 
         <button
           onClick={() => onNavigateTab('prioritize')}
-          className="btn-magnetic flex items-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/20"
+          className="btn-magnetic w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/20 min-h-[44px]"
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
-          <span>Open Prioritization Workbench →</span>
+          <span>Prioritize Roadmap →</span>
         </button>
       </div>
 
@@ -71,17 +71,17 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search opportunities..."
-            className="w-full bg-[#0A0A0A] border border-[#1D1D1D] focus:border-[#0066FF] rounded-[3px] pl-9 pr-3 py-2 text-xs font-mono-tech text-[#F5F5F0] placeholder:text-[#525252] outline-none"
+            className="w-full bg-[#0A0A0A] border border-[#1D1D1D] focus:border-[#0066FF] rounded-[3px] pl-9 pr-3 py-2 text-xs font-mono-tech text-[#F5F5F0] placeholder:text-[#525252] outline-none min-h-[40px]"
           />
         </div>
 
-        <div className="flex items-center gap-1.5 p-1 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px]">
+        <div className="flex items-center gap-1.5 p-1 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px] overflow-x-auto no-scrollbar">
           <Filter className="w-3 h-3 text-[#525252] ml-1.5 hidden sm:block" />
           {(['ALL', 'HIGH', 'MEDIUM'] as const).map((imp) => (
             <button
               key={imp}
               onClick={() => setFilterImpact(imp)}
-              className={`px-2.5 py-1 rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer min-h-[36px] flex-shrink-0 ${
                 filterImpact === imp
                   ? 'bg-[#141414] text-[#F5F5F0] font-bold border border-[#2E2E2E]'
                   : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
@@ -94,22 +94,22 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
       </div>
 
       {/* Opportunities List */}
-      <div className="flex flex-col divide-y divide-[#1D1D1D] bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px]">
+      <div className="flex flex-col divide-y divide-[#1D1D1D] bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] overflow-hidden">
         {filteredOpps.length > 0 ? (
           filteredOpps.map((opp) => (
             <div
               key={opp.id}
-              className="group p-5 sm:p-6 flex flex-col gap-4 hover:bg-[#0E0E0E] transition-all duration-150"
+              className="group p-4 sm:p-6 flex flex-col gap-4 hover:bg-[#0E0E0E] transition-all duration-150"
             >
               {/* Main Row */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-start sm:items-center gap-4">
-                  <span className="font-mono-tech text-xs font-bold text-[#525252] w-7">
+                <div className="flex items-start gap-3 min-w-0">
+                  <span className="font-mono-tech text-xs font-bold text-[#525252] w-7 flex-shrink-0 pt-0.5">
                     {opp.number}
                   </span>
 
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
                       <h2 className="text-sm font-bold text-[#F5F5F0] group-hover:text-white">
                         {opp.title}
                       </h2>
@@ -120,21 +120,21 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
                             : 'bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/25'
                         }`}
                       >
-                        {opp.potentialImpact} IMPACT
+                        {opp.potentialImpact}
                       </span>
                       <span className="text-[10px] font-mono-tech text-[#8A8A8A]">
                         {opp.confidence}% confidence
                       </span>
                     </div>
-                    <p className="text-xs text-[#8A8A8A] font-mono-tech line-clamp-1">
+                    <p className="text-xs text-[#8A8A8A] font-mono-tech line-clamp-2">
                       {opp.aiRecommendation}
                     </p>
                   </div>
                 </div>
 
                 {/* Metrics & Action Buttons */}
-                <div className="flex items-center gap-4 flex-shrink-0 self-end sm:self-center font-mono-tech">
-                  <div className="text-right">
+                <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 font-mono-tech pt-2 sm:pt-0 border-t sm:border-t-0 border-[#141414]">
+                  <div>
                     <span className="text-xs font-bold text-[#10B981]">{opp.estimatedOpportunity}</span>
                     <span className="text-[10px] text-[#525252] block">{opp.usersAffected} users</span>
                   </div>
@@ -142,7 +142,7 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => onDismissOpportunity(opp.id)}
-                      className="px-2.5 py-1.5 rounded-[3px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer"
+                      className="px-3 py-2 rounded-[3px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer min-h-[40px]"
                     >
                       Dismiss
                     </button>
@@ -151,7 +151,7 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
                         onPrioritizeOpportunity(opp.id);
                         onNavigateTab('prioritize');
                       }}
-                      className="btn-magnetic flex items-center gap-1.5 px-3.5 py-1.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer"
+                      className="btn-magnetic flex items-center gap-1.5 px-3.5 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer min-h-[40px]"
                     >
                       <span>Prioritize</span>
                       <ArrowRight className="w-3 h-3" />
@@ -187,11 +187,11 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
             </div>
           ))
         ) : (
-          <div className="p-12 text-center flex flex-col items-center justify-center gap-2 font-mono-tech">
-            <span className="text-xs text-[#8A8A8A]">No opportunities matching the current filter.</span>
+          <div className="p-10 text-center flex flex-col items-center justify-center gap-2 font-mono-tech">
+            <span className="text-xs text-[#8A8A8A]">No opportunities match the current filter.</span>
             <button
               onClick={() => { setFilterImpact('ALL'); setSearchQuery(''); }}
-              className="text-xs text-[#0066FF] hover:underline cursor-pointer"
+              className="text-xs text-[#0066FF] hover:underline cursor-pointer min-h-[40px]"
             >
               Reset filters
             </button>

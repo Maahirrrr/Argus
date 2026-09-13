@@ -18,10 +18,7 @@ import { OpportunitiesInbox } from './components/modules/OpportunitiesInbox';
 import { PrioritizationModule } from './components/modules/PrioritizationModule';
 import { PrdWorkspace } from './components/modules/PrdWorkspace';
 import { ExperimentLab } from './components/modules/ExperimentLab';
-import { AnalyticsCopilot } from './components/modules/AnalyticsCopilot';
 import { ContextualCopilot } from './components/modules/ContextualCopilot';
-import { WeeklyReviewPage } from './components/modules/WeeklyReviewPage';
-import { DataSourcesPage } from './components/modules/DataSourcesPage';
 import { SettingsPage } from './components/modules/SettingsPage';
 
 export function App() {
@@ -99,11 +96,12 @@ export function App() {
         if (char === 'o') targetTab = 'overview';
         else if (char === 's') targetTab = 'signals';
         else if (char === 'i') targetTab = 'insights';
-        else if (char === 'p') targetTab = 'prioritize';
-        else if (char === 'r') targetTab = 'prds';
+        else if (char === 'p') targetTab = 'opportunities';
+        else if (char === 'r') targetTab = 'prioritize';
+        else if (char === 'd') targetTab = 'prds';
         else if (char === 'e') targetTab = 'experiments';
-        else if (char === 'a') targetTab = 'analytics';
         else if (char === 'c') targetTab = 'ai_copilot';
+        else if (char === 'k') targetTab = 'settings';
 
         if (targetTab) {
           e.preventDefault();
@@ -160,18 +158,18 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#F5F5F0] flex flex-col font-sans selection:bg-[#0066FF] selection:text-white pb-14 md:pb-0">
+    <div className="min-h-screen bg-[#050505] text-[#F5F5F0] flex flex-col font-sans selection:bg-[#0066FF] selection:text-white pb-20 md:pb-0">
       {/* 1.2s Fast Initial Loading Sequence */}
       {!hasLoaded && <LoadingSequence onComplete={() => setHasLoaded(true)} />}
 
       {/* Subtle Noise Texture */}
       <div className="tapwise-noise" aria-hidden="true" />
 
-      {/* Toast Notification Banner */}
+      {/* Toast Notification Banner (Centered on phone, top-right on desktop) */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 px-4 py-2.5 rounded-[3px] bg-[#0A0A0A] border border-[#0066FF]/40 text-xs font-mono-tech text-[#F5F5F0] shadow-2xl flex items-center gap-2.5 animate-fade-in">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse-dot" />
-          <span>{toastMessage}</span>
+        <div className="fixed top-18 sm:top-20 left-4 right-4 sm:left-auto sm:right-6 z-50 px-4 py-2.5 rounded-[3px] bg-[#0A0A0A] border border-[#0066FF]/40 text-xs font-mono-tech text-[#F5F5F0] shadow-2xl flex items-center justify-center sm:justify-start gap-2.5 animate-fade-in max-w-md mx-auto sm:mx-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse-dot flex-shrink-0" />
+          <span className="truncate">{toastMessage}</span>
         </div>
       )}
 
@@ -266,14 +264,7 @@ export function App() {
               />
             )}
 
-            {activeTab === 'analytics' && (
-              <AnalyticsCopilot
-                onNavigateTab={setActiveTab}
-                onCreateOpportunity={() => handleCreateOpportunityFromInsight('ins-001')}
-              />
-            )}
-
-            {activeTab === 'ai_copilot' && (
+            {(activeTab === 'ai_copilot' || (activeTab as any) === 'analytics') && (
               <ContextualCopilot
                 activeTab={activeTab}
                 onNavigateTab={setActiveTab}
@@ -281,17 +272,7 @@ export function App() {
               />
             )}
 
-            {activeTab === 'weekly_review' && (
-              <WeeklyReviewPage
-                onNavigateTab={setActiveTab}
-              />
-            )}
-
-            {activeTab === 'data_sources' && (
-              <DataSourcesPage />
-            )}
-
-            {activeTab === 'settings' && (
+            {(activeTab === 'settings' || (activeTab as any) === 'data_sources' || (activeTab as any) === 'weekly_review') && (
               <SettingsPage />
             )}
           </main>
@@ -307,6 +288,7 @@ export function App() {
           onToggleDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
           onOpenCaseStudy={() => setIsCaseStudyOpen(true)}
           unresolvedSignalsCount={5}
+          unresolvedOpportunitiesCount={opportunities.filter((o) => o.status === 'inbox').length}
         />
       )}
 

@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import {
   Sparkles,
   Search,
-  ArrowRight
+  ArrowRight,
+  Database,
+  CheckCircle2,
+  Code,
+  ShieldCheck
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/tapwise';
 
@@ -17,8 +21,12 @@ export const ContextualCopilot: React.FC<ContextualCopilotProps> = ({
   onNavigateTab,
   onCreateOpportunity,
 }) => {
+  const [copilotMode, setCopilotMode] = useState<'decision' | 'telemetry'>('decision');
   const [question, setQuestion] = useState('Why did payment success drop last week?');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [rowsScanned, setRowsScanned] = useState('4,281,940');
+  const [executionMs, setExecutionMs] = useState(28);
+
   const [activeAnalysis, setActiveAnalysis] = useState<any | null>({
     query: 'Why did payment success drop last week?',
     recommendation: 'Investigate Bank X gateway timeout behavior before altering checkout UI.',
@@ -84,6 +92,9 @@ export const ContextualCopilot: React.FC<ContextualCopilotProps> = ({
     setIsAnalyzing(true);
     setTimeout(() => {
       setIsAnalyzing(false);
+      setRowsScanned((Math.floor(Math.random() * 800000) + 4000000).toLocaleString());
+      setExecutionMs(Math.floor(Math.random() * 20) + 18);
+
       if (qText.toLowerCase().includes('effort') || qText.toLowerCase().includes('what if')) {
         setActiveAnalysis({
           query: qText,
@@ -127,152 +138,232 @@ export const ContextualCopilot: React.FC<ContextualCopilotProps> = ({
           targetTab: 'opportunities' as NavigationTab,
         });
       }
-    }, 700);
+    }, 550);
   };
 
   return (
-    <div className="flex flex-col gap-8 max-w-7xl mx-auto py-8 px-4 sm:px-6 select-none">
+    <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto py-5 sm:py-8 px-4 sm:px-6 select-none pb-24 md:pb-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-5 border-b border-[#1D1D1D] gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
-              AI COPILOT · PRODUCT INTELLIGENCE
+              AI COPILOT & TELEMETRY STUDIO
             </span>
-            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#0066FF]/15 text-[#0066FF] border border-[#0066FF]/30">
-              CONTEXT: {activeTab.toUpperCase()}
+            <span className="text-[9px] sm:text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25">
+              BAYESIAN INFERENCE · 4.2M EVENTS
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
             WHAT ARE YOU TRYING TO DECIDE?
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            TapWise interprets telemetry, evaluates roadmap trade-offs, and challenges product hypotheses.
+            Contextual fintech product advisor. Ask high-level product questions or run deep ClickHouse SQL queries.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Dual Mode Switcher */}
+        <div className="flex items-center gap-1 p-1 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px]">
           <button
-            onClick={() => onNavigateTab('analytics')}
-            className="px-3.5 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
+            onClick={() => setCopilotMode('decision')}
+            className={`px-3 py-1.5 rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer min-h-[38px] flex items-center gap-1.5 ${
+              copilotMode === 'decision'
+                ? 'bg-[#0066FF] text-white font-bold'
+                : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
+            }`}
           >
-            ClickHouse Telemetry →
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Decision Advisor</span>
+          </button>
+          <button
+            onClick={() => setCopilotMode('telemetry')}
+            className={`px-3 py-1.5 rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer min-h-[38px] flex items-center gap-1.5 ${
+              copilotMode === 'telemetry'
+                ? 'bg-[#0066FF] text-white font-bold'
+                : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5" />
+            <span>ClickHouse SQL</span>
           </button>
         </div>
       </div>
 
       {/* Input Search Box */}
-      <div className="p-2 bg-[#0A0A0A] border border-[#1D1D1D] focus-within:border-[#0066FF] rounded-[4px] flex items-center gap-2">
-        <Search className="w-4 h-4 text-[#525252] ml-2 flex-shrink-0" />
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter') handleAsk(question); }}
-          placeholder="Ask TapWise anything: 'Why did payment success drop?', 'Challenge my PRD'..."
-          className="flex-1 bg-transparent px-2 py-1.5 text-xs sm:text-sm text-[#F5F5F0] placeholder:text-[#525252] outline-none font-mono-tech"
-        />
+      <div className="p-2 sm:p-2.5 bg-[#0A0A0A] border border-[#1D1D1D] focus-within:border-[#0066FF] rounded-[4px] flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <div className="flex items-center flex-1 min-w-0">
+          <Search className="w-4 h-4 text-[#525252] ml-2 flex-shrink-0" />
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') handleAsk(question); }}
+            placeholder="Ask anything: 'Why did payment success drop?', 'What if effort doubles?'..."
+            className="flex-1 bg-transparent px-2.5 py-1.5 text-xs sm:text-sm text-[#F5F5F0] placeholder:text-[#525252] outline-none font-mono-tech"
+          />
+        </div>
         <button
           onClick={() => handleAsk(question)}
           disabled={isAnalyzing}
-          className="btn-magnetic px-4 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer disabled:opacity-50"
+          className="btn-magnetic px-5 py-2.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer disabled:opacity-50 min-h-[42px] flex items-center justify-center gap-1.5 flex-shrink-0"
         >
-          {isAnalyzing ? 'Analyzing...' : 'Decide'}
+          {isAnalyzing ? (
+            <span>Analyzing 4.2M events...</span>
+          ) : (
+            <>
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Ask Copilot</span>
+            </>
+          )}
         </button>
       </div>
 
-      {/* Contextual Suggested Prompts */}
-      <div className="space-y-2">
-        <span className="text-[10px] font-mono-tech uppercase text-[#525252] tracking-wider block font-bold">
-          CONTEXT-AWARE QUERIES FOR {activeTab.toUpperCase()}:
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {currentPrompts.map((prompt, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleAsk(prompt)}
-              className={`text-xs font-mono-tech px-3 py-1.5 rounded-[3px] cursor-pointer transition-colors ${
-                question === prompt
-                  ? 'bg-[#0066FF]/20 text-[#0066FF] border border-[#0066FF]/40 font-bold'
-                  : 'bg-[#0A0A0A] hover:bg-[#141414] text-[#8A8A8A] hover:text-[#F5F5F0] border border-[#1D1D1D]'
-              }`}
-            >
-              {prompt}
-            </button>
-          ))}
-        </div>
+      {/* Suggested Quick Prompts (Swipeable horizontally on mobile) */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        {currentPrompts.map((prompt, idx) => (
+          <button
+            key={idx}
+            onClick={() => handleAsk(prompt)}
+            className={`text-xs font-mono-tech px-3 py-2 rounded-[3px] cursor-pointer transition-colors whitespace-nowrap flex-shrink-0 min-h-[38px] ${
+              question === prompt
+                ? 'bg-[#0066FF]/20 text-[#0066FF] border border-[#0066FF]/40 font-bold'
+                : 'bg-[#0A0A0A] hover:bg-[#141414] text-[#8A8A8A] hover:text-[#F5F5F0] border border-[#1D1D1D]'
+            }`}
+          >
+            {prompt}
+          </button>
+        ))}
       </div>
 
-      {/* AI Structured Response Card */}
-      {isAnalyzing ? (
-        /* Loading Skeleton with Perception of Intelligence */
-        <div className="p-8 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] space-y-4 animate-pulse">
-          <div className="flex items-center gap-2 text-xs font-mono-tech text-[#0066FF]">
-            <span className="w-2 h-2 rounded-full bg-[#0066FF] animate-pulse-dot" />
-            <span>Scanning 4.2M events across ClickHouse & NPCI telemetry partition...</span>
-          </div>
-          <div className="h-4 bg-[#141414] rounded-[2px] w-3/4" />
-          <div className="h-4 bg-[#141414] rounded-[2px] w-1/2" />
-        </div>
-      ) : activeAnalysis && (
-        <div className="p-6 sm:p-8 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] space-y-6">
-          {/* Top Recommendation Banner */}
-          <div className="p-4 bg-[#0D0E14] border border-[#0066FF]/30 rounded-[3px] flex items-start gap-3">
+      {/* Active Analysis Results Display */}
+      {activeAnalysis && (
+        <div className="p-4 sm:p-6 lg:p-8 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] space-y-6">
+          {/* Top Recommendation Box */}
+          <div className="p-4 bg-[#0D0E14] border border-[#0066FF]/35 rounded-[3px] flex items-start gap-3">
             <Sparkles className="w-4 h-4 text-[#0066FF] flex-shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono-tech font-bold uppercase text-[#0066FF]">
-                  AI STRATEGIC RECOMMENDATION
+            <div className="space-y-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-mono-tech font-bold uppercase tracking-wider text-[#0066FF]">
+                  AI RECOMMENDATION
                 </span>
-                <span className="text-[10px] font-mono-tech text-[#8A8A8A]">
+                <span className="text-[10px] font-mono-tech px-1.5 py-0.2 rounded-[2px] bg-[#10B981]/15 text-[#10B981]">
                   {activeAnalysis.confidence}% CONFIDENCE
                 </span>
               </div>
-              <p className="text-xs sm:text-sm font-mono-tech text-[#F5F5F0] leading-relaxed">
+              <p className="text-sm font-bold text-[#F5F5F0] font-display leading-snug">
                 {activeAnalysis.recommendation}
               </p>
             </div>
           </div>
 
-          {/* Evidence Breakdown */}
-          <div className="space-y-3">
+          {/* Mode 2: ClickHouse Telemetry SQL Drawer */}
+          {copilotMode === 'telemetry' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs font-mono-tech text-[#8A8A8A]">
+                  <Code className="w-3.5 h-3.5 text-[#0066FF]" />
+                  <span>ClickHouse SQL Query:</span>
+                </div>
+                <span className="text-[10px] font-mono-tech text-[#525252]">
+                  Latency: {executionMs}ms · {rowsScanned} rows scanned
+                </span>
+              </div>
+
+              <div className="p-3.5 rounded-[3px] bg-[#050505] border border-[#161616] font-mono-tech text-xs overflow-x-auto leading-relaxed text-[#0066FF]">
+                <pre>
+{`SELECT 
+    toStartOfHour(timestamp) as hour,
+    bank_node,
+    countIf(status = 'FAILED') / count(*) * 100 as failure_pct
+FROM upi_transactions
+WHERE timestamp >= now() - INTERVAL 7 DAY AND amount >= 10000
+GROUP BY hour, bank_node
+ORDER BY failure_pct DESC LIMIT 10;`}
+                </pre>
+              </div>
+
+              {/* Contributors Bar Graph */}
+              <div className="p-4 bg-[#050505] border border-[#161616] rounded-[3px] space-y-3">
+                <span className="text-[10px] font-mono-tech uppercase text-[#8A8A8A] block">
+                  ClickHouse Failure Contributor Breakdown
+                </span>
+                <div className="space-y-2 font-mono-tech text-xs">
+                  <div>
+                    <div className="flex justify-between text-[11px] mb-1">
+                      <span className="text-[#F5F5F0]">Bank X Core Switch (U30 Timeout)</span>
+                      <span className="text-[#EF4444] font-bold">52% share</span>
+                    </div>
+                    <div className="w-full bg-[#161616] h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-[#EF4444] h-full" style={{ width: '52%' }} />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-[11px] mb-1">
+                      <span className="text-[#F5F5F0]">Android 15 Background Intent Kills</span>
+                      <span className="text-[#F59E0B] font-bold">24% share</span>
+                    </div>
+                    <div className="w-full bg-[#161616] h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-[#F59E0B] h-full" style={{ width: '24%' }} />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-[11px] mb-1">
+                      <span className="text-[#F5F5F0]">Peak Evening Concurrency (8–10:30 PM)</span>
+                      <span className="text-[#0066FF] font-bold">15% share</span>
+                    </div>
+                    <div className="w-full bg-[#161616] h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-[#0066FF] h-full" style={{ width: '15%' }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Evidence Checklist */}
+          <div className="space-y-2">
             <span className="text-[10px] font-mono-tech uppercase text-[#8A8A8A] font-bold block">
-              EMPIRICAL EVIDENCE EVALUATED:
+              CORRELATED TELEMETRY EVIDENCE
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {activeAnalysis.evidence.map((ev: string, i: number) => (
-                <div key={i} className="p-3 bg-[#050505] border border-[#161616] rounded-[3px] text-xs font-mono-tech text-[#8A8A8A] flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] mt-1.5 flex-shrink-0" />
-                  <span>{ev}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono-tech">
+              {activeAnalysis.evidence.map((ev: string, idx: number) => (
+                <div key={idx} className="p-3 bg-[#050505] border border-[#161616] rounded-[3px] flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#0066FF] flex-shrink-0 mt-0.5" />
+                  <span className="text-[#8A8A8A]">{ev}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Alternative Hypothesis */}
-          <div className="p-3.5 bg-[#050505] border border-[#1D1D1D] rounded-[3px] text-xs font-mono-tech text-[#8A8A8A]">
-            <span className="text-[#EF4444] font-bold uppercase text-[10px] block mb-1">
-              ALTERNATIVE HYPOTHESIS CONSIDERED:
-            </span>
-            <p>{activeAnalysis.alternativeHypothesis}</p>
+          {/* Alternative Hypothesis & Confounder Check */}
+          <div className="p-4 bg-[#050505] border border-[#161616] rounded-[3px] space-y-1">
+            <div className="flex items-center gap-1.5 text-[10px] font-mono-tech text-[#10B981] font-bold uppercase">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Confounder Safeguard</span>
+            </div>
+            <p className="text-xs font-mono-tech text-[#8A8A8A] leading-relaxed">
+              {activeAnalysis.alternativeHypothesis}
+            </p>
           </div>
 
-          {/* Action Footer */}
-          <div className="pt-4 border-t border-[#1D1D1D] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="text-xs font-mono-tech text-[#525252]">
-              Recommended Action: <strong className="text-[#F5F5F0]">{activeAnalysis.suggestedAction}</strong>
+          {/* Suggested Next Action */}
+          <div className="pt-4 border-t border-[#1D1D1D] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div className="text-xs font-mono-tech text-[#8A8A8A]">
+              <span>RECOMMENDED ACTION: </span>
+              <strong className="text-[#F5F5F0]">{activeAnalysis.suggestedAction}</strong>
             </div>
 
             <button
               onClick={() => {
-                if (activeAnalysis.targetTab === 'opportunities') {
+                if (activeAnalysis.targetTab) {
+                  onNavigateTab(activeAnalysis.targetTab);
+                } else {
                   onCreateOpportunity();
                 }
-                onNavigateTab(activeAnalysis.targetTab);
               }}
-              className="btn-magnetic flex items-center gap-1.5 px-4 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer"
+              className="btn-magnetic flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-md shadow-[#0066FF]/20 min-h-[44px]"
             >
-              <span>Execute Action</span>
+              <span>Take Action in OS</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

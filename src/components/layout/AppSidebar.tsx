@@ -7,11 +7,8 @@ import {
   SlidersHorizontal,
   FileText,
   FlaskConical,
-  BarChart3,
   Terminal,
-  Database,
-  Settings,
-  Calendar
+  Settings
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/tapwise';
 
@@ -41,24 +38,18 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
     { id: 'overview', label: 'Overview', icon: LayoutDashboard, shortcut: 'G O' },
     { id: 'signals', label: 'Signals', icon: Radio, badge: unresolvedSignalsCount, badgeColor: '#EF4444', shortcut: 'G S' },
     { id: 'insights', label: 'Insights', icon: Sparkles, shortcut: 'G I' },
-    { id: 'opportunities', label: 'Opportunities', icon: Inbox, badge: unresolvedOpportunitiesCount, badgeColor: '#0066FF' },
+    { id: 'opportunities', label: 'Opportunities', icon: Inbox, badge: unresolvedOpportunitiesCount, badgeColor: '#0066FF', shortcut: 'G P' },
   ];
 
   const executionNav: NavItem[] = [
-    { id: 'prioritize', label: 'Prioritize', icon: SlidersHorizontal, shortcut: 'G P' },
-    { id: 'prds', label: 'PRDs', icon: FileText, shortcut: 'G R' },
+    { id: 'prioritize', label: 'Prioritize', icon: SlidersHorizontal, shortcut: 'G R' },
+    { id: 'prds', label: 'PRDs', icon: FileText, shortcut: 'G D' },
     { id: 'experiments', label: 'Experiments', icon: FlaskConical, shortcut: 'G E' },
   ];
 
-  const deepSystemsNav: NavItem[] = [
-    { id: 'analytics', label: 'Analytics', icon: BarChart3, shortcut: 'G A' },
-    { id: 'ai_copilot', label: 'AI Copilot', icon: Terminal, shortcut: 'G C' },
-    { id: 'weekly_review', label: 'Weekly Review', icon: Calendar },
-  ];
-
-  const configNav: NavItem[] = [
-    { id: 'data_sources', label: 'Data Sources', icon: Database },
-    { id: 'settings', label: 'Settings', icon: Settings },
+  const copilotConfigNav: NavItem[] = [
+    { id: 'ai_copilot', label: 'AI Copilot & SQL', icon: Terminal, shortcut: 'G C' },
+    { id: 'settings', label: 'Settings & Sources', icon: Settings },
   ];
 
   const renderNavGroup = (title: string, items: NavItem[]) => (
@@ -126,8 +117,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
       <div className="py-4 px-3 flex flex-col gap-4 overflow-y-auto">
         {renderNavGroup('Core Intelligence', intelligenceNav)}
         {renderNavGroup('Execution Engine', executionNav)}
-        {renderNavGroup('Deep Systems', deepSystemsNav)}
-        {renderNavGroup('Configuration', configNav)}
+        {renderNavGroup('Copilot & Systems', copilotConfigNav)}
       </div>
 
       {/* Bottom Status Feed */}
@@ -139,8 +129,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
         <div className="flex items-center justify-between">
           <span>TELEMETRY FEED</span>
           <span className="text-[#10B981] flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse-dot" />
-            STREAMING (4.2M)
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+            ACTIVE
           </span>
         </div>
       </div>
