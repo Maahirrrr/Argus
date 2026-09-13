@@ -1,90 +1,78 @@
-# TapWise — AI Copilot for Fintech Product Managers
+﻿# Argus — AI Operating System for Fintech Product Teams
 
-[![Live App](https://img.shields.io/badge/live%20app-maahirrrr.github.io%2FTapWise-indigo.svg)](https://maahirrrr.github.io/TapWise/)
+[![Live App](https://img.shields.io/badge/live%20app-maahirrrr.github.io%2FArgus-blue.svg)](https://maahirrrr.github.io/Argus/)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Product Stack](https://img.shields.io/badge/fintech-UPI%20%7C%20eKYC%20%7C%20Refunds-cyan.svg)]()
+[![Product Stack](https://img.shields.io/badge/fintech-UPI%20%7C%20Gateways%20%7C%20Chaos%20Failover-cyan.svg)]()
 [![Decision Engine](https://img.shields.io/badge/prioritization-Dynamic%20RICE%20Workbench-purple.svg)]()
 
-> **"Cursor / Claude for a Fintech PM."**  
-> Go from Problem Discovery → Telemetry Insight → Dynamic Prioritization → Production PRD → Causal A/B Experimentation → Weekly Autonomous Review in seconds.
+> **Cursor / Claude for a Fintech PM.**  
+> Go from Problem Discovery → Telemetry Insight → Dynamic Prioritization → Production PRD → Causal A/B Experimentation → Chaos Failover Simulation in seconds.
 >
-> 🔗 **Live Interactive App:** [https://maahirrrr.github.io/TapWise/](https://maahirrrr.github.io/TapWise/)
+> 🔗 **Live Interactive Platform:** [https://maahirrrr.github.io/Argus/](https://maahirrrr.github.io/Argus/)
 
 ---
 
-## 🎯 What is TapWise?
+## 👁️ What is Argus?
 
-TapWise is an **AI Product Management Decision Cockpit** built specifically for fintech product teams managing high-volume payment systems, onboarding funnels, and fraud/compliance pipelines.
+**Argus** is an **AI-powered Product Operating System** built specifically for fintech product teams managing high-volume payment systems, onboarding funnels, banking switches, and fraud/compliance pipelines.
 
-When a product anomaly occurs—such as a 4.1% drop in UPI checkout success rate—TapWise correlates millions of telemetry events, decomposes the root contributors, lets PMs test roadmap trade-offs on an interactive RICE workbench, drafts an engineering-ready PRD, and configures guarded A/B experiments.
+When a payment anomaly occurs—such as a 4.1% drop in UPI checkout success rate—Argus correlates telemetry streams across millions of events, isolates the causal root contributors, lets PMs test roadmap trade-offs on an interactive RICE sensitivity workbench, drafts an engineering-hardened PRD with BDD test cases, and runs chaos outage failover simulations.
 
 ---
 
-## ⚡ The 7 Core Product Modules
+## ⚡ Core Product Capabilities
 
-### 1. 🔎 Incident Discovery & Product Intelligence
-* **Real-time Anomaly Sentry**: Detects metric regressions across 4.8M transacting users (e.g. UPI SR: 94.2% → 90.1%).
-* **Root Cause Decomposition**: Breaks down failure share across:
-  * **Bank Switches**: Bank X core banking node timeouts (>30s) accounting for 52% of lost volume.
-  * **OS Regressions**: Android 15 background service policy terminating intent handshakes (24% share).
-  * **Ticket Sizes**: High-value ₹10,000+ fraud velocity check drops (15% share).
-  * **Peak Traffic**: 8:00 PM – 10:30 PM evening congestion surges (9% share).
+### 1. 🔎 Telemetry Anomaly Sentry & Signals Triage
+* **Real-time Anomaly Sentry**: Detects metric regressions across transacting cohorts (e.g. UPI SR: 94.2% → 90.1%).
+* **Causal Root Cause Decomposition**: Breaks down failure attribution across Bank Switches, OS Regressions, Ticket Sizes, and Peak Traffic.
 * **AI Actionable Advice**: Suggests dynamic multi-bank routing over UI redesigns.
 
-### 2. 🧠 AI Prioritization Engine (The Centerpiece)
-* **Dynamic Sensitivity & Trade-Off Workbench**: Live interactive sliders for **Reach**, **Impact (1-10)**, **Confidence (1-10)**, and **Effort (Sprints)**.
-* **Instant Re-Ranking**: Dynamically re-sorts initiatives across **RICE**, **ICE**, or **MoSCoW** algorithms.
-* **Causal Sensitivity Explainer**: TapWise automatically explains *why* the ranking shifted (e.g., *"Increasing effort on Dynamic Failover from 3 to 6 sprints reduces RICE score by 44%, dropping it to #3 below Aadhaar Face-RD"*).
+### 2. ⚡ Real-Time Payment Chaos & Failover Simulator
+* **Bank Outage Injection**: Simulate live HDFC latency spikes (+1,400ms), Android 15 auth crashes, and NPCI switch throttling.
+* **Live Ticking GMV Loss Meter**: Real-time revenue at risk calculation.
+* **1-Click Autonomous Failover**: Reroutes degraded traffic to secondary gateways and displays salvaged GMV counter.
+* **Incident Post-Mortem PRD Export**: Converts failure telemetry into an incident post-mortem and PRD spec.
 
-### 3. 📄 PRD Copilot (Production-Grade Specs)
-* Generates comprehensive product requirements:
-  * **Problem Statement & User Impact**
-  * **Goals & Non-Goals (Scope Boundaries)**
-  * **Prioritized Functional Specs (P0 / P1 / P2)**
-  * **Gherkin Acceptance Criteria (Given / When / Then)**
-  * **Edge Cases & Graceful Degradation Safeguards**
-  * **Phased Rollout Strategy (Canary 5% → Staged 25% → 100%)**
-* **1-Click Markdown Export**: Ready to paste directly into Notion, Linear, Jira, or Confluence.
+### 3. 🧠 Dynamic RICE Prioritization Workbench
+* **Interactive Sensitivity Sliders**: Live controls for Reach, Impact, Confidence, and Effort.
+* **Instant Re-Ranking**: Dynamically re-sorts initiatives across RICE, ICE, or MoSCoW models.
+* **Causal Explainer**: Argus automatically explains why rankings shifted.
 
-### 4. 🧪 Experiment Designer & Causal A/B Testing
+### 4. 📄 PRD Studio & Adversarial AI Critic
+* **Production-Grade Specs**: Problem statement, scope, functional specs with Gherkin BDD test cases, rollout phases.
+* **AI Version Diff Inspector (v1 vs v2)**: Side-by-side comparison of PM draft against AI-critic hardened specs.
+
+### 5. 🧪 Experiment Lab & Causal A/B Testing
 * **Hypothesis Formulation**: Formalizes Null vs Alternative causal hypotheses.
-* **Dynamic Traffic Split**: Visual slider allocating volume between Control and Variant A (Smart Failover).
-* **Sample Size & MDE Estimation**: Statistical power calculations (α = 0.05, 80% power).
-* **Guardrail Constraints (Circuit Breakers)**: Enforces hard thresholds on retry rate and gateway latency with automated rollback triggers.
+* **Dynamic Traffic Allocation**: Slider splitting volume between Control and Variant.
+* **Guardrail Constraints & Rollback Kill Switch**: Circuit breaker thresholds with automated rollback triggers.
 
-### 5. 📊 Product Analytics Copilot (ClickHouse Telemetry)
-* **Natural Language to SQL**: Converts PM inquiries into high-performance ClickHouse warehouse queries.
-* **Instant Diagnostic Visualizations**: Funnel drop-offs, bank latency heatmaps, and retention cohort decay curves.
-* **Preset Benchmarks**: Quick exploration of failure rates, Day-7 retention impact, and merchant categories.
+### 6. 📊 Contextual Telemetry Copilot & ClickHouse Studio
+* **Natural Language to SQL**: Converts PM inquiries into ClickHouse queries.
+* **Diagnostic Funnels**: Funnel drop-offs, bank latency heatmaps, and retention curves.
 
-### 6. 🤖 Autonomous Weekly PM Agent
-* **Monday 8:00 AM Executive Brief**: Synthesizes product health into a unified scorecard.
-* **Core Metric Drift Tracker**: Quantifies deltas in UPI SR, new signups, refund tickets, and GMV.
-* **Stakeholder Sign-Offs**: Interactive approval checkpoints for Engineering Leads, Risk & Compliance, and VP of Product.
-
-### 7. ⚡ Fintech Brain Feed
-* **Customer Voice Clustering**: Unifies Play Store reviews, Zendesk tickets, and Twitter/X complaints into thematic churn clusters.
-* **Competitor Radar**: Tracks counter-strategies against PhonePe (1-Tap biometric), Google Pay (multi-bank fallback), CRED (P2P drops), and Paytm (Soundbox screen reversal).
+### 7. 🎓 Interactive Onboarding Tutorial
+* Step-by-step interactive onboarding guide accessible via top header, keyboard shortcut T, or ⌘K command palette.
 
 ---
 
 ## 🛠 Tech Stack & Design System
 
-* **Framework**: React 19 + TypeScript (Strict mode, 0 lint/build warnings)
-* **Styling**: Tailwind CSS v4 + Obsidian Dark Design System (Linear / Cursor aesthetic)
+* **Framework**: React 19 + TypeScript (Strict mode, 0 warnings)
+* **Styling**: Tailwind CSS v4 + Obsidian Dark Design System (#050505 base, #0066FF electric blue accent)
 * **Animation & Motion**: Motion (Framer Motion v13 engine)
 * **Icons**: Lucide React
-* **Typography**: Syne (Hero headlines), Space Grotesk (UI headers), JetBrains Mono (Telemetry/Data), DM Sans (Body)
+* **Typography**: Syne (Hero headlines), Space Grotesk (UI headers), JetBrains Mono (Telemetry/Data), Inter (Body)
 * **Build**: Vite 8
 
 ---
 
 ## 🚀 Getting Started Locally
 
-```bash
+`ash
 # 1. Clone repository
-git clone https://github.com/Maahirrrr/TapWise.git
-cd TapWise
+git clone https://github.com/Maahirrrr/Argus.git
+cd Argus
 
 # 2. Install dependencies
 npm install
@@ -94,11 +82,22 @@ npm run dev
 
 # 4. Build for production
 npm run build
-```
+`
+
+---
+
+## 🌐 GitHub Pages Deployment Setup
+
+To ensure GitHub Pages serves Argus properly:
+1. In your GitHub repository, go to **Settings** > **Pages**.
+2. Under **Build and deployment** > **Source**:
+   - Select **GitHub Actions** (Recommended — builds and deploys automatically via .github/workflows/deploy.yml).
+   - *Or* select **Deploy from a branch** > Branch: main > Folder: /docs.
+3. Your live site will be available at: **[https://maahirrrr.github.io/Argus/](https://maahirrrr.github.io/Argus/)**
 
 ---
 
 ## 👤 Author & Architecture
 
 Crafted as a flagship Fintech Product Management & AI Copilot system showcase.  
-Live deployment: [https://maahirrrr.github.io/TapWise/](https://maahirrrr.github.io/TapWise/)
+Live deployment: [https://maahirrrr.github.io/Argus/](https://maahirrrr.github.io/Argus/)

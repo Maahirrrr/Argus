@@ -10,17 +10,44 @@
     <meta property="og:title" content="Argus — AI Copilot for Fintech Product Managers" />
     <meta property="og:description" content="Turn messy fintech signals, bank drop-offs, and payment telemetry into engineering-ready PRDs, RICE priorities, and guarded experiments." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://maahirrrr.github.io/TapWise/" />
+    <meta property="og:url" content="https://maahirrrr.github.io/Argus/" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Argus — AI Product Intelligence Platform" />
     <meta name="twitter:description" content="Cursor/Claude for a Fintech PM. Signals → Insights → Opportunities → Prioritization → PRDs → Experiments." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="./assets/index-BxenriC1.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DeOoZHP3.css">
+    <script type="module" crossorigin src="./assets/index-CNGtLYkG.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CMoNA0Ho.css">
   </head>
   <body class="bg-[#050505] text-[#F5F5F0]">
     <div id="root"></div>
+    <script>
+      // Graceful fallback for static GitHub Pages root deployment if Vite dev server is not active
+      if (window.location.hostname.includes('github.io')) {
+        window.addEventListener('DOMContentLoaded', function() {
+          setTimeout(function() {
+            var rootEl = document.getElementById('root');
+            if (rootEl && !rootEl.hasChildNodes()) {
+              console.warn('[Argus] Static environment detected. Injecting production bundle assets...');
+              var head = document.head || document.getElementsByTagName('head')[0];
+              var body = document.body || document.getElementsByTagName('body')[0];
+              
+              var cssLink = document.createElement('link');
+              cssLink.rel = 'stylesheet';
+              cssLink.crossOrigin = '';
+              cssLink.href = './assets/index-CMoNA0Ho.css';
+              head.appendChild(cssLink);
+
+              var jsScript = document.createElement('script');
+              jsScript.type = 'module';
+              jsScript.crossOrigin = '';
+              jsScript.src = './assets/index-CNGtLYkG.js';
+              body.appendChild(jsScript);
+            }
+          }, 350);
+        });
+      }
+    </script>
   </body>
 </html>
