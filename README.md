@@ -1,13 +1,13 @@
 # TapWise — Real-Time Indian Credit Card Swipe Optimizer
 
-[![Live Demo](https://img.shields.io/badge/live%20demo-tapwise--app--seven.vercel.app-emerald.svg)](https://tapwise-app-seven.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/live%20demo-maahirrrr.github.io%2FTapWise-gold.svg)](https://maahirrrr.github.io/TapWise/)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![Benchmark Evals](https://img.shields.io/badge/evals-11%2F11%20passing%20(100%25)-emerald.svg)]()
 [![Privacy](https://img.shields.io/badge/privacy-100%25%20client--side-blue.svg)]()
 [![Cards Mapped](https://img.shields.io/badge/cards-15%20Indian%20Powerhouses-amber.svg)]()
 
 > **Never swipe the wrong card in India again.**  
-> 🔗 **Live Demo:** [https://tapwise-app-seven.vercel.app/](https://tapwise-app-seven.vercel.app/)  
+> 🔗 **Live Web App:** [https://maahirrrr.github.io/TapWise/](https://maahirrrr.github.io/TapWise/)  
 > TapWise is a sub-second, zero-KYC credit card rewards optimizer designed specifically for urban Indian cardholders. It disambiguates cryptic payment gateway descriptors (`RAZORPAY*BLINKIT`, `PAYTM*DMART`), identifies online vs. offline channel disparity traps, and alerts users to fine-print regulatory exclusions.
 
 ---
