@@ -1,5 +1,6 @@
-import React from 'react';
-import { CreditCard as CardIcon, ShieldCheck, Lock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import { CreditCard as CardIcon, Lock, Zap } from 'lucide-react';
 
 interface HeaderProps {
   walletCount: number;
@@ -7,62 +8,80 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ walletCount, onOpenDeck }) => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.07] bg-[#060608]/90 backdrop-blur-xl">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <motion.header
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-[#060608]/95 backdrop-blur-2xl border-b border-white/[0.06]'
+          : 'bg-transparent backdrop-blur-sm border-b border-transparent'
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
 
-        {/* Brand: Private Banking Luxury Vibe */}
-        <div className="flex items-center gap-3.5">
-          {/* Foil Stamped Monogram */}
-          <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-gradient-to-b from-[#1c1c24] to-[#0c0c10] p-[1px] shadow-lg shadow-black/60 border border-white/10">
-            <div className="w-full h-full rounded-[11px] bg-[#08080c] flex items-center justify-center relative">
-              <span className="font-display font-bold text-xs tracking-wider text-gold-foil">
-                TW
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.05] to-transparent pointer-events-none" />
-            </div>
+        {/* Brand */}
+        <div className="flex items-center gap-3">
+          <div className="relative w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/5 border border-[#d4af37]/30 flex items-center justify-center">
+            <span className="font-syne font-bold text-xs text-[#d4af37] tracking-wider">TW</span>
           </div>
-
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-display text-lg font-bold tracking-tight text-white">
-                TapWise
-              </span>
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest bg-[#d4af37]/10 text-[#e5c07b] border border-[#d4af37]/25 font-display">
-                India Engine
-              </span>
-            </div>
-            <p className="text-[11px] text-zinc-500 hidden sm:block">
-              Credit Card Rewards & POS Classifier · 15 Cards Mapped
-            </p>
+            <span className="font-syne font-bold text-base tracking-tight text-white">TapWise</span>
+            <span className="hidden sm:inline text-zinc-500 text-xs ml-2">India Engine</span>
           </div>
         </div>
 
-        {/* Right Side: Security & Deck Pill */}
-        <div className="flex items-center gap-3.5">
-          <div className="hidden md:flex items-center gap-4 pr-4 border-r border-white/10 text-xs text-zinc-400">
-            <span className="flex items-center gap-1.5 text-zinc-400">
-              <Lock className="w-3.5 h-3.5 text-[#d4af37]" />
+        {/* Center: Live indicator */}
+        <div className="hidden md:flex items-center gap-2">
+          <span className="live-badge">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Sub-second
+          </span>
+        </div>
+
+        {/* Right */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-3 text-xs text-zinc-500">
+            <span className="flex items-center gap-1.5">
+              <Lock className="w-3 h-3 text-[#d4af37]" />
               Zero KYC
             </span>
-            <span className="flex items-center gap-1.5 text-zinc-400">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              100% Client-Side
+            <span className="text-zinc-700">|</span>
+            <span className="flex items-center gap-1.5">
+              <Zap className="w-3 h-3 text-emerald-400" />
+              100% Local
             </span>
           </div>
 
-          <button
+          <motion.button
             onClick={onOpenDeck}
-            className="btn-cred-dark flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer active:scale-[0.98] transition-all"
+            whileHover={{ scale: 1.03, y: -1 }}
+            whileTap={{ scale: 0.97 }}
+            className="btn-cred-dark flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold cursor-pointer"
           >
-            <CardIcon className="w-4 h-4 text-[#d4af37]" />
-            <span className="text-zinc-200">My Deck</span>
-            <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-[#d4af37]/20 text-[#f3e5ab] font-display">
+            <CardIcon className="w-3.5 h-3.5 text-[#d4af37]" />
+            <span className="text-zinc-200">Vault</span>
+            <motion.span
+              key={walletCount}
+              initial={{ scale: 1.4 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+              className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#d4af37]/20 text-[#f3e5ab] font-display"
+            >
               {walletCount}
-            </span>
-          </button>
+            </motion.span>
+          </motion.button>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };

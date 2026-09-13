@@ -65,11 +65,12 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
               return (
                 <tr
                   key={item.card.id}
-                  className={`transition-colors ${
+                  className={`transition-colors animate-float-up ${
                     isWinner
-                      ? 'bg-[#d4af37]/[0.06] hover:bg-[#d4af37]/[0.09]'
+                      ? 'bg-[#d4af37]/[0.06] hover:bg-[#d4af37]/[0.09] winner-glow'
                       : 'hover:bg-white/[0.02]'
                   }`}
+                  style={{ animationDelay: `${index * 60}ms` }}
                 >
                   {/* Rank Badge */}
                   <td className="py-4 px-6">
@@ -118,14 +119,17 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
                     <div className="flex items-center justify-end gap-3">
                       <div className="hidden lg:block w-24 h-1.5 rounded-full overflow-hidden bg-white/[0.06]">
                         <div
-                          className={`h-full rounded-full transition-all duration-500 ${
+                          className={`h-full rounded-full ${
                             isWinner
                               ? 'bg-gradient-to-r from-[#e5c07b] to-[#d4af37]'
                               : isRunnerUp
                               ? 'bg-slate-300'
                               : 'bg-zinc-600'
                           }`}
-                          style={{ width: `${isExclusion ? 0 : barWidth}%` }}
+                          style={{
+                            width: `${isExclusion ? 0 : barWidth}%`,
+                            transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                          }}
                         />
                       </div>
                       <span

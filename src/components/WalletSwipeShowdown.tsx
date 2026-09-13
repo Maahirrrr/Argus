@@ -300,7 +300,7 @@ export const WalletSwipeShowdown: React.FC<WalletSwipeShowdownProps> = ({
                 ref={cardRef}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                initial={{ scale: 0.8, y: 40, opacity: 0 }}
+                initial={{ scale: 0.7, y: 60, opacity: 0, rotateX: -15 }}
                 animate={{
                   scale: 1,
                   y: 0,
@@ -308,8 +308,8 @@ export const WalletSwipeShowdown: React.FC<WalletSwipeShowdownProps> = ({
                   rotateX: tilt.rotateX,
                   rotateY: tilt.rotateY,
                 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                className="w-full max-w-[440px] cursor-pointer"
+                transition={{ type: 'spring', stiffness: 160, damping: 14, mass: 0.8 }}
+                className={`w-full max-w-[440px] cursor-pointer ${stage === 'winner' ? 'winner-glow' : ''} rounded-[18px]`}
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 {/* The Mirror Chrome Metal Card Shell */}
