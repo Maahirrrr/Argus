@@ -544,3 +544,43 @@ body {
 }
 .input-floating::placeholder { color: rgba(255,255,255,0.2); }
 
+
+/* ----- Tier & Animation Utilities ----- */
+
+/* Tier colors */
+.tier-gold {
+  border-color: #d4af37;
+  box-shadow: 0 0 20px rgba(212,175,55,0.6);
+}
+.tier-silver {
+  border-color: #cbd5e1;
+  box-shadow: 0 0 15px rgba(203,213,225,0.5);
+}
+.tier-bronze {
+  border-color: #b87333;
+  box-shadow: 0 0 15px rgba(184,115,51,0.5);
+}
+
+@keyframes card-out {
+  from { opacity: 0; transform: translateY(30px) rotateZ(0deg); }
+  to { opacity: 1; transform: translateY(0) rotateZ(0deg); }
+}
+
+.animate-card-out {
+  animation: card-out 0.6s ease-out both;
+}
+
+@keyframes scan-beam {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-scan-beam {
+  background: linear-gradient(90deg, transparent, rgba(0,240,255,0.5), transparent);
+  background-size: 200% 100%;
+  animation: scan-beam 1.4s linear infinite;
+}
+
+.tier-fade {
+  animation: fade-in-scale 0.6s ease both;
+}

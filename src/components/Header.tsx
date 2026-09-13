@@ -42,26 +42,14 @@ export const Header: React.FC<HeaderProps> = ({ walletCount, onOpenDeck }) => {
 
         {/* Center: Live indicator */}
         <div className="hidden md:flex items-center gap-2">
-          <span className="live-badge">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Sub-second
+          {/* Unified Tagline */}
+          <span className="live-badge font-syne">
+            TapWise India Engine – Sub‑second • Zero KYC • 100 % Local
           </span>
         </div>
 
         {/* Right */}
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-3 text-xs text-zinc-500">
-            <span className="flex items-center gap-1.5">
-              <Lock className="w-3 h-3 text-[#d4af37]" />
-              Zero KYC
-            </span>
-            <span className="text-zinc-700">|</span>
-            <span className="flex items-center gap-1.5">
-              <Zap className="w-3 h-3 text-emerald-400" />
-              100% Local
-            </span>
-          </div>
-
           <motion.button
             onClick={onOpenDeck}
             whileHover={{ scale: 1.03, y: -1 }}

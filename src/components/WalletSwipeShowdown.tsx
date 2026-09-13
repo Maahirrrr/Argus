@@ -11,7 +11,9 @@ import {
 } from 'lucide-react';
 import type { SwipeRecommendation, CreditCard, PaymentChannel } from '../lib/types';
 import { EmvChip, ContactlessIcon } from './EmvChip';
-
+import GoldBadge from '../assets/crown.svg';
+import SilverBadge from '../assets/silver-medal.svg';
+import BronzeBadge from '../assets/bronze-medal.svg';
 interface WalletSwipeShowdownProps {
   recommendation: SwipeRecommendation;
   activeCards: CreditCard[];
@@ -201,6 +203,9 @@ export const WalletSwipeShowdown: React.FC<WalletSwipeShowdownProps> = ({
                     const isBest = card.id === bestCard.id;
                     const evalItem = comparison.find((c) => c.card.id === card.id);
                     const isExclusion = evalItem?.isExclusion;
+                    const rankIdx = comparison.findIndex((c) => c.card.id === card.id);
+                    const tierClass = rankIdx === 0 ? 'tier-gold' : rankIdx === 1 ? 'tier-silver' : rankIdx === 2 ? 'tier-bronze' : '';
+                    const tierBadge = rankIdx === 0 ? <GoldBadge className="w-5 h-5" /> : rankIdx === 1 ? <SilverBadge className="w-5 h-5" /> : rankIdx === 2 ? <BronzeBadge className="w-5 h-5" /> : null;
 
                     const isPocket = stage === 'pocket';
                     const targetY = isPocket ? 90 : -35 + Math.abs(offset) * 10;
@@ -221,7 +226,7 @@ export const WalletSwipeShowdown: React.FC<WalletSwipeShowdownProps> = ({
                           zIndex: isBest && stage === 'scanning' ? 30 : idx + 10,
                         }}
                         transition={{ type: 'spring', stiffness: 220, damping: 22 }}
-                        className={`absolute w-64 sm:w-72 h-40 sm:h-44 rounded-2xl p-4 flex flex-col justify-between shadow-2xl border transition-all select-none bg-gradient-to-br ${card.theme.gradient}`}
+                        className={`absolute w-64 sm:w-72 h-40 sm:h-44 rounded-2xl p-4 flex flex-col justify-between shadow-2xl border transition-all select-none bg-gradient-to-br ${card.theme.gradient} ${tierClass}`}
                         style={{
                           borderColor: isBest && stage === 'scanning' ? '#00f0ff' : 'rgba(255,255,255,0.12)',
                           boxShadow: isBest && stage === 'scanning' ? '0 0 35px rgba(0,240,255,0.4)' : undefined,
@@ -240,6 +245,7 @@ export const WalletSwipeShowdown: React.FC<WalletSwipeShowdownProps> = ({
                           <p className={`font-display text-sm font-bold truncate ${card.theme.textColor}`}>
                             {card.name}
                           </p>
+                          {tierBadge && <div className="mt-1 flex justify-center">{tierBadge}</div>}
                         </div>
 
                         <div className="pt-2 border-t border-white/10 flex items-end justify-between">

@@ -66,7 +66,7 @@ export const SearchOptimizer: React.FC<SearchOptimizerProps> = ({
             type="text"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Merchant, POS string, descriptor (e.g. RAZORPAY*BLINKIT)..."
+            placeholder="Merchant, POS string, descriptor (e.g. RAZORPAY*BLINKIT)…"
             className="input-floating w-full pl-11 pr-4 py-4 rounded-2xl text-sm font-medium placeholder:text-zinc-600"
           />
         </div>
