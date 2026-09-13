@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Award, AlertTriangle, Share2, Check, ShieldAlert, Sparkles } from 'lucide-react';
+import { AlertTriangle, Copy, Check, ShieldAlert, TrendingUp, ArrowRight } from 'lucide-react';
 import type { SwipeRecommendation, PaymentChannel } from '../lib/types';
 
 interface RecommendationCardProps {
@@ -15,149 +15,257 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
   spendAmount,
 }) => {
   const [copied, setCopied] = useState(false);
-  const { bestCard, bestRatePercent, estimatedSavingInr, rationale, runnerUpCard, runnerUpRatePercent, channelAlert, exclusionWarning } = recommendation;
+  const {
+    bestCard,
+    bestRatePercent,
+    estimatedSavingInr,
+    rationale,
+    runnerUpCard,
+    runnerUpRatePercent,
+    channelAlert,
+    exclusionWarning,
+  } = recommendation;
+
+  const isZero = bestRatePercent === 0;
 
   const handleCopy = () => {
-    const text = `💳 TapWise Recommendation for ₹${spendAmount.toLocaleString('en-IN')} on ${rawQuery}:\n👉 Use ${bestCard.name} for ${bestRatePercent}% ${recommendation.bestRewardType} (₹${estimatedSavingInr} saved)!\nWhy: ${rationale}`;
+    const text = `💳 TapWise · ₹${spendAmount.toLocaleString('en-IN')} on ${rawQuery}\n👑 Use ${bestCard.name} → ${bestRatePercent}% ${recommendation.bestRewardType} = ₹${estimatedSavingInr} saved\n${rationale}`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const isZeroRate = bestRatePercent === 0;
-
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-zinc-700/80 bg-gradient-to-b from-zinc-900 to-zinc-950 p-6 md:p-8 shadow-2xl card-sheen">
-      {/* Background ambient glow based on card accent */}
+    <div className="animate-fade-up flex flex-col gap-4">
+
+      {/* ── Main recommendation grid ── */}
       <div
-        className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl opacity-15 pointer-events-none"
-        style={{ backgroundColor: bestCard.theme.accentColor }}
-      />
+        className="relative rounded-2xl overflow-hidden"
+        style={{
+          background: 'rgba(8, 12, 22, 0.9)',
+          border: '1px solid rgba(201, 168, 76, 0.15)',
+          boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.08)',
+        }}
+      >
+        {/* Ambient background from card accent */}
+        <div
+          className="absolute -top-32 -right-32 w-64 h-64 rounded-full blur-[80px] pointer-events-none"
+          style={{ backgroundColor: bestCard.theme.accentColor, opacity: 0.07 }}
+        />
+        <div
+          className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full blur-[60px] pointer-events-none"
+          style={{ backgroundColor: '#4f46e5', opacity: 0.08 }}
+        />
 
-      {/* Top Banner: Status & Share */}
-      <div className="flex items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-            <Award className="w-3.5 h-3.5" />
-            Rank #1 Best Card to Swipe
-          </span>
-          <span className="text-xs text-zinc-400 hidden sm:inline">
-            for ₹{spendAmount.toLocaleString('en-IN')} spend
-          </span>
-        </div>
-
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-xs font-medium text-zinc-200 transition-all border border-zinc-700 active:scale-[0.98]"
-          title="Copy shareable summary"
-        >
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
-          <span>{copied ? 'Copied!' : 'Share Recommendation'}</span>
-        </button>
-      </div>
-
-      {/* Main Card Presentation Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        {/* Left: Card Visual Badge */}
-        <div className="lg:col-span-5">
-          <div
-            className={`relative rounded-2xl p-5 border ${bestCard.theme.border} bg-gradient-to-br ${bestCard.theme.gradient} shadow-2xl transition-transform hover:scale-[1.02] duration-300`}
+        {/* Header row */}
+        <div className="relative flex items-center justify-between px-6 pt-5 pb-4 border-b border-white/5">
+          <div className="flex items-center gap-2">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold font-display uppercase tracking-widest tag-gold">
+              <TrendingUp className="w-3 h-3" />
+              Rank #1 — Best Card to Swipe
+            </span>
+            <span className="hidden sm:block text-xs" style={{ color: '#454d62' }}>
+              for ₹{spendAmount.toLocaleString('en-IN')}
+            </span>
+          </div>
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer btn-ghost"
           >
-            <div className="flex justify-between items-start mb-8">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-widest text-zinc-400">
-                  {bestCard.issuer}
-                </span>
-                <h3 className={`text-lg font-bold tracking-tight ${bestCard.theme.textColor}`}>
-                  {bestCard.name}
-                </h3>
-              </div>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-white/10 text-white backdrop-blur-sm">
-                {bestCard.network}
-              </span>
-            </div>
+            {copied ? <Check className="w-3.5 h-3.5" style={{ color: '#c9a84c' }} /> : <Copy className="w-3.5 h-3.5" />}
+            <span>{copied ? 'Copied' : 'Copy'}</span>
+          </button>
+        </div>
 
-            <div className="flex items-end justify-between">
-              <div>
-                <span className="text-[10px] text-zinc-400 uppercase tracking-wider block">
-                  Reward Value
-                </span>
-                <span className="text-2xl font-extrabold text-white tracking-tight">
-                  {bestRatePercent}%
+        {/* Main content */}
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-0">
+
+          {/* LEFT: 3D Card visual */}
+          <div className="lg:col-span-5 p-6 lg:border-r border-white/5 flex items-center">
+            <div
+              className="card-3d card-holo relative w-full rounded-2xl p-5 cursor-default"
+              style={{
+                background: `linear-gradient(135deg, ${bestCard.theme.accentColor}22 0%, #0a0f1e 60%, #050810 100%)`,
+                border: `1px solid ${bestCard.theme.accentColor}40`,
+                minHeight: '160px',
+              }}
+            >
+              {/* Card top row */}
+              <div className="relative z-10 flex items-start justify-between mb-8">
+                <div>
+                  <p
+                    className="text-[10px] font-bold uppercase tracking-[0.15em] mb-1"
+                    style={{ color: bestCard.theme.accentColor, opacity: 0.7 }}
+                  >
+                    {bestCard.issuer}
+                  </p>
+                  <h3
+                    className="font-display text-base font-bold tracking-tight leading-snug"
+                    style={{ color: bestCard.theme.accentColor }}
+                  >
+                    {bestCard.name}
+                  </h3>
+                </div>
+                <span
+                  className="text-[10px] font-semibold px-2 py-1 rounded-lg font-display"
+                  style={{
+                    background: 'rgba(255,255,255,0.07)',
+                    color: 'rgba(255,255,255,0.5)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                >
+                  {bestCard.network}
                 </span>
               </div>
-              <div className="text-right">
-                <span className="text-[10px] text-zinc-400 uppercase tracking-wider block">
-                  Net Savings
-                </span>
-                <span className="text-xl font-bold text-emerald-400">
-                  ₹{estimatedSavingInr.toLocaleString('en-IN')}
-                </span>
+
+              {/* Card bottom row */}
+              <div className="relative z-10 flex items-end justify-between">
+                <div>
+                  <p className="text-[9px] uppercase tracking-widest mb-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                    Reward rate
+                  </p>
+                  <p
+                    className="font-display text-3xl font-bold tracking-tight"
+                    style={{ color: isZero ? '#ef4444' : bestCard.theme.accentColor }}
+                  >
+                    {bestRatePercent}%
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[9px] uppercase tracking-widest mb-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                    You save
+                  </p>
+                  <p
+                    className="font-display text-2xl font-bold tracking-tight"
+                    style={{ color: isZero ? '#ef4444' : '#22c55e' }}
+                  >
+                    {isZero ? '₹0' : `₹${estimatedSavingInr.toLocaleString('en-IN')}`}
+                  </p>
+                </div>
+              </div>
+
+              {/* Tier badge */}
+              <div
+                className="absolute top-3 right-3 text-[8px] font-bold px-1.5 py-0.5 rounded font-display uppercase tracking-wider"
+                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.3)' }}
+              >
+                {bestCard.cardTier}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right: Rationale and Metrics */}
-        <div className="lg:col-span-7 flex flex-col justify-center">
-          <div className="flex items-baseline gap-3 mb-2">
-            <span className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-              {isZeroRate ? '0% Return' : `${bestRatePercent}%`}
-            </span>
-            <span className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">
-              {isZeroRate ? 'Exclusion Detected' : `${recommendation.bestRewardType} Yield`}
-            </span>
+          {/* RIGHT: Rationale + runner-up */}
+          <div className="lg:col-span-7 p-6 flex flex-col justify-center gap-4">
+
+            {/* Big number + type */}
+            <div>
+              <div className="flex items-baseline gap-3 mb-2">
+                <span
+                  className="font-display text-4xl font-bold tracking-tight"
+                  style={{ color: isZero ? '#ef4444' : '#f0f4ff' }}
+                >
+                  {isZero ? '0%' : `${bestRatePercent}%`}
+                </span>
+                <span
+                  className="text-sm font-semibold uppercase tracking-widest font-display"
+                  style={{ color: '#454d62' }}
+                >
+                  {isZero ? 'Exclusion Zone' : recommendation.bestRewardType}
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: '#8892aa', maxWidth: '38ch' }}>
+                {rationale}
+              </p>
+            </div>
+
+            {/* Top perk */}
+            {bestCard.perks[0] && (
+              <div
+                className="flex items-start gap-3 p-3.5 rounded-xl"
+                style={{ background: 'rgba(5,8,16,0.6)', border: '1px solid rgba(255,255,255,0.05)' }}
+              >
+                <div
+                  className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5"
+                  style={{ background: 'rgba(201,168,76,0.15)' }}
+                >
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#c9a84c' }} />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold mb-0.5" style={{ color: '#c9a84c' }}>
+                    {bestCard.perks[0].title}
+                  </p>
+                  <p className="text-xs" style={{ color: '#8892aa' }}>
+                    {bestCard.perks[0].description}
+                  </p>
+                </div>
+                {bestCard.perks[0].badge && (
+                  <span className="ml-auto text-[9px] font-bold px-2 py-0.5 rounded font-display tag-gold flex-shrink-0">
+                    {bestCard.perks[0].badge}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Runner-up */}
+            {runnerUpCard && (
+              <div
+                className="flex items-center justify-between pt-3 border-t"
+                style={{ borderColor: 'rgba(255,255,255,0.05)' }}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#454d62' }}>
+                    Runner-Up
+                  </span>
+                  <ArrowRight className="w-3 h-3" style={{ color: '#454d62' }} />
+                  <span className="text-xs font-semibold" style={{ color: '#8892aa' }}>
+                    {runnerUpCard.name}
+                  </span>
+                </div>
+                <span
+                  className="font-display text-sm font-bold tag-indigo px-2 py-0.5 rounded"
+                >
+                  {runnerUpRatePercent}%
+                </span>
+              </div>
+            )}
           </div>
-
-          <p className="text-base text-zinc-200 font-medium leading-relaxed mb-4">
-            {rationale}
-          </p>
-
-          {/* Key Perk Bullet */}
-          {bestCard.perks[0] && (
-            <div className="flex items-center gap-2 text-xs text-zinc-400 mb-4 bg-zinc-950/60 p-2.5 rounded-lg border border-zinc-800">
-              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>
-                <strong className="text-zinc-200">{bestCard.perks[0].title}:</strong> {bestCard.perks[0].description}
-              </span>
-            </div>
-          )}
-
-          {/* Runner-up card preview */}
-          {runnerUpCard && (
-            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs">
-              <span className="text-zinc-400">
-                Runner-Up Card: <strong className="text-zinc-200">{runnerUpCard.name}</strong>
-              </span>
-              <span className="font-semibold text-zinc-300">
-                {runnerUpRatePercent}% yield
-              </span>
-            </div>
-          )}
         </div>
+
+        {/* Alert banners */}
+        {channelAlert && (
+          <div
+            className="mx-6 mb-5 p-4 rounded-xl flex items-start gap-3"
+            style={{ background: 'rgba(234,179,8,0.06)', border: '1px solid rgba(234,179,8,0.2)' }}
+          >
+            <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#eab308' }} />
+            <div>
+              <p className="text-xs font-bold mb-0.5" style={{ color: '#fde047' }}>
+                Channel Disparity Alert
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: '#fde04799' }}>
+                {channelAlert}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {exclusionWarning && (
+          <div
+            className="mx-6 mb-5 p-4 rounded-xl flex items-start gap-3"
+            style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)' }}
+          >
+            <ShieldAlert className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#ef4444' }} />
+            <div>
+              <p className="text-xs font-bold mb-0.5" style={{ color: '#fca5a5' }}>
+                Indian FinTech Exclusion Trap
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: '#fca5a599' }}>
+                {exclusionWarning}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Channel Disparity Alert Banner */}
-      {channelAlert && (
-        <div className="mt-6 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-          <div className="text-xs text-amber-200 leading-relaxed">
-            <strong className="font-semibold block mb-0.5">Payment Channel Disparity Alert:</strong>
-            {channelAlert}
-          </div>
-        </div>
-      )}
-
-      {/* Exclusion Warning Banner */}
-      {exclusionWarning && (
-        <div className="mt-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3">
-          <ShieldAlert className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
-          <div className="text-xs text-rose-200 leading-relaxed">
-            <strong className="font-semibold block mb-0.5">Indian FinTech Exclusion Trap:</strong>
-            {exclusionWarning}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

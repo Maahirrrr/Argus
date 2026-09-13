@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard as CardIcon, Check, X } from 'lucide-react';
+import { X, Check, Wallet } from 'lucide-react';
 import { INDIAN_CARDS } from '../data/cards';
 import { PRESET_WALLETS } from '../lib/storage';
 
@@ -21,128 +21,168 @@ export const WalletDeck: React.FC<WalletDeckProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-zinc-950 border border-zinc-800 w-full max-w-4xl max-h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
-        {/* Modal Header */}
-        <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <CardIcon className="w-5 h-5 text-emerald-400" />
-              Your Credit Card Deck
-              <span className="text-xs font-normal text-zinc-400 ml-2">
-                ({activeCardIds.length} of {INDIAN_CARDS.length} active)
-              </span>
-            </h2>
-            <p className="text-xs text-zinc-400 mt-1">
-              Select the cards you currently carry. TapWise calculates real-time rewards exclusively across your active deck.
-            </p>
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+      style={{ background: 'rgba(2,4,9,0.85)', backdropFilter: 'blur(16px)' }}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div
+        className="w-full sm:max-w-4xl max-h-[92vh] sm:max-h-[88vh] rounded-t-3xl sm:rounded-2xl flex flex-col overflow-hidden animate-fade-up"
+        style={{
+          background: 'rgba(8,12,22,0.97)',
+          border: '1px solid rgba(255,255,255,0.07)',
+          boxShadow: '0 -24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.08)',
+        }}
+      >
+        {/* Header */}
+        <div className="px-6 py-5 border-b flex items-center justify-between flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)' }}
+            >
+              <Wallet className="w-4 h-4" style={{ color: '#c9a84c' }} />
+            </div>
+            <div>
+              <h2 className="font-display text-base font-bold tracking-tight" style={{ color: '#f0f4ff' }}>
+                Your Card Deck
+              </h2>
+              <p className="text-[11px]" style={{ color: '#454d62' }}>
+                {activeCardIds.length} of {INDIAN_CARDS.length} active · stored locally, never sent
+              </p>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors"
+            className="w-8 h-8 rounded-xl flex items-center justify-center cursor-pointer transition-all btn-ghost"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Presets Bar */}
-        <div className="px-6 py-3 bg-zinc-900/60 border-b border-zinc-800/80 flex flex-wrap items-center gap-2">
-          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mr-1">
-            Quick Presets:
-          </span>
-          {PRESET_WALLETS.map((preset) => (
-            <button
-              key={preset.name}
-              onClick={() => onSelectPreset(preset.cardIds)}
-              className="text-xs px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 hover:border-zinc-500 transition-all flex items-center gap-1.5"
-            >
-              <span>{preset.name}</span>
-              <span className="text-[10px] text-zinc-400">({preset.cardIds.length})</span>
-            </button>
-          ))}
+        {/* Presets bar */}
+        <div className="px-6 py-3 border-b flex-shrink-0" style={{ background: 'rgba(5,8,16,0.5)', borderColor: 'rgba(255,255,255,0.05)' }}>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest mr-1" style={{ color: '#454d62' }}>
+              Quick stack
+            </span>
+            {PRESET_WALLETS.map((preset) => (
+              <button
+                key={preset.name}
+                onClick={() => onSelectPreset(preset.cardIds)}
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium cursor-pointer transition-all btn-ghost"
+              >
+                <span>{preset.name}</span>
+                <span
+                  className="text-[9px] font-bold px-1.5 py-0.5 rounded font-display"
+                  style={{ background: 'rgba(99,102,241,0.12)', color: '#818cf8' }}
+                >
+                  {preset.cardIds.length}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Card Grid */}
-        <div className="p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Card grid */}
+        <div className="p-5 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {INDIAN_CARDS.map((card) => {
             const isActive = activeCardIds.includes(card.id);
             return (
-              <div
+              <button
                 key={card.id}
                 onClick={() => onToggleCard(card.id)}
-                className={`group relative p-4 rounded-xl border transition-all cursor-pointer select-none card-sheen ${
-                  isActive
-                    ? 'border-emerald-500/50 bg-gradient-to-br from-zinc-900 to-zinc-950 shadow-lg shadow-emerald-500/5'
-                    : 'border-zinc-800/60 bg-zinc-900/30 opacity-60 hover:opacity-90 hover:border-zinc-700'
+                className={`card-3d card-holo relative p-4 rounded-xl text-left cursor-pointer transition-all select-none ${
+                  isActive ? '' : 'opacity-50 hover:opacity-80'
                 }`}
+                style={
+                  isActive
+                    ? {
+                        background: `linear-gradient(135deg, ${card.theme.accentColor}14 0%, rgba(8,12,22,0.9) 70%)`,
+                        border: `1px solid ${card.theme.accentColor}40`,
+                        boxShadow: `0 8px 32px rgba(0,0,0,0.3)`,
+                      }
+                    : {
+                        background: 'rgba(8,12,22,0.6)',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                      }
+                }
               >
-                {/* Active Checkbox badge */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
-                      {card.issuer}
-                    </span>
-                    {card.isRupayUPI && (
-                      <span className="px-1.5 py-0.5 text-[9px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded">
-                        RuPay UPI
-                      </span>
-                    )}
-                  </div>
+                {/* Active check */}
+                {isActive && (
                   <div
-                    className={`w-5 h-5 rounded-md flex items-center justify-center border transition-all ${
-                      isActive
-                        ? 'bg-emerald-500 border-emerald-400 text-black'
-                        : 'border-zinc-700 bg-zinc-800/50 text-transparent'
-                    }`}
+                    className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
+                    style={{ background: 'linear-gradient(135deg, #c9a84c, #e2c06a)' }}
                   >
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  </div>
-                </div>
-
-                {/* Card Title & Tier */}
-                <h3 className="font-semibold text-white text-sm tracking-tight mb-1">
-                  {card.name}
-                </h3>
-                <div className="flex items-center gap-2 text-xs text-zinc-400 mb-3">
-                  <span>{card.cardTier}</span>
-                  <span>•</span>
-                  <span>{card.network}</span>
-                  <span>•</span>
-                  <span>{card.annualFee === 0 ? 'Free' : `₹${card.annualFee}/yr`}</span>
-                </div>
-
-                {/* Key Highlight Perk */}
-                {card.perks[0] && (
-                  <div className="bg-zinc-950/80 border border-zinc-800/80 rounded-lg p-2 text-xs">
-                    <div className="font-medium text-emerald-400 flex items-center justify-between">
-                      <span>{card.perks[0].title}</span>
-                      {card.perks[0].badge && (
-                        <span className="text-[10px] font-bold text-amber-400">
-                          {card.perks[0].badge}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-[11px] text-zinc-400 mt-0.5 line-clamp-1">
-                      {card.perks[0].description}
-                    </p>
+                    <Check className="w-3 h-3" style={{ color: '#0a0810' }} />
                   </div>
                 )}
-              </div>
+
+                {/* Card info */}
+                <div>
+                  <p
+                    className="text-[9px] font-bold uppercase tracking-[0.15em] mb-1"
+                    style={{ color: card.theme.accentColor, opacity: 0.7 }}
+                  >
+                    {card.issuer}
+                  </p>
+                  <p
+                    className="font-display text-sm font-bold tracking-tight leading-tight mb-3"
+                    style={{ color: isActive ? '#f0f4ff' : '#8892aa' }}
+                  >
+                    {card.name}
+                  </p>
+                </div>
+
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: '#454d62' }}>
+                      Base reward
+                    </p>
+                    <p
+                      className="font-display text-lg font-bold"
+                      style={{ color: isActive ? card.theme.accentColor : '#454d62' }}
+                    >
+                      {card.baseRewardPercent}%
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span
+                      className="text-[9px] font-semibold px-2 py-0.5 rounded font-display"
+                      style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        color: '#454d62',
+                      }}
+                    >
+                      {card.network}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Tier tag */}
+                <div className="mt-2">
+                  <span
+                    className="text-[9px] font-semibold font-display"
+                    style={{ color: '#454d62' }}
+                  >
+                    {card.cardTier}
+                  </span>
+                </div>
+              </button>
             );
           })}
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 px-6 border-t border-zinc-800 bg-zinc-950 flex items-center justify-between">
-          <div className="text-xs text-zinc-400 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Changes saved locally. No sign-up required.
-          </div>
+        {/* Footer */}
+        <div className="px-6 py-4 border-t flex-shrink-0 flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.05)', background: 'rgba(5,8,16,0.5)' }}>
+          <p className="text-xs" style={{ color: '#454d62' }}>
+            {activeCardIds.length} card{activeCardIds.length !== 1 ? 's' : ''} active
+          </p>
           <button
             onClick={onClose}
-            className="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-sm rounded-lg transition-all active:scale-[0.98]"
+            className="btn-gold px-5 py-2 rounded-xl text-sm cursor-pointer"
           >
-            Done Selecting
+            Optimize →
           </button>
         </div>
       </div>
