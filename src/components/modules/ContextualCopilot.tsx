@@ -8,7 +8,7 @@ import {
   Code,
   ShieldCheck
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface ContextualCopilotProps {
   activeTab: NavigationTab;

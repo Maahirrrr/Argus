@@ -168,7 +168,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose 
         </div>
 
         <div className="px-4 sm:px-6 py-3 border-t border-[#1D1D1D] bg-[#070707] flex items-center justify-between text-[11px] font-mono-tech text-[#525252]">
-          <span>TapWise AI Product Management Portfolio</span>
+          <span>Argus AI Product Management Portfolio</span>
           <button
             onClick={onClose}
             className="px-4 py-2 rounded-[2px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer min-h-[40px]"

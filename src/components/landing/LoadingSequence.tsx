@@ -47,7 +47,7 @@ export const LoadingSequence: React.FC<LoadingSequenceProps> = ({ onComplete }) 
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="text-2xl font-bold tracking-[0.25em] text-[#F5F5F0] mb-2 font-display"
             >
-              TAPWISE
+              ARGUS
             </motion.h1>
 
             {/* Subtext */}

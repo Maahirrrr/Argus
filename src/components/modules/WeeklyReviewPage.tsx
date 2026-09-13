@@ -4,7 +4,7 @@ import {
   Sparkles,
   Download
 } from 'lucide-react';
-import type { NavigationTab, WeeklyReviewData } from '../../types/tapwise';
+import type { NavigationTab, WeeklyReviewData } from '../../types/argus';
 import { DEMO_WEEKLY_REVIEW } from '../../data/demoData';
 
 interface WeeklyReviewPageProps {

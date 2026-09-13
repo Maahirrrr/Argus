@@ -7,7 +7,7 @@ import {
   Keyboard,
   Menu
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface AppHeaderProps {
   activeTab: NavigationTab;
@@ -72,11 +72,9 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             onClick={() => onSelectTab(isLandingMode ? 'landing' : 'overview')}
             className="flex items-center gap-2 cursor-pointer group text-left flex-shrink-0"
           >
-            <div className="w-6 h-6 bg-[#F5F5F0] rounded-[2px] flex items-center justify-center font-bold text-xs text-[#050505] tracking-wider">
-              TW
-            </div>
+            <div className="w-6 h-6 bg-[#0066FF] rounded-[2px] flex items-center justify-center font-bold text-xs text-white tracking-wider shadow-sm shadow-[#0066FF]/30">A</div>
             <span className="font-bold text-sm tracking-[0.15em] text-[#F5F5F0] group-hover:text-white transition-colors font-display">
-              TAPWISE
+              ARGUS
             </span>
           </button>
 

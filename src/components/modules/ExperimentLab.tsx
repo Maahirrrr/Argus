@@ -4,7 +4,7 @@ import {
   CheckCircle2,
   ShieldAlert
 } from 'lucide-react';
-import type { NavigationTab, ExperimentItem } from '../../types/tapwise';
+import type { NavigationTab, ExperimentItem } from '../../types/argus';
 import { DEMO_EXPERIMENT } from '../../data/demoData';
 
 interface ExperimentLabProps {

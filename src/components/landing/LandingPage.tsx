@@ -4,7 +4,7 @@ import {
   Sparkles,
   BookOpen
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 import { HeroStreamVisualization } from './HeroStreamVisualization';
 
 interface LandingPageProps {
@@ -36,27 +36,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       num: '01',
       title: 'SIGNALS',
       subtitle: 'Continuous Telemetry Surveillance',
-      desc: 'TapWise monitors 4.2M daily transactional events across payment gateways, banking switches, and user support queues to catch micro-anomalies before they escalate.',
+      desc: 'Argus monitors 4.2M daily transactional events across payment gateways, banking switches, and user support queues to catch micro-anomalies before they escalate.',
       metrics: [
         { label: 'PAYMENT SUCCESS', val: '94.2%', delta: '↓ 4.1%', bad: true },
         { label: 'TRANSACTION VOLUME', val: '₹18.4Cr', delta: '↑ 12.6%', bad: false },
         { label: 'SUPPORT TICKETS', val: '1,284', delta: '↑ 18.2%', bad: true },
         { label: '7D RETENTION', val: '41.8%', delta: '↓ 0.8%', bad: true },
       ],
-      tagline: 'TapWise watches what changes.',
+      tagline: 'Argus watches what changes.',
     },
     {
       num: '02',
       title: 'INSIGHTS',
       subtitle: 'Root Cause Decomposition',
-      desc: 'Instead of alerting you with noise, TapWise correlates millions of log records to decompose why the failure occurred and pinpoints exact system contributors.',
+      desc: 'Instead of alerting you with noise, Argus correlates millions of log records to decompose why the failure occurred and pinpoints exact system contributors.',
       metrics: [
         { label: 'BANK X TIMEOUTS', val: '52% share', delta: '48% cluster', bad: true },
         { label: 'ANDROID 15 OS', val: '24% share', delta: '1.7x risk', bad: true },
         { label: 'TICKETS > ₹10K', val: '15% share', delta: '2.4x failure', bad: true },
         { label: 'EVENING PEAK', val: '9% share', delta: '8-10 PM', bad: false },
       ],
-      tagline: 'TapWise doesn\'t just show the anomaly. It explains why it matters.',
+      tagline: 'Argus doesn\'t just show the anomaly. It explains why it matters.',
     },
     {
       num: '03',
@@ -108,7 +108,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* Subtext */}
             <p className="text-sm sm:text-base md:text-lg text-[#8A8A8A] leading-relaxed max-w-[48ch] mb-8 font-normal">
-              TapWise helps fintech product teams turn fragmented telemetry into high-conviction product decisions.
+              Argus helps fintech product teams turn fragmented telemetry into high-conviction product decisions.
             </p>
 
             {/* CTAs */}
@@ -117,7 +117,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 onClick={() => onOpenApp('overview')}
                 className="btn-magnetic flex items-center justify-center gap-2 px-6 py-3.5 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-semibold cursor-pointer shadow-lg shadow-white/5 min-h-[44px]"
               >
-                <span>Enter TapWise →</span>
+                <span>Enter Argus →</span>
               </button>
 
               <a
@@ -245,19 +245,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section className="py-16 sm:py-24 border-t border-[#1D1D1D] bg-[#080808]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <span className="text-[10px] font-mono-tech uppercase tracking-[0.3em] text-[#8A8A8A] mb-3 block">
-            THE TAPWISE MANIFESTO
+            THE ARGUS MANIFESTO
           </span>
           <h2 className="font-editorial text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-[#F5F5F0] tracking-tight leading-tight mb-6">
-            TapWise doesn't give PMs more information.{' '}
+            Argus doesn't give PMs more information.{' '}
             <span className="text-[#0066FF]">It gives them better decisions.</span>
           </h2>
           <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[50ch] mx-auto leading-relaxed font-mono-tech px-2">
-            Traditional analytics dashboards show what happened yesterday. TapWise acts as a cognitive copilot that isolates why it matters and what engineering initiative to ship next.
+            Traditional analytics dashboards show what happened yesterday. Argus acts as a cognitive copilot that isolates why it matters and what engineering initiative to ship next.
           </p>
         </div>
       </section>
 
-      {/* ───── THE TAPWISE SYSTEM (STAGED WORKFLOW) ───── */}
+      {/* ───── THE ARGUS SYSTEM (STAGED WORKFLOW) ───── */}
       <section id="system" className="py-16 sm:py-24 border-t border-[#1D1D1D] bg-[#050505]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4">
@@ -266,7 +266,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 OPERATING SYSTEM ARCHITECTURE
               </span>
               <h2 className="font-editorial text-2xl sm:text-4xl md:text-5xl text-[#F5F5F0] tracking-tight">
-                THE TAPWISE SYSTEM.
+                THE ARGUS SYSTEM.
               </h2>
             </div>
 
@@ -362,14 +362,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             NOW LET'S MAKE A DECISION.
           </h2>
           <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[50ch] mx-auto leading-relaxed mb-8 font-mono-tech px-2">
-            Step inside the TapWise Operating System. Triage active payment anomalies, simulate roadmap trade-offs, challenge AI assumptions, and deploy guarded experiments.
+            Step inside the Argus Operating System. Triage active payment anomalies, simulate roadmap trade-offs, challenge AI assumptions, and deploy guarded experiments.
           </p>
 
           <button
             onClick={() => onOpenApp('overview')}
             className="btn-magnetic w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-bold tracking-wider uppercase cursor-pointer shadow-xl shadow-white/5 min-h-[48px]"
           >
-            <span>Enter TapWise OS →</span>
+            <span>Enter Argus OS →</span>
           </button>
         </div>
       </section>
@@ -382,7 +382,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               TW
             </div>
             <div>
-              <span className="font-bold text-[#F5F5F0] tracking-wider">TAPWISE</span>
+              <span className="font-bold text-[#F5F5F0] tracking-wider">ARGUS</span>
               <span className="text-[#8A8A8A] ml-2">AI PRODUCT INTELLIGENCE</span>
             </div>
           </div>
@@ -395,7 +395,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               Case Study
             </button>
             <a
-              href="https://github.com/Maahirrrr/TapWise"
+              href="https://github.com/Maahirrrr/Argus"
               target="_blank"
               rel="noreferrer"
               className="hover:text-[#F5F5F0]"

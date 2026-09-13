@@ -15,7 +15,7 @@ import {
   LayoutDashboard,
   X
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -100,7 +100,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       id: 'cmd-copilot',
       icon: Terminal,
       title: 'Open AI Copilot & SQL Studio.',
-      subtitle: 'Ask TapWise anything or run ClickHouse SQL queries across 4.2M events',
+      subtitle: 'Ask Argus anything or run ClickHouse SQL queries across 4.2M events',
       tab: 'ai_copilot' as NavigationTab,
       category: 'Copilot',
     },
@@ -238,7 +238,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         {/* Footer */}
         <div className="px-4 py-2.5 bg-[#050505] border-t border-[#1D1D1D] flex items-center justify-between text-[10px] font-mono-tech text-[#525252]">
           <span>Tap to select or use ↑ ↓ ↵</span>
-          <span className="text-[#8A8A8A]">TAPWISE COMMANDS</span>
+          <span className="text-[#8A8A8A]">ARGUS COMMANDS</span>
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ import {
   Settings,
   BookOpen
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface MobileNavigationProps {
   activeTab: NavigationTab;
@@ -118,12 +118,10 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
         <div className="md:hidden fixed inset-0 z-50 flex flex-col bg-[#050505]/98 backdrop-blur-2xl p-5 select-none overflow-hidden pb-safe">
           <div className="flex items-center justify-between pb-4 border-b border-[#1D1D1D]">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 bg-[#F5F5F0] rounded-[2px] flex items-center justify-center font-bold text-xs text-[#050505] tracking-wider">
-                TW
-              </div>
+              <div className="w-7 h-7 bg-[#0066FF] rounded-[2px] flex items-center justify-center font-bold text-xs text-white tracking-wider shadow-sm shadow-[#0066FF]/30">A</div>
               <div>
                 <span className="font-bold text-sm tracking-wider text-[#F5F5F0] font-display block">
-                  TAPWISE OS
+                  ARGUS OS
                 </span>
                 <span className="text-[9px] font-mono-tech text-[#8A8A8A]">
                   AI PRODUCT INTELLIGENCE

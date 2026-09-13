@@ -1,4 +1,4 @@
-import type { PrioritizationInitiative } from '../types/tapwise';
+import type { PrioritizationInitiative } from '../types/argus';
 
 export type ScoringMethod = 'RICE' | 'ICE' | 'MoSCoW';
 

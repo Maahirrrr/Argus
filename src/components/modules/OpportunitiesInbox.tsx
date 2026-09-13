@@ -5,7 +5,7 @@ import {
   Search,
   Filter
 } from 'lucide-react';
-import type { NavigationTab, Opportunity } from '../../types/tapwise';
+import type { NavigationTab, Opportunity } from '../../types/argus';
 
 interface OpportunitiesInboxProps {
   opportunities: Opportunity[];

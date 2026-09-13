@@ -4,7 +4,7 @@ import {
   ShieldAlert,
   CheckCircle2
 } from 'lucide-react';
-import type { NavigationTab, PrioritizationInitiative } from '../../types/tapwise';
+import type { NavigationTab, PrioritizationInitiative } from '../../types/argus';
 import {
   calculateRiceScore,
   calculateIceScore,

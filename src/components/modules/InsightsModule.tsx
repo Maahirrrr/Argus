@@ -7,7 +7,7 @@ import {
   HelpCircle,
   X
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface InsightsModuleProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -196,7 +196,7 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#0066FF]">
-            WHY TAPWISE THINKS THIS MATTERS
+            WHY ARGUS THINKS THIS MATTERS
           </span>
           <span className="text-xs text-[#525252]">· Telemetry Decomposition</span>
         </div>
@@ -290,7 +290,7 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#10B981]" />
                 <h3 className="text-sm font-bold text-[#F5F5F0] font-display">
-                  TAPWISE AI TRUST LAYER · MODEL CARD
+                  ARGUS AI TRUST LAYER · MODEL CARD
                 </h3>
               </div>
               <button

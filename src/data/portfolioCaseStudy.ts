@@ -28,7 +28,7 @@ export interface CaseStudyData {
 }
 
 export const PORTFOLIO_CASE_STUDY: CaseStudyData = {
-  title: 'TapWise: Designing an AI Operating System for Fintech PMs',
+  title: 'Argus: Designing an AI Operating System for Fintech PMs',
   role: 'AI Product Manager & Product Designer',
   timeline: '6-Week Concept to Working Institutional Prototype',
   problem: 'Fintech product managers drown in disparate data streams: ClickHouse event logs, core banking gateway webhooks, Zendesk dispute tickets, and volatile failure codes (U30, U69). When checkout success drops by 4%, PMs spend 3–4 days manually correlating logs with engineering before drafting a spec. By the time a PRD is approved, millions in GMV have bled out.',

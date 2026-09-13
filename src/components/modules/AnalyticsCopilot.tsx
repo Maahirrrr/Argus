@@ -5,7 +5,7 @@ import {
   Terminal,
   Inbox
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface AnalyticsCopilotProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -58,7 +58,7 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
             CLICKHOUSE ANALYTICS
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            Query 4.2M daily transactional events in natural language. TapWise synthesizes ClickHouse SQL and returns structured root-cause telemetry.
+            Query 4.2M daily transactional events in natural language. Argus synthesizes ClickHouse SQL and returns structured root-cause telemetry.
           </p>
         </div>
 

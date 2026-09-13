@@ -11,7 +11,7 @@ import {
   Database,
   Settings
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface NavigationProps {
   activeTab: NavigationTab;

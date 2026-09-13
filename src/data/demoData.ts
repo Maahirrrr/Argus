@@ -8,7 +8,7 @@ import type {
   ExperimentItem,
   DataSourceItem,
   WeeklyReviewData,
-} from '../types/tapwise';
+} from '../types/argus';
 
 export const DEMO_METRICS = {
   healthScore: 84,

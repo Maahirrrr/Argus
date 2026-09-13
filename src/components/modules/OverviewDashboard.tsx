@@ -11,7 +11,7 @@ import {
   Terminal,
   Activity
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 
 interface OverviewDashboardProps {
   onNavigateTab: (tab: NavigationTab) => void;

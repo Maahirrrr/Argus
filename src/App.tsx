@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { NavigationTab, Opportunity, PrioritizationInitiative } from './types/tapwise';
+import type { NavigationTab, Opportunity, PrioritizationInitiative } from './types/argus';
 import { DEMO_OPPORTUNITIES, DEMO_INITIATIVES } from './data/demoData';
 
 import { LoadingSequence } from './components/landing/LoadingSequence';
@@ -163,7 +163,7 @@ export function App() {
       {!hasLoaded && <LoadingSequence onComplete={() => setHasLoaded(true)} />}
 
       {/* Subtle Noise Texture */}
-      <div className="tapwise-noise" aria-hidden="true" />
+      <div className="argus-noise" aria-hidden="true" />
 
       {/* Toast Notification Banner (Centered on phone, top-right on desktop) */}
       {toastMessage && (

@@ -36,7 +36,7 @@ export const DataSourcesPage: React.FC = () => {
             DATA SOURCES
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            High-fidelity simulated telemetry pipelines feeding TapWise AI intelligence layer.
+            High-fidelity simulated telemetry pipelines feeding Argus AI intelligence layer.
           </p>
         </div>
 
@@ -112,7 +112,7 @@ export const DataSourcesPage: React.FC = () => {
               </button>
             </div>
             <p className="text-xs font-mono-tech text-[#8A8A8A]">
-              Select a data source connector to stream event logs into TapWise anomaly sentry:
+              Select a data source connector to stream event logs into Argus anomaly sentry:
             </p>
             <div className="space-y-2 font-mono-tech text-xs">
               {['Stripe Core Webhooks', 'Razorpay Route Gateway', 'Juspay Hyperswitch', 'Mixpanel Analytics'].map((conn, i) => (

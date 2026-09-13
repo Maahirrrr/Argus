@@ -5,7 +5,7 @@ import {
   ArrowRight,
   Filter
 } from 'lucide-react';
-import type { NavigationTab } from '../../types/tapwise';
+import type { NavigationTab } from '../../types/argus';
 import { DEMO_SIGNALS } from '../../data/demoData';
 
 interface SignalsModuleProps {

@@ -206,7 +206,7 @@ export const SettingsPage: React.FC = () => {
             </h2>
           </div>
           <p className="text-xs text-[#8A8A8A] font-mono-tech leading-relaxed">
-            TapWise enforces an explicit approval checkpoint before any routing recommendation can be committed to production feature flags. All recommendations remain assistive hypotheses until human sign-off.
+            Argus enforces an explicit approval checkpoint before any routing recommendation can be committed to production feature flags. All recommendations remain assistive hypotheses until human sign-off.
           </p>
           <div className="inline-flex items-center gap-2 text-xs text-[#10B981] font-mono-tech pt-1">
             <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
@@ -260,7 +260,7 @@ export const SettingsPage: React.FC = () => {
               </div>
 
               <div className="p-3 bg-[#050505] border border-[#161616] rounded-[2px] text-[11px] text-[#525252]">
-                Zero KYC guarantee: TapWise never ingests or stores customer PAN, CVV, or identity tokens.
+                Zero KYC guarantee: Argus never ingests or stores customer PAN, CVV, or identity tokens.
               </div>
             </div>
 
