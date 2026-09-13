@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldAlert, ChevronUp } from 'lucide-react';
+import { ShieldAlert, Trophy, Layers } from 'lucide-react';
 import type { SwipeRecommendation } from '../lib/types';
 
 interface ComparisonMatrixProps {
@@ -11,165 +11,163 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
   const max = comparison[0]?.ratePercent || 1;
 
   return (
-    <div
-      className="rounded-2xl overflow-hidden animate-fade-up delay-100"
-      style={{
-        background: 'rgba(8, 12, 22, 0.8)',
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
-    >
+    <div className="cred-card rounded-3xl overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-        <div>
-          <h3 className="font-display text-sm font-bold tracking-tight" style={{ color: '#f0f4ff' }}>
-            Wallet Leaderboard
-          </h3>
-          <p className="text-[11px] mt-0.5" style={{ color: '#454d62' }}>
-            All {comparison.length} cards ranked for ₹{spendAmount.toLocaleString('en-IN')}
-          </p>
+      <div className="px-6 sm:px-8 py-5 border-b border-white/[0.06] flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#d4af37]/10 border border-[#d4af37]/25">
+            <Trophy className="w-4 h-4 text-[#d4af37]" />
+          </div>
+          <div>
+            <h3 className="font-display text-base font-bold tracking-tight text-white">
+              Wallet Yield Ledger
+            </h3>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              All {comparison.length} cards evaluated for ₹{spendAmount.toLocaleString('en-IN')} spend
+            </p>
+          </div>
         </div>
-        <div
-          className="flex items-center gap-1 text-[10px] font-semibold font-display px-2.5 py-1 rounded-lg"
-          style={{ background: 'rgba(79,70,229,0.1)', color: '#818cf8', border: '1px solid rgba(79,70,229,0.2)' }}
-        >
-          <ChevronUp className="w-3 h-3" />
-          {comparison.length} evaluated
+        <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-semibold font-display px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/10 text-zinc-300">
+          <Layers className="w-3.5 h-3.5 text-[#d4af37]" />
+          <span>{comparison.length} Evaluated</span>
         </div>
       </div>
 
-      {/* Table — desktop */}
+      {/* Table: Desktop */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full text-left">
           <thead>
-            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              {['#', 'Card', 'Reward Rate', 'Estimated Value', 'Rule'].map((h, i) => (
-                <th
-                  key={h}
-                  className={`py-3 px-4 text-[10px] font-bold uppercase tracking-widest font-display ${i > 1 ? 'text-right' : 'text-left'}`}
-                  style={{ color: '#454d62', background: 'rgba(5,8,16,0.4)' }}
-                >
-                  {h}
-                </th>
-              ))}
+            <tr className="border-b border-white/[0.06] bg-[#09090c]/70">
+              <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500 w-16">
+                Rank
+              </th>
+              <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500">
+                Card & Issuer
+              </th>
+              <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500 text-right">
+                Net Yield
+              </th>
+              <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500 text-right">
+                Estimated Value
+              </th>
+              <th className="py-3.5 px-6 text-[10px] font-bold uppercase tracking-widest font-display text-zinc-500">
+                Engine Rationale
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-white/[0.03]">
             {comparison.map((item, index) => {
               const isWinner = index === 0;
+              const isRunnerUp = index === 1;
               const isExclusion = item.isExclusion;
               const barWidth = max > 0 ? Math.max(0, (item.ratePercent / max) * 100) : 0;
 
               return (
                 <tr
                   key={item.card.id}
-                  className="transition-colors"
-                  style={{
-                    background: isWinner ? 'rgba(201,168,76,0.04)' : 'transparent',
-                    borderBottom: '1px solid rgba(255,255,255,0.03)',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isWinner) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = isWinner ? 'rgba(201,168,76,0.04)' : 'transparent';
-                  }}
+                  className={`transition-colors ${
+                    isWinner
+                      ? 'bg-[#d4af37]/[0.06] hover:bg-[#d4af37]/[0.09]'
+                      : 'hover:bg-white/[0.02]'
+                  }`}
                 >
-                  {/* Rank */}
-                  <td className="py-3.5 px-4 w-12">
+                  {/* Rank Badge */}
+                  <td className="py-4 px-6">
                     <span
-                      className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold font-display"
-                      style={
+                      className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold font-display ${
                         isWinner
-                          ? { background: 'linear-gradient(135deg, #c9a84c, #e2c06a)', color: '#0a0810' }
-                          : index === 1
-                          ? { background: 'rgba(99,102,241,0.12)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.25)' }
-                          : { background: 'rgba(255,255,255,0.04)', color: '#454d62', border: '1px solid rgba(255,255,255,0.06)' }
-                      }
+                          ? 'bg-gradient-to-br from-[#f3e5ab] via-[#d4af37] to-[#aa8c2c] text-[#060608] shadow-md shadow-[#d4af37]/20 font-black'
+                          : isRunnerUp
+                          ? 'bg-gradient-to-br from-white via-slate-200 to-slate-400 text-[#060608] shadow-sm font-black'
+                          : 'bg-white/[0.04] text-zinc-400 border border-white/[0.08]'
+                      }`}
                     >
                       {index + 1}
                     </span>
                   </td>
 
-                  {/* Card name */}
-                  <td className="py-3.5 px-4">
-                    <div className="flex items-center gap-2">
-                      {/* Color dot */}
+                  {/* Card Name & Metadata */}
+                  <td className="py-4 px-6">
+                    <div className="flex items-center gap-3">
                       <div
-                        className="w-2 h-2 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: item.card.theme.accentColor, opacity: isWinner ? 1 : 0.5 }}
+                        className="w-2.5 h-2.5 rounded-full flex-shrink-0 shadow-sm"
+                        style={{ backgroundColor: item.card.theme.accentColor }}
                       />
-                      <span
-                        className="text-sm font-semibold"
-                        style={{ color: isWinner ? '#f0f4ff' : '#8892aa' }}
-                      >
-                        {item.card.name}
-                      </span>
-                      <span
-                        className="text-[9px] font-mono"
-                        style={{ color: '#454d62' }}
-                      >
-                        {item.card.network}
-                      </span>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`text-sm font-semibold tracking-tight ${
+                              isWinner ? 'text-white' : 'text-zinc-200'
+                            }`}
+                          >
+                            {item.card.name}
+                          </span>
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/[0.05] border border-white/[0.08] text-zinc-400 font-display">
+                            {item.card.network}
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-zinc-500 block">
+                          {item.card.issuer} · {item.card.cardTier}
+                        </span>
+                      </div>
                     </div>
                   </td>
 
-                  {/* Rate with mini bar */}
-                  <td className="py-3.5 px-4 text-right">
+                  {/* Reward Rate with Yield Bar */}
+                  <td className="py-4 px-6 text-right">
                     <div className="flex items-center justify-end gap-3">
-                      {/* Mini bar */}
-                      <div className="hidden lg:block w-20 h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="hidden lg:block w-24 h-1.5 rounded-full overflow-hidden bg-white/[0.06]">
                         <div
-                          className="h-full rounded-full transition-all"
-                          style={{
-                            width: `${isExclusion ? 0 : barWidth}%`,
-                            background: isWinner
-                              ? 'linear-gradient(90deg, #c9a84c, #e2c06a)'
-                              : 'rgba(99,102,241,0.6)',
-                          }}
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            isWinner
+                              ? 'bg-gradient-to-r from-[#e5c07b] to-[#d4af37]'
+                              : isRunnerUp
+                              ? 'bg-slate-300'
+                              : 'bg-zinc-600'
+                          }`}
+                          style={{ width: `${isExclusion ? 0 : barWidth}%` }}
                         />
                       </div>
                       <span
-                        className="font-display text-sm font-bold tabular-nums"
-                        style={{
-                          color: isExclusion
-                            ? '#ef4444'
+                        className={`font-display text-sm font-bold tabular-nums ${
+                          isExclusion
+                            ? 'text-rose-400'
                             : isWinner
-                            ? '#c9a84c'
-                            : index === 1
-                            ? '#818cf8'
-                            : '#8892aa',
-                        }}
+                            ? 'text-[#d4af37]'
+                            : isRunnerUp
+                            ? 'text-zinc-200'
+                            : 'text-zinc-400'
+                        }`}
                       >
                         {isExclusion ? '0.0%' : `${item.ratePercent}%`}
                       </span>
                     </div>
                   </td>
 
-                  {/* Estimated value */}
-                  <td className="py-3.5 px-4 text-right">
+                  {/* Estimated Value */}
+                  <td className="py-4 px-6 text-right">
                     <span
-                      className="font-display text-sm font-bold tabular-nums"
-                      style={{
-                        color: isExclusion
-                          ? '#454d62'
+                      className={`font-display text-sm font-bold tabular-nums ${
+                        isExclusion
+                          ? 'text-zinc-600'
                           : isWinner
-                          ? '#22c55e'
-                          : '#8892aa',
-                      }}
+                          ? 'text-emerald-400'
+                          : 'text-zinc-300'
+                      }`}
                     >
                       ₹{item.effectiveSavingInr.toLocaleString('en-IN')}
                     </span>
                   </td>
 
-                  {/* Rule */}
-                  <td className="py-3.5 px-4 max-w-xs">
+                  {/* Rationale / Exclusions */}
+                  <td className="py-4 px-6 max-w-xs">
                     {isExclusion ? (
-                      <span className="flex items-center gap-1.5 text-xs" style={{ color: '#ef444488' }}>
-                        <ShieldAlert className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#ef4444' }} />
-                        {item.reason}
+                      <span className="inline-flex items-center gap-1.5 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1 rounded-lg">
+                        <ShieldAlert className="w-3.5 h-3.5 flex-shrink-0 text-rose-400" />
+                        <span className="truncate">{item.reason}</span>
                       </span>
                     ) : (
-                      <span className="text-xs truncate block" style={{ color: '#454d62' }}>
+                      <span className="text-xs text-zinc-400 truncate block">
                         {item.reason}
                       </span>
                     )}
@@ -181,44 +179,58 @@ export const ComparisonMatrix: React.FC<ComparisonMatrixProps> = ({ comparison, 
         </table>
       </div>
 
-      {/* Mobile card list */}
-      <div className="md:hidden divide-y" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
+      {/* Mobile Ledger List */}
+      <div className="md:hidden divide-y divide-white/[0.04]">
         {comparison.map((item, index) => {
           const isWinner = index === 0;
+          const isRunnerUp = index === 1;
+          const isExclusion = item.isExclusion;
+
           return (
             <div
               key={item.card.id}
-              className="px-4 py-3.5 flex items-center gap-3"
-              style={{ background: isWinner ? 'rgba(201,168,76,0.04)' : 'transparent' }}
+              className={`p-4 flex items-center gap-3.5 ${
+                isWinner ? 'bg-[#d4af37]/[0.06]' : ''
+              }`}
             >
               <span
-                className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold font-display flex-shrink-0"
-                style={
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold font-display flex-shrink-0 ${
                   isWinner
-                    ? { background: 'linear-gradient(135deg, #c9a84c, #e2c06a)', color: '#0a0810' }
-                    : { background: 'rgba(255,255,255,0.04)', color: '#454d62', border: '1px solid rgba(255,255,255,0.06)' }
-                }
+                    ? 'bg-gradient-to-br from-[#f3e5ab] via-[#d4af37] to-[#aa8c2c] text-[#060608] shadow-sm font-black'
+                    : isRunnerUp
+                    ? 'bg-slate-300 text-[#060608] font-black'
+                    : 'bg-white/[0.04] text-zinc-400 border border-white/[0.08]'
+                }`}
               >
                 {index + 1}
               </span>
+
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate" style={{ color: isWinner ? '#f0f4ff' : '#8892aa' }}>
-                  {item.card.name}
-                </p>
-                <p className="text-[11px] truncate" style={{ color: '#454d62' }}>
-                  {item.isExclusion ? '0% Exclusion' : item.reason}
+                <div className="flex items-center gap-2">
+                  <p className={`text-sm font-semibold truncate ${isWinner ? 'text-white' : 'text-zinc-200'}`}>
+                    {item.card.name}
+                  </p>
+                  <span className="text-[8px] font-bold px-1 py-0.2 rounded bg-white/[0.05] text-zinc-400 font-display">
+                    {item.card.network}
+                  </span>
+                </div>
+                <p className="text-[11px] truncate text-zinc-500">
+                  {isExclusion ? 'Excluded: 0% reward' : item.reason}
                 </p>
               </div>
+
               <div className="text-right flex-shrink-0">
                 <p
-                  className="font-display text-sm font-bold"
-                  style={{ color: item.isExclusion ? '#ef4444' : isWinner ? '#c9a84c' : '#8892aa' }}
+                  className={`font-display text-sm font-bold tabular-nums ${
+                    isExclusion ? 'text-rose-400' : isWinner ? 'text-[#d4af37]' : 'text-zinc-300'
+                  }`}
                 >
-                  {item.isExclusion ? '0%' : `${item.ratePercent}%`}
+                  {isExclusion ? '0.0%' : `${item.ratePercent}%`}
                 </p>
                 <p
-                  className="font-display text-xs"
-                  style={{ color: item.isExclusion ? '#454d62' : isWinner ? '#22c55e' : '#454d62' }}
+                  className={`font-display text-xs tabular-nums ${
+                    isExclusion ? 'text-zinc-600' : isWinner ? 'text-emerald-400' : 'text-zinc-400'
+                  }`}
                 >
                   ₹{item.effectiveSavingInr.toLocaleString('en-IN')}
                 </p>

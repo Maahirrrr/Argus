@@ -1,7 +1,8 @@
 import React from 'react';
-import { X, Check, Wallet } from 'lucide-react';
+import { X, Check, Wallet, Sparkles, CreditCard as CardIcon } from 'lucide-react';
 import { INDIAN_CARDS } from '../data/cards';
 import { PRESET_WALLETS } from '../lib/storage';
+import { ContactlessIcon } from './EmvChip';
 
 interface WalletDeckProps {
   isOpen: boolean;
@@ -23,60 +24,58 @@ export const WalletDeck: React.FC<WalletDeckProps> = ({
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-      style={{ background: 'rgba(2,4,9,0.85)', backdropFilter: 'blur(16px)' }}
+      style={{ background: 'rgba(6, 6, 8, 0.85)', backdropFilter: 'blur(20px)' }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="w-full sm:max-w-4xl max-h-[92vh] sm:max-h-[88vh] rounded-t-3xl sm:rounded-2xl flex flex-col overflow-hidden animate-fade-up"
+        className="w-full sm:max-w-4xl max-h-[92vh] sm:max-h-[88vh] rounded-t-3xl sm:rounded-3xl flex flex-col overflow-hidden cred-card"
         style={{
-          background: 'rgba(8,12,22,0.97)',
-          border: '1px solid rgba(255,255,255,0.07)',
-          boxShadow: '0 -24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.08)',
+          boxShadow: '0 -24px 80px rgba(0,0,0,0.85), 0 0 0 1px rgba(212, 175, 55, 0.15)',
         }}
       >
         {/* Header */}
-        <div className="px-6 py-5 border-b flex items-center justify-between flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-          <div className="flex items-center gap-3">
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)' }}
-            >
-              <Wallet className="w-4 h-4" style={{ color: '#c9a84c' }} />
+        <div className="px-6 sm:px-8 py-5 border-b border-white/[0.07] flex items-center justify-between flex-shrink-0 bg-[#09090c]/80">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#d4af37]/10 border border-[#d4af37]/25">
+              <Wallet className="w-5 h-5 text-[#d4af37]" />
             </div>
             <div>
-              <h2 className="font-display text-base font-bold tracking-tight" style={{ color: '#f0f4ff' }}>
-                Your Card Deck
-              </h2>
-              <p className="text-[11px]" style={{ color: '#454d62' }}>
-                {activeCardIds.length} of {INDIAN_CARDS.length} active · stored locally, never sent
+              <div className="flex items-center gap-2">
+                <h2 className="font-display text-lg font-bold tracking-tight text-white">
+                  Your Card Vault
+                </h2>
+                <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-[#d4af37]/15 text-[#f3e5ab] border border-[#d4af37]/30 font-display">
+                  CRED Grade
+                </span>
+              </div>
+              <p className="text-xs text-zinc-400 mt-0.5">
+                {activeCardIds.length} of {INDIAN_CARDS.length} cards active · Stored in local sandbox, zero KYC
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl flex items-center justify-center cursor-pointer transition-all btn-ghost"
+            className="w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer transition-all bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-white/[0.06]"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Presets bar */}
-        <div className="px-6 py-3 border-b flex-shrink-0" style={{ background: 'rgba(5,8,16,0.5)', borderColor: 'rgba(255,255,255,0.05)' }}>
+        {/* Presets Bar */}
+        <div className="px-6 sm:px-8 py-3.5 border-b border-white/[0.05] bg-[#07070a]/90 flex-shrink-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest mr-1" style={{ color: '#454d62' }}>
-              Quick stack
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mr-1 flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#d4af37]" />
+              Quick Deck:
             </span>
             {PRESET_WALLETS.map((preset) => (
               <button
                 key={preset.name}
                 onClick={() => onSelectPreset(preset.cardIds)}
-                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium cursor-pointer transition-all btn-ghost"
+                className="btn-cred-dark flex items-center gap-2 text-xs px-3 py-1.5 rounded-xl font-medium cursor-pointer transition-all"
               >
                 <span>{preset.name}</span>
-                <span
-                  className="text-[9px] font-bold px-1.5 py-0.5 rounded font-display"
-                  style={{ background: 'rgba(99,102,241,0.12)', color: '#818cf8' }}
-                >
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-[#d4af37]/15 text-[#f3e5ab] font-display">
                   {preset.cardIds.length}
                 </span>
               </button>
@@ -84,89 +83,70 @@ export const WalletDeck: React.FC<WalletDeckProps> = ({
           </div>
         </div>
 
-        {/* Card grid */}
-        <div className="p-5 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {/* Card Grid */}
+        <div className="p-6 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {INDIAN_CARDS.map((card) => {
             const isActive = activeCardIds.includes(card.id);
             return (
               <button
                 key={card.id}
                 onClick={() => onToggleCard(card.id)}
-                className={`card-3d card-holo relative p-4 rounded-xl text-left cursor-pointer transition-all select-none ${
-                  isActive ? '' : 'opacity-50 hover:opacity-80'
-                }`}
-                style={
+                className={`group relative p-5 rounded-2xl text-left cursor-pointer transition-all duration-300 select-none ${
                   isActive
-                    ? {
-                        background: `linear-gradient(135deg, ${card.theme.accentColor}14 0%, rgba(8,12,22,0.9) 70%)`,
-                        border: `1px solid ${card.theme.accentColor}40`,
-                        boxShadow: `0 8px 32px rgba(0,0,0,0.3)`,
-                      }
-                    : {
-                        background: 'rgba(8,12,22,0.6)',
-                        border: '1px solid rgba(255,255,255,0.06)',
-                      }
-                }
+                    ? 'cred-card-gold shadow-lg shadow-black/40 scale-[1.01]'
+                    : 'bg-[#0b0b0f] border border-white/[0.06] opacity-60 hover:opacity-90 hover:border-white/[0.12]'
+                }`}
               >
-                {/* Active check */}
+                {/* Active Checkmark Pill */}
                 {isActive && (
-                  <div
-                    className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
-                    style={{ background: 'linear-gradient(135deg, #c9a84c, #e2c06a)' }}
-                  >
-                    <Check className="w-3 h-3" style={{ color: '#0a0810' }} />
+                  <div className="absolute top-3.5 right-3.5 w-6 h-6 rounded-full flex items-center justify-center bg-gradient-to-br from-[#f3e5ab] via-[#d4af37] to-[#aa8c2c] text-[#060608] shadow-md shadow-[#d4af37]/30">
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
                   </div>
                 )}
 
-                {/* Card info */}
-                <div>
-                  <p
-                    className="text-[9px] font-bold uppercase tracking-[0.15em] mb-1"
-                    style={{ color: card.theme.accentColor, opacity: 0.7 }}
+                {/* Top: Issuer & Tier */}
+                <div className="flex items-center justify-between pr-8 mb-2">
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-[0.16em] font-display"
+                    style={{ color: isActive ? card.theme.accentColor : '#888892' }}
                   >
                     {card.issuer}
-                  </p>
-                  <p
-                    className="font-display text-sm font-bold tracking-tight leading-tight mb-3"
-                    style={{ color: isActive ? '#f0f4ff' : '#8892aa' }}
-                  >
-                    {card.name}
-                  </p>
+                  </span>
+                  <ContactlessIcon className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
                 </div>
 
-                <div className="flex items-end justify-between">
+                {/* Middle: Card Name */}
+                <h4
+                  className={`font-display text-sm font-bold tracking-tight mb-4 line-clamp-1 ${
+                    isActive ? 'text-white' : 'text-zinc-400'
+                  }`}
+                >
+                  {card.name}
+                </h4>
+
+                {/* Bottom: Yield & Network */}
+                <div className="pt-3 border-t border-white/[0.06] flex items-end justify-between">
                   <div>
-                    <p className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: '#454d62' }}>
-                      Base reward
-                    </p>
-                    <p
-                      className="font-display text-lg font-bold"
-                      style={{ color: isActive ? card.theme.accentColor : '#454d62' }}
+                    <span className="text-[9px] uppercase tracking-wider text-zinc-500 block font-semibold">
+                      Base Rate
+                    </span>
+                    <span
+                      className={`font-display text-lg font-bold tabular-nums ${
+                        isActive ? 'text-[#d4af37]' : 'text-zinc-500'
+                      }`}
                     >
                       {card.baseRewardPercent}%
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <span
-                      className="text-[9px] font-semibold px-2 py-0.5 rounded font-display"
-                      style={{
-                        background: 'rgba(255,255,255,0.05)',
-                        color: '#454d62',
-                      }}
-                    >
-                      {card.network}
                     </span>
                   </div>
-                </div>
 
-                {/* Tier tag */}
-                <div className="mt-2">
-                  <span
-                    className="text-[9px] font-semibold font-display"
-                    style={{ color: '#454d62' }}
-                  >
-                    {card.cardTier}
-                  </span>
+                  <div className="text-right flex flex-col items-end gap-1">
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-white/[0.05] border border-white/[0.08] text-zinc-400 font-display">
+                      {card.network}
+                    </span>
+                    <span className="text-[9px] text-zinc-600 font-display">
+                      {card.cardTier}
+                    </span>
+                  </div>
                 </div>
               </button>
             );
@@ -174,15 +154,18 @@ export const WalletDeck: React.FC<WalletDeckProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t flex-shrink-0 flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.05)', background: 'rgba(5,8,16,0.5)' }}>
-          <p className="text-xs" style={{ color: '#454d62' }}>
-            {activeCardIds.length} card{activeCardIds.length !== 1 ? 's' : ''} active
-          </p>
+        <div className="px-6 sm:px-8 py-4 border-t border-white/[0.06] flex-shrink-0 flex items-center justify-between bg-[#08080a]">
+          <div className="flex items-center gap-2 text-xs text-zinc-400">
+            <CardIcon className="w-4 h-4 text-[#d4af37]" />
+            <span>
+              <strong className="text-white font-display">{activeCardIds.length}</strong> card{activeCardIds.length !== 1 ? 's' : ''} active for evaluation
+            </span>
+          </div>
           <button
             onClick={onClose}
-            className="btn-gold px-5 py-2 rounded-xl text-sm cursor-pointer"
+            className="btn-cred-gold px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer font-display"
           >
-            Optimize →
+            Apply & Optimize
           </button>
         </div>
       </div>

@@ -1,272 +1,243 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-/* ───── Design Tokens ───── */
+/* ───── CRED / American Express Luxury Dark Tokens ───── */
 :root {
-  --navy-950: #020409;
-  --navy-900: #050810;
-  --navy-800: #0a0f1e;
-  --navy-700: #111827;
-  --navy-600: #1a2234;
-  --gold-500: #c9a84c;
-  --gold-400: #e2c06a;
-  --gold-300: #f0d48a;
-  --gold-glow: rgba(201, 168, 76, 0.15);
-  --indigo-500: #4f46e5;
-  --indigo-400: #6366f1;
-  --indigo-glow: rgba(79, 70, 229, 0.2);
-  --surface: rgba(10, 15, 30, 0.8);
-  --border: rgba(255, 255, 255, 0.07);
-  --border-gold: rgba(201, 168, 76, 0.25);
-  --text-primary: #f0f4ff;
-  --text-secondary: #8892aa;
-  --text-muted: #454d62;
-  --red-alert: #ef4444;
-  --green-ok: #22c55e;
+  --obsidian-950: #060608;
+  --obsidian-900: #0a0a0d;
+  --obsidian-850: #0f0f13;
+  --obsidian-800: #141418;
+  --obsidian-700: #1a1a20;
+  --obsidian-600: #24242c;
+  
+  /* Amex / CRED Champagne Gold */
+  --gold-500: #d4af37;
+  --gold-400: #e5c07b;
+  --gold-300: #f3e5ab;
+  --gold-glow: rgba(212, 175, 55, 0.18);
+  
+  /* Centurion Brushed Platinum */
+  --platinum-100: #f8fafc;
+  --platinum-300: #cbd5e1;
+  --platinum-500: #94a3b8;
+  
+  /* Surface & Border */
+  --surface-matte: rgba(15, 15, 19, 0.85);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-gold: rgba(212, 175, 55, 0.3);
+  --border-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  
+  /* Typography */
+  --text-pure: #ffffff;
+  --text-high: #f4f4f6;
+  --text-muted: #888892;
+  --text-faint: #4c4c56;
 }
 
-/* ───── Reset & Base ───── */
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--navy-950);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(79, 70, 229, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(201, 168, 76, 0.06) 0%, transparent 50%);
-  color: var(--text-primary);
+  background-color: var(--obsidian-950);
+  background-image: 
+    radial-gradient(ellipse 90% 60% at 50% -15%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 85%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+    linear-gradient(to bottom, #060608 0%, #0a0a0d 100%);
+  color: var(--text-high);
   font-family: 'DM Sans', -apple-system, sans-serif;
-  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ───── Typography ───── */
-.font-display { font-family: 'Space Grotesk', sans-serif; }
+.font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
 
 /* ───── Scrollbar ───── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: var(--navy-900); }
-::-webkit-scrollbar-thumb { background: var(--navy-600); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: var(--indigo-500); }
-
-/* ───── Glass Morphism ───── */
-.glass {
-  background: rgba(10, 15, 30, 0.7);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid var(--border);
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--obsidian-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--obsidian-600);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-500);
 }
 
-.glass-gold {
-  background: rgba(10, 15, 30, 0.75);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-gold);
+/* ───── CRED Tactile Neumorphic Bevel Container ───── */
+.cred-card {
+  background: linear-gradient(180deg, rgba(20, 20, 26, 0.9) 0%, rgba(12, 12, 16, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 24px 60px -12px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
-/* ───── 3D Card Effect ───── */
-.card-3d {
-  transform-style: preserve-3d;
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
-  will-change: transform;
+.cred-card-gold {
+  background: linear-gradient(180deg, rgba(24, 22, 16, 0.95) 0%, rgba(12, 11, 8, 0.98) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 
+    inset 0 1px 0 rgba(243, 229, 171, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.8),
+    0 30px 80px -15px rgba(212, 175, 55, 0.15),
+    0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
-.card-3d:hover {
-  transform: perspective(800px) rotateX(-4deg) rotateY(4deg) scale(1.02);
-  box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(201, 168, 76, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-/* ───── Holographic Sheen ───── */
-.card-holo {
+/* ───── Amex Physical Card Dimensions & Brushed Texture ───── */
+.physical-card-shell {
+  aspect-ratio: 1.586 / 1;
   position: relative;
   overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.7),
+    0 25px 60px -10px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
 }
-.card-holo::before {
-  content: '';
+
+.physical-card-shell:hover {
+  transform: perspective(1000px) rotateX(-5deg) rotateY(6deg) translateY(-4px) scale(1.02);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    0 35px 80px -12px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(212, 175, 55, 0.2);
+}
+
+/* Brushed metal horizontal lines */
+.brushed-metal {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(255, 255, 255, 0.02) 1px,
+    rgba(255, 255, 255, 0.02) 2px
+  );
+}
+
+/* Guilloche pattern overlay for Amex vibe */
+.guilloche-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+  background-size: 12px 12px;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Holographic dynamic sweep */
+.holo-sweep {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    135deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.03) 30%,
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.04) 35%,
+    rgba(212, 175, 55, 0.08) 45%,
     rgba(255, 255, 255, 0.07) 50%,
-    rgba(255, 255, 255, 0.03) 70%,
-    transparent 100%
+    transparent 65%
   );
   pointer-events: none;
-  z-index: 1;
-}
-.card-holo::after {
-  content: '';
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 300%;
-  height: 300%;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    rgba(201, 168, 76, 0.04) 60deg,
-    transparent 120deg,
-    rgba(99, 102, 241, 0.04) 180deg,
-    transparent 240deg,
-    rgba(201, 168, 76, 0.03) 300deg,
-    transparent 360deg
-  );
-  animation: holo-spin 12s linear infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-@keyframes holo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  mix-blend-mode: overlay;
 }
 
-/* ───── Beam / Scanner Line ───── */
-.beam-scan {
-  position: relative;
-  overflow: hidden;
-}
-.beam-scan::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 40%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.08), transparent);
-  animation: beam-slide 3s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes beam-slide {
-  0% { left: -40%; }
-  100% { left: 140%; }
-}
-
-/* ───── Gold Glow Button ───── */
-.btn-gold {
-  background: linear-gradient(135deg, #c9a84c, #e2c06a);
-  color: #0a0810;
+/* ───── CRED Luxury Bevel Buttons ───── */
+.btn-cred-gold {
+  background: linear-gradient(180deg, #e5c07b 0%, #d4af37 50%, #b89225 100%);
+  color: #060608;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  border: none;
-  box-shadow: 0 4px 24px rgba(201, 168, 76, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1px solid #f3e5ab;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 8px 24px -4px rgba(212, 175, 55, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.btn-gold:hover {
+.btn-cred-gold:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 32px rgba(201, 168, 76, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 12px 32px -4px rgba(212, 175, 55, 0.5);
 }
-.btn-gold:active {
+.btn-cred-gold:active {
   transform: translateY(0);
 }
 
-/* ───── Ghost Button ───── */
-.btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
+.btn-cred-dark {
+  background: linear-gradient(180deg, #1f1f26 0%, #121216 100%);
+  color: var(--text-high);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 4px 12px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
 }
-.btn-ghost:hover {
-  border-color: rgba(201, 168, 76, 0.3);
+.btn-cred-dark:hover {
+  border-color: rgba(212, 175, 55, 0.4);
   color: var(--gold-400);
-  background: rgba(201, 168, 76, 0.04);
 }
 
-/* ───── Input Field ───── */
-.input-field {
-  background: rgba(5, 8, 16, 0.8);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  transition: border-color 0.2s, box-shadow 0.2s;
+/* ───── Carved Inputs ───── */
+.cred-input {
+  background: #08080a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+  color: var(--text-pure);
   outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.input-field::placeholder { color: var(--text-muted); }
-.input-field:hover { border-color: rgba(255, 255, 255, 0.12); }
-.input-field:focus {
+.cred-input:focus {
   border-color: var(--gold-500);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.7),
+    0 0 0 3px rgba(212, 175, 55, 0.12);
 }
 
-/* ───── Rank Badge ───── */
-.rank-1 { background: linear-gradient(135deg, #c9a84c, #e2c06a); color: #0a0810; }
-.rank-2 { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
-.rank-n { background: rgba(255, 255, 255, 0.04); color: var(--text-muted); border: 1px solid var(--border); }
-
-/* ───── Ambient Glow Under Cards ───── */
-.glow-gold { box-shadow: 0 0 60px rgba(201, 168, 76, 0.12), 0 0 120px rgba(201, 168, 76, 0.06); }
-.glow-indigo { box-shadow: 0 0 60px rgba(79, 70, 229, 0.15), 0 0 120px rgba(79, 70, 229, 0.07); }
-
-/* ───── Animated Gradient Top Bar ───── */
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.gradient-bar {
-  background: linear-gradient(90deg, #4f46e5, #c9a84c, #6366f1, #e2c06a, #4f46e5);
-  background-size: 300% 100%;
-  animation: gradient-shift 8s ease infinite;
+/* ───── Gold Foil Text ───── */
+.text-gold-foil {
+  background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa8c2c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* ───── Table Rows ───── */
-.table-row-winner { background: rgba(201, 168, 76, 0.04); }
-.table-row-winner:hover { background: rgba(201, 168, 76, 0.07); }
-.table-row-normal:hover { background: rgba(255, 255, 255, 0.02); }
-
-/* ───── Pill Tags ───── */
-.tag-gold {
-  background: rgba(201, 168, 76, 0.1);
-  color: var(--gold-400);
-  border: 1px solid rgba(201, 168, 76, 0.25);
-}
-.tag-red {
-  background: rgba(239, 68, 68, 0.1);
-  color: #fca5a5;
-  border: 1px solid rgba(239, 68, 68, 0.25);
-}
-.tag-indigo {
-  background: rgba(99, 102, 241, 0.1);
-  color: #a5b4fc;
-  border: 1px solid rgba(99, 102, 241, 0.25);
-}
-.tag-green {
-  background: rgba(34, 197, 94, 0.1);
-  color: #86efac;
-  border: 1px solid rgba(34, 197, 94, 0.2);
+.text-platinum-foil {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* ───── Section Divider ───── */
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
+/* ───── Embossed Card Number Font ───── */
+.embossed-digits {
+  font-family: 'Space Grotesk', monospace;
+  letter-spacing: 0.18em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(255, 255, 255, 0.2);
 }
-
-/* ───── Fade-in animations ───── */
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-up { animation: fade-up 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-.delay-100 { animation-delay: 0.1s; opacity: 0; }
-.delay-200 { animation-delay: 0.2s; opacity: 0; }
-.delay-300 { animation-delay: 0.3s; opacity: 0; }
-
-/* ───── Focus Visible ───── */
-:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
 
 /* ───── Reduced Motion ───── */
 @media (prefers-reduced-motion: reduce) {
-  .card-3d { transition: none; }
-  .card-holo::after { animation: none; }
-  .beam-scan::after { animation: none; }
-  .gradient-bar { animation: none; }
-  .animate-fade-up { animation: none; opacity: 1; }
+  .physical-card-shell { transition: none; }
+  .physical-card-shell:hover { transform: none; }
 }
