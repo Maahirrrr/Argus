@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
-  FileCode2,
   Sparkles,
-  GitCompare
+  ShieldAlert,
+  CheckCircle2
 } from 'lucide-react';
 import type { NavigationTab, PrioritizationInitiative } from '../../types/finpilot';
 import {
@@ -12,6 +12,7 @@ import {
   simulateDecisionScenario,
   type ScoringMethod
 } from '../../lib/prioritization';
+import { ChallengeModal } from './ChallengeModal';
 
 interface PrioritizationModuleProps {
   initiatives: PrioritizationInitiative[];
@@ -24,316 +25,288 @@ export const PrioritizationModule: React.FC<PrioritizationModuleProps> = ({
   onNavigateTab,
   onSelectInitiativeForPrd,
 }) => {
+  const [scoringMethod, setScoringMethod] = useState<ScoringMethod>('RICE');
   const [initiatives, setInitiatives] = useState<PrioritizationInitiative[]>(initialInitiatives);
-  const [method, setMethod] = useState<ScoringMethod>('RICE');
+  const [selectedId, setSelectedId] = useState<string>('init-014');
+  const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
 
-  // Decision Simulator state (testing Effort 5 -> 8)
-  const [simulatedEffort, setSimulatedEffort] = useState<number>(5);
-  const targetSimulationId = 'init-001'; // Reduce payment failures
+  const activeInitiative = initiatives.find((i) => i.id === selectedId) || initiatives[0];
 
-  const ranked = rankInitiatives(initiatives, method);
-
-  const handleSliderChange = (
+  const handleUpdateParam = (
     id: string,
-    field: 'reachCount' | 'impact' | 'confidence' | 'effort',
+    field: 'reach' | 'impact' | 'confidence' | 'effort',
     value: number
   ) => {
-    const updated = initiatives.map((item) => {
-      if (item.id === id) {
-        const next = { ...item, [field]: value };
-        next.riceScore = calculateRiceScore(next.reachCount, next.impact, next.confidence, next.effort);
-        next.iceScore = calculateIceScore(next.impact, next.confidence, next.effort);
-        return next;
-      }
-      return item;
-    });
-    setInitiatives(updated);
+    setInitiatives((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+        const updated = { ...item };
+        if (field === 'reach') {
+          updated.reachCount = Math.round(value / 1000);
+          updated.reach = `${(value / 1000).toFixed(0)}k transactors`;
+        } else {
+          (updated as any)[field] = value;
+        }
+        updated.riceScore = calculateRiceScore(
+          updated.reachCount,
+          updated.impact,
+          updated.confidence,
+          updated.effort
+        );
+        updated.iceScore = calculateIceScore(
+          updated.impact,
+          updated.confidence,
+          updated.effort
+        );
+        return updated;
+      })
+    );
   };
 
-  const simulation = simulateDecisionScenario(initiatives, targetSimulationId, simulatedEffort);
+  const rankedList = rankInitiatives(initiatives, scoringMethod);
+
+  // Causal sensitivity scenario simulation
+  const simulation = simulateDecisionScenario(
+    initiatives,
+    activeInitiative.id,
+    activeInitiative.effort + 2
+  );
 
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto py-6 px-4 sm:px-6">
+    <div className="flex flex-col gap-8 max-w-7xl mx-auto py-8 px-4 sm:px-6 select-none">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">
+            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
               DECISION WORKBENCH
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/25">
-              RICE / ICE / Simulator
+            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
+              REAL-TIME SENSITIVITY
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-            Prioritize
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
+            WHAT SHOULD WE BUILD?
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
-            Evaluate reach, impact, confidence, and engineering effort to maximize product ROI.
+          <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
+            Dynamic trade-off evaluation across RICE and ICE algorithms
           </p>
         </div>
 
-        {/* Algorithm Toggles */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08]">
-            {(['RICE', 'ICE'] as ScoringMethod[]).map((m) => (
+        {/* Algorithm Toggles & Opportunities Link */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => onNavigateTab('opportunities')}
+            className="px-3 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
+          >
+            ← Opportunities
+          </button>
+          <div className="flex items-center gap-1.5 p-1 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px]">
+            {(['RICE', 'ICE'] as ScoringMethod[]).map((method) => (
               <button
-                key={m}
-                onClick={() => setMethod(m)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold cursor-pointer transition-all ${
-                  method === m
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-zinc-400 hover:text-white'
+                key={method}
+                onClick={() => setScoringMethod(method)}
+                className={`px-3 py-1.5 rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer ${
+                  scoringMethod === method
+                    ? 'bg-[#0066FF] text-white font-bold'
+                    : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
                 }`}
               >
-                {m}
+                {method} SCORING
               </button>
             ))}
           </div>
-
-          <button
-            onClick={() => onNavigateTab('prds')}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-zinc-300 cursor-pointer"
-          >
-            <FileCode2 className="w-3.5 h-3.5 text-blue-400" />
-            <span>PRD Workspace →</span>
-          </button>
         </div>
       </div>
 
-      {/* AI Recommendation Explainer Banner */}
-      <div className="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30 flex items-start gap-3">
-        <Sparkles className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
-        <div className="flex-1">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-300 block mb-0.5">
-            AI Roadmap Recommendation
-          </span>
-          <p className="text-xs text-zinc-200 font-mono leading-relaxed">
-            "Reduce payment failures should be prioritized because it combines high user impact (9.2), high confidence (91%), and moderate engineering effort (5 sprints) to yield the highest expected GMV recovery."
-          </p>
-        </div>
-      </div>
+      {/* Main Split Layout: Ranked Board (Left) vs AI Decision Panel & Sliders (Right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column: Ranked Editorial Board */}
+        <div className="lg:col-span-7 flex flex-col gap-3">
+          <div className="flex items-center justify-between text-xs font-mono-tech text-[#8A8A8A] px-2">
+            <span>RANKED ROADMAP INITIATIVES</span>
+            <span>ALGORITHM: {scoringMethod}</span>
+          </div>
 
-      {/* Prioritization Table */}
-      <div className="p-6 rounded-2xl bg-[#090a0d] border border-white/[0.08] overflow-x-auto shadow-xl">
-        <table className="w-full text-left text-xs">
-          <thead>
-            <tr className="border-b border-white/[0.08] text-zinc-400 font-mono text-[10px] uppercase tracking-wider">
-              <th className="py-3 px-3 w-12 text-center">Rank</th>
-              <th className="py-3 px-3 min-w-[260px]">Initiative</th>
-              <th className="py-3 px-3 w-32">Reach</th>
-              <th className="py-3 px-3 w-32">Impact (1-10)</th>
-              <th className="py-3 px-3 w-32">Confidence</th>
-              <th className="py-3 px-3 w-32">Effort (Sprints)</th>
-              <th className="py-3 px-3 text-right w-24">RICE</th>
-              <th className="py-3 px-3 text-right w-28">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/[0.04]">
-            {ranked.map((item, idx) => {
-              const isWinner = idx === 0;
+          <div className="flex flex-col divide-y divide-[#1D1D1D] bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px]">
+            {rankedList.map((item, idx) => {
+              const isSelected = item.id === selectedId;
+              const score = scoringMethod === 'RICE' ? item.riceScore : item.iceScore;
+
               return (
-                <tr
+                <div
                   key={item.id}
-                  className={`transition-all ${
-                    isWinner ? 'bg-blue-600/[0.06] hover:bg-blue-600/[0.1]' : 'hover:bg-white/[0.02]'
+                  onClick={() => setSelectedId(item.id)}
+                  className={`p-4 flex items-center justify-between gap-4 cursor-pointer transition-colors ${
+                    isSelected ? 'bg-[#141414] border-l-2 border-[#0066FF]' : 'hover:bg-[#0E0E0E]'
                   }`}
                 >
-                  <td className="py-4 px-3 text-center">
-                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md font-mono text-xs font-bold ${
-                      isWinner ? 'bg-blue-600 text-white' : 'bg-white/[0.04] text-zinc-400'
-                    }`}>
-                      #{idx + 1}
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono-tech text-xs font-bold text-[#525252] w-5">
+                      0{idx + 1}
                     </span>
-                  </td>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-[#F5F5F0]">{item.title}</span>
+                        {idx === 0 && (
+                          <span className="text-[9px] font-mono-tech px-1.5 py-0.2 rounded-[2px] bg-[#0066FF]/20 text-[#0066FF] border border-[#0066FF]/30 font-bold">
+                            #1 TOP PRIORITY
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] font-mono-tech text-[#8A8A8A]">
+                        {item.category} · {item.reach}
+                      </span>
+                    </div>
+                  </div>
 
-                  <td className="py-4 px-3">
-                    <div className="font-semibold text-white text-xs">{item.title}</div>
-                    <div className="text-[11px] text-zinc-400 line-clamp-1">{item.description}</div>
-                  </td>
-
-                  <td className="py-4 px-3">
-                    <div className="text-[11px] font-mono text-zinc-300">{item.reachCount}K users</div>
-                    <input
-                      type="range"
-                      min="10"
-                      max="150"
-                      step="5"
-                      value={item.reachCount}
-                      onChange={(e) => handleSliderChange(item.id, 'reachCount', Number(e.target.value))}
-                      className="w-full accent-blue-500 h-1 bg-zinc-800 rounded cursor-pointer"
-                    />
-                  </td>
-
-                  <td className="py-4 px-3">
-                    <div className="text-[11px] font-mono font-bold text-white">{item.impact}/10</div>
-                    <input
-                      type="range"
-                      min="1"
-                      max="10"
-                      step="0.2"
-                      value={item.impact}
-                      onChange={(e) => handleSliderChange(item.id, 'impact', Number(e.target.value))}
-                      className="w-full accent-blue-500 h-1 bg-zinc-800 rounded cursor-pointer"
-                    />
-                  </td>
-
-                  <td className="py-4 px-3">
-                    <div className="text-[11px] font-mono text-zinc-300">{item.confidence}%</div>
-                    <input
-                      type="range"
-                      min="40"
-                      max="100"
-                      step="5"
-                      value={item.confidence}
-                      onChange={(e) => handleSliderChange(item.id, 'confidence', Number(e.target.value))}
-                      className="w-full accent-blue-500 h-1 bg-zinc-800 rounded cursor-pointer"
-                    />
-                  </td>
-
-                  <td className="py-4 px-3">
-                    <div className="text-[11px] font-mono text-zinc-300">{item.effort} sprints</div>
-                    <input
-                      type="range"
-                      min="1"
-                      max="10"
-                      step="1"
-                      value={item.effort}
-                      onChange={(e) => handleSliderChange(item.id, 'effort', Number(e.target.value))}
-                      className="w-full accent-rose-500 h-1 bg-zinc-800 rounded cursor-pointer"
-                    />
-                  </td>
-
-                  <td className="py-4 px-3 text-right font-mono font-bold text-sm text-white">
-                    {method === 'RICE' ? item.riceScore : item.iceScore}
-                  </td>
-
-                  <td className="py-4 px-3 text-right">
-                    <button
-                      onClick={() => {
-                        onSelectInitiativeForPrd(item);
-                        onNavigateTab('prds');
-                      }}
-                      className="px-3 py-1 rounded bg-white/[0.04] hover:bg-blue-600/20 text-blue-300 hover:text-white border border-white/10 text-xs font-semibold cursor-pointer"
-                    >
-                      Create PRD →
-                    </button>
-                  </td>
-                </tr>
+                  <div className="flex items-center gap-4 flex-shrink-0">
+                    <div className="text-right font-mono-tech">
+                      <span className="text-xs font-bold text-[#F5F5F0]">{score.toFixed(1)}</span>
+                      <span className="text-[10px] text-[#525252] block">{scoringMethod}</span>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ───── SIGNATURE FEATURE: DECISION SIMULATOR (Section 10) ───── */}
-      <div className="p-6 rounded-2xl bg-[#08090d] border border-white/[0.12] shadow-2xl flex flex-col gap-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.08] gap-3">
-          <div className="flex items-center gap-2">
-            <GitCompare className="w-4 h-4 text-blue-400" />
-            <h2 className="text-sm font-bold text-white font-mono uppercase tracking-tight">
-              DECISION SIMULATOR: What If Scenarios
-            </h2>
           </div>
-          <span className="text-[10px] font-mono text-zinc-500">
-            Interactive PM Decision-Making Simulator
-          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Controls: Change assumptions */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-4">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400 block">
-              Simulate Engineering Effort Assumption
-            </span>
-            <p className="text-xs text-zinc-300">
-              Target: <strong>Reduce Payment Failures</strong> (Baseline: 5 sprints)
-            </p>
+        {/* Right Column: AI Decision Panel, Sliders & Challenge Trigger */}
+        <div className="lg:col-span-5 flex flex-col gap-5">
+          {/* 29 AI Decision Panel */}
+          <div className="p-6 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1D1D1D]">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
+                <span className="text-xs font-mono-tech font-bold uppercase text-[#0066FF]">
+                  AI DECISION RECOMMENDATION
+                </span>
+              </div>
+              <span className="text-[10px] font-mono-tech text-[#8A8A8A]">91% CONFIDENCE</span>
+            </div>
 
             <div>
-              <div className="flex items-center justify-between text-xs font-mono mb-2">
-                <span className="text-zinc-400">Engineering Effort:</span>
-                <span className="font-bold text-white text-sm">
-                  {simulatedEffort} Sprints {simulatedEffort === 5 ? '(Current)' : `(Simulated: 5 → ${simulatedEffort})`}
-                </span>
+              <h3 className="text-sm font-bold text-[#F5F5F0] mb-1 font-display">
+                {activeInitiative.title} should remain your highest priority.
+              </h3>
+              <p className="text-xs text-[#8A8A8A] font-mono-tech leading-relaxed">
+                High transactional impact (₹18.4L GMV/wk), high data confidence (91%), and moderate engineering effort (5 sprints) yield the strongest RICE yield across your roadmap.
+              </p>
+            </div>
+
+            {/* Decision Actions: Accept vs Challenge */}
+            <div className="pt-3 border-t border-[#1D1D1D] flex items-center gap-3">
+              <button
+                onClick={() => onSelectInitiativeForPrd(activeInitiative)}
+                className="btn-magnetic flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Accept & Create PRD</span>
+              </button>
+
+              <button
+                onClick={() => setIsChallengeModalOpen(true)}
+                className="btn-magnetic px-3.5 py-2 rounded-[3px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#EF4444] hover:text-white cursor-pointer flex items-center gap-1"
+              >
+                <ShieldAlert className="w-3.5 h-3.5" />
+                <span>Challenge</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Interactive Sensitivity Sliders for Active Item */}
+          <div className="p-6 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] flex flex-col gap-4">
+            <span className="text-xs font-mono-tech font-bold uppercase text-[#8A8A8A]">
+              PARAMETER SENSITIVITY SLIDERS
+            </span>
+
+            {/* Reach */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between text-xs font-mono-tech">
+                <span className="text-[#8A8A8A]">Reach (Users)</span>
+                <span className="text-[#F5F5F0] font-bold">{activeInitiative.reach.toLocaleString()}</span>
+              </div>
+              <input
+                type="range"
+                min="10000"
+                max="500000"
+                step="10000"
+                value={activeInitiative.reach}
+                onChange={(e) => handleUpdateParam(activeInitiative.id, 'reach', Number(e.target.value))}
+                className="w-full accent-[#0066FF] h-1.5 bg-[#1D1D1D] rounded cursor-pointer"
+              />
+            </div>
+
+            {/* Impact */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between text-xs font-mono-tech">
+                <span className="text-[#8A8A8A]">Impact (1-10)</span>
+                <span className="text-[#F5F5F0] font-bold">{activeInitiative.impact} / 10</span>
               </div>
               <input
                 type="range"
                 min="1"
                 max="10"
                 step="1"
-                value={simulatedEffort}
-                onChange={(e) => setSimulatedEffort(Number(e.target.value))}
-                className="w-full accent-blue-500 h-2 bg-zinc-800 rounded cursor-pointer"
+                value={activeInitiative.impact}
+                onChange={(e) => handleUpdateParam(activeInitiative.id, 'impact', Number(e.target.value))}
+                className="w-full accent-[#0066FF] h-1.5 bg-[#1D1D1D] rounded cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] font-mono text-zinc-500 mt-1">
-                <span>1 sprint (Fast)</span>
-                <span>5 sprints (Baseline)</span>
-                <span>8 sprints (Scope creep)</span>
-                <span>10 sprints</span>
+            </div>
+
+            {/* Confidence */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between text-xs font-mono-tech">
+                <span className="text-[#8A8A8A]">Confidence (1-10)</span>
+                <span className="text-[#F5F5F0] font-bold">{activeInitiative.confidence} / 10</span>
               </div>
+              <input
+                type="range"
+                min="1"
+                max="10"
+                step="1"
+                value={activeInitiative.confidence}
+                onChange={(e) => handleUpdateParam(activeInitiative.id, 'confidence', Number(e.target.value))}
+                className="w-full accent-[#0066FF] h-1.5 bg-[#1D1D1D] rounded cursor-pointer"
+              />
             </div>
 
-            <div className="flex items-center gap-2 pt-2">
-              <button
-                onClick={() => setSimulatedEffort(8)}
-                className="px-2.5 py-1 rounded text-[11px] font-mono bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 border border-white/[0.06] cursor-pointer"
-              >
-                Test Scope Creep (Effort 5 → 8)
-              </button>
-              <button
-                onClick={() => setSimulatedEffort(5)}
-                className="px-2.5 py-1 rounded text-[11px] font-mono bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 border border-white/[0.06] cursor-pointer"
-              >
-                Reset to 5
-              </button>
-            </div>
-          </div>
-
-          {/* Scenario Comparison Card */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] flex flex-col justify-between space-y-3">
-            <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400 block mb-2">
-                Scenario Comparison Result
-              </span>
-
-              <div className="grid grid-cols-2 gap-3 mb-3 font-mono text-xs">
-                <div className="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
-                  <span className="text-zinc-500 text-[10px] block mb-0.5">BEFORE</span>
-                  <p className="text-white font-bold">Rank #{simulation.originalRank}</p>
-                  <p className="text-zinc-400 text-[11px]">RICE: {simulation.originalRice}</p>
-                  <p className="text-zinc-500 text-[10px]">Effort: {simulation.originalEffort} sprints</p>
-                </div>
-
-                <div className={`p-3 rounded-lg border ${
-                  simulation.simulatedRank > simulation.originalRank
-                    ? 'bg-red-950/20 border-red-500/30'
-                    : 'bg-emerald-950/20 border-emerald-500/30'
-                }`}>
-                  <span className="text-zinc-500 text-[10px] block mb-0.5">AFTER SIMULATION</span>
-                  <p className={`font-bold ${
-                    simulation.simulatedRank > simulation.originalRank ? 'text-red-400' : 'text-emerald-400'
-                  }`}>
-                    Rank #{simulation.simulatedRank}
-                  </p>
-                  <p className="text-zinc-300 text-[11px]">RICE: {simulation.simulatedRice}</p>
-                  <p className="text-zinc-400 text-[10px]">Effort: {simulation.simulatedEffort} sprints</p>
-                </div>
+            {/* Effort */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between text-xs font-mono-tech">
+                <span className="text-[#8A8A8A]">Effort (Sprints)</span>
+                <span className="text-[#F5F5F0] font-bold">{activeInitiative.effort} Sprints</span>
               </div>
+              <input
+                type="range"
+                min="1"
+                max="10"
+                step="1"
+                value={activeInitiative.effort}
+                onChange={(e) => handleUpdateParam(activeInitiative.id, 'effort', Number(e.target.value))}
+                className="w-full accent-[#0066FF] h-1.5 bg-[#1D1D1D] rounded cursor-pointer"
+              />
             </div>
 
-            {/* AI Explanation */}
-            <div className="p-3 rounded-lg bg-black/60 border border-white/[0.06]">
-              <span className="text-[10px] font-mono text-blue-400 font-bold block mb-1">
-                AI Decision Explanation:
-              </span>
-              <p className="text-xs text-zinc-300 font-mono leading-relaxed">
-                "{simulation.explanation}"
-              </p>
+            {/* Sensitivity Narration */}
+            <div className="pt-3 border-t border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] leading-relaxed bg-[#050505] p-3 rounded-[3px] border border-[#161616]">
+              <span className="text-[#0066FF] font-bold block mb-0.5">Causal Sensitivity Narration:</span>
+              <span>{simulation.explanation}</span>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Signature Split-Screen Challenge Modal */}
+      <ChallengeModal
+        isOpen={isChallengeModalOpen}
+        onClose={() => setIsChallengeModalOpen(false)}
+        onAcceptAndCreatePrd={() => {
+          setIsChallengeModalOpen(false);
+          onSelectInitiativeForPrd(activeInitiative);
+        }}
+      />
     </div>
   );
 };

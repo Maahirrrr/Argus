@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   BookOpen,
-  Layers,
-  ChevronDown,
-  ArrowUpRight
+  ArrowUpRight,
+  Terminal
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/finpilot';
 
@@ -24,80 +23,107 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   isLandingMode,
   onToggleMode,
 }) => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 24);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 bg-[#07080a]/95 backdrop-blur-md border-b border-white/[0.08]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-        {/* Brand & Workspace */}
-        <div className="flex items-center gap-4">
+    <header
+      className={`sticky top-0 z-40 h-[68px] transition-all duration-300 ${
+        scrolled || !isLandingMode
+          ? 'bg-[#050505]/90 backdrop-blur-md border-b border-[#1D1D1D]'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between gap-4">
+        {/* Brand */}
+        <div className="flex items-center gap-6">
           <button
             onClick={() => onSelectTab(isLandingMode ? 'landing' : 'overview')}
             className="flex items-center gap-2.5 cursor-pointer group text-left"
           >
-            <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center font-mono font-bold text-xs text-white shadow-sm shadow-blue-600/30">
-              FP
+            <div className="w-6 h-6 bg-[#F5F5F0] rounded-[2px] flex items-center justify-center font-bold text-xs text-[#050505] tracking-wider">
+              TW
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm tracking-tight text-white group-hover:text-blue-400 transition-colors">
-                  FinPilot
-                </span>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 border border-white/[0.08] px-1.5 py-0.2 rounded">
-                  OS v2.4
-                </span>
-              </div>
-            </div>
+            <span className="font-bold text-sm tracking-[0.15em] text-[#F5F5F0] group-hover:text-white transition-colors font-display">
+              TAPWISE
+            </span>
           </button>
 
-          <div className="hidden md:flex items-center gap-1.5 pl-3 border-l border-white/[0.08] text-xs text-zinc-400">
-            <span className="text-zinc-500">Pod:</span>
-            <span className="font-medium text-zinc-200">UPI Acquiring & Core Banking</span>
-            <ChevronDown className="w-3 h-3 text-zinc-600" />
-          </div>
-        </div>
+          {/* Landing Mode Desktop Links */}
+          {isLandingMode && (
+            <nav className="hidden md:flex items-center gap-6 text-xs text-[#8A8A8A]">
+              <a href="#problem" className="hover:text-[#F5F5F0] transition-colors">
+                Problem
+              </a>
+              <a href="#system" className="hover:text-[#F5F5F0] transition-colors">
+                Platform
+              </a>
+              <a href="#system" className="hover:text-[#F5F5F0] transition-colors">
+                Intelligence
+              </a>
+              <button
+                onClick={onOpenCaseStudy}
+                className="hover:text-[#F5F5F0] transition-colors cursor-pointer"
+              >
+                Case Study
+              </button>
+            </nav>
+          )}
 
-        {/* Center: System Ingestion Status */}
-        <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.02] border border-white/[0.06] text-[11px] font-mono text-zinc-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>ClickHouse Live · 4.2M events/day ingested</span>
+          {/* App Mode Contextual Pill */}
+          {!isLandingMode && (
+            <div className="hidden md:flex items-center gap-2 text-xs font-mono-tech text-[#8A8A8A] pl-4 border-l border-[#1D1D1D]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse-dot" />
+              <span>UPI ACQUIRING & TELEMETRY</span>
+            </div>
+          )}
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2.5">
-          {/* Global Search Command Bar Trigger */}
+        <div className="flex items-center gap-3">
+          {/* Command Palette Trigger */}
           <button
             onClick={onOpenCommandPalette}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-xs text-zinc-400 hover:text-zinc-200 cursor-pointer transition-colors"
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
+            title="Open Command Palette (⌘K)"
           >
-            <Search className="w-3.5 h-3.5 text-zinc-500" />
-            <span className="hidden sm:inline">Search & Actions</span>
-            <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[10px] font-mono bg-white/[0.06] px-1.5 py-0.5 rounded text-zinc-400">
+            <Search className="w-3.5 h-3.5 text-[#8A8A8A]" />
+            <span className="hidden sm:inline font-mono-tech text-[11px]">Search</span>
+            <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[10px] font-mono-tech bg-[#1A1A1A] px-1.5 py-0.5 rounded-[2px] text-[#8A8A8A] border border-[#2E2E2E]">
               ⌘K
             </kbd>
           </button>
 
-          {/* PM Portfolio Case Study Button */}
+          {/* Portfolio Case Study */}
           <button
             onClick={onOpenCaseStudy}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-xs text-zinc-300 hover:text-white cursor-pointer transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
           >
-            <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+            <BookOpen className="w-3.5 h-3.5 text-[#0066FF]" />
             <span>AI PM Case Study</span>
           </button>
 
-          {/* Toggle between Product Landing Story & Interactive App */}
+          {/* Primary Action Button */}
           <button
             onClick={onToggleMode}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold cursor-pointer shadow-sm shadow-blue-600/30 transition-all"
+            className="btn-magnetic flex items-center gap-1.5 px-3.5 py-1.5 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-semibold cursor-pointer shadow-sm transition-all"
           >
             {isLandingMode ? (
               <>
-                <span>Open FinPilot OS</span>
+                <span>Launch App</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </>
             ) : (
               <>
-                <Layers className="w-3.5 h-3.5" />
-                <span>Product Tour</span>
+                <Terminal className="w-3.5 h-3.5 text-[#0066FF]" />
+                <span>Exit to Landing</span>
               </>
             )}
           </button>

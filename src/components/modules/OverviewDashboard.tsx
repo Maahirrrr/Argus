@@ -2,10 +2,12 @@ import React from 'react';
 import {
   TrendingUp,
   TrendingDown,
-  ArrowRight
+  ArrowRight,
+  ShieldAlert,
+  Sparkles
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/finpilot';
-import { DEMO_METRICS, DEMO_SIGNALS } from '../../data/demoData';
+import { DEMO_SIGNALS } from '../../data/demoData';
 
 interface OverviewDashboardProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -17,178 +19,174 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   onInvestigateSignal,
 }) => {
   return (
-    <div className="flex flex-col gap-8 max-w-7xl mx-auto py-6 px-4 sm:px-6">
-      {/* Welcome Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
+    <div className="flex flex-col gap-8 max-w-7xl mx-auto py-8 px-4 sm:px-6 select-none">
+      {/* 21 Editorial Dashboard Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-            Good evening, Product Team.
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#8A8A8A]">
+              PRODUCT INTELLIGENCE COCKPIT
+            </span>
+            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/25">
+              ACTIVE SURVEILLANCE
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
+            Good evening. Here's what changed across your product.
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
-            Here's what changed across your product this week · Updated {DEMO_METRICS.date}
+          <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
+            September 13, 2026 · Analyzing 4.2M events across ClickHouse & NPCI
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-zinc-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span>Health Score: <strong>{DEMO_METRICS.healthScore}</strong>/100 (GOOD)</span>
-          </div>
-
-          <button
-            onClick={() => onNavigateTab('weekly_review')}
-            className="px-3 py-1.5 rounded-lg bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/25 text-xs font-semibold cursor-pointer transition-colors"
-          >
-            Weekly Brief →
-          </button>
-        </div>
-      </div>
-
-      {/* Top Metrics Row */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-            Payment Success
-          </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-white">94.2%</span>
-            <span className="text-xs font-mono text-emerald-400 font-bold flex items-center">
-              <TrendingUp className="w-3 h-3 mr-0.5" /> +1.8%
-            </span>
-          </div>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Baseline: 92.4%</span>
-        </div>
-
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-            DAU
-          </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-white">284K</span>
-            <span className="text-xs font-mono text-emerald-400 font-bold flex items-center">
-              <TrendingUp className="w-3 h-3 mr-0.5" /> +6.2%
-            </span>
-          </div>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">4.8M WAU transacting</span>
-        </div>
-
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-            7D Retention
-          </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-white">41.8%</span>
-            <span className="text-xs font-mono text-emerald-400 font-bold flex items-center">
-              <TrendingUp className="w-3 h-3 mr-0.5" /> +2.4%
-            </span>
-          </div>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">New transactor cohort</span>
-        </div>
-
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-            Revenue (GMV)
-          </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-white">₹12.8Cr</span>
-            <span className="text-xs font-mono text-emerald-400 font-bold flex items-center">
-              <TrendingUp className="w-3 h-3 mr-0.5" /> +9.7%
-            </span>
-          </div>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">MDR & fee capture</span>
-        </div>
-
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08] col-span-2 md:col-span-1">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-            Support Tickets
-          </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-white">1,284</span>
-            <span className="text-xs font-mono text-emerald-400 font-bold flex items-center">
-              <TrendingDown className="w-3 h-3 mr-0.5" /> -8.1%
-            </span>
-          </div>
-          <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Zendesk dispute volume</span>
-        </div>
-      </div>
-
-      {/* Product Signals Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono">
-              PRODUCT SIGNALS
-            </h2>
-            <p className="text-xs text-zinc-400">
-              5 anomalies & telemetry trends flagged by FinPilot Sentry
-            </p>
-          </div>
+        <div className="flex items-center gap-4 text-xs font-mono-tech text-[#525252]">
+          <span>LAST SYNCED: <strong className="text-[#8A8A8A]">8 MIN AGO</strong></span>
           <button
             onClick={() => onNavigateTab('insights')}
-            className="text-xs font-mono text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-[#0066FF] hover:text-[#3385FF] transition-colors cursor-pointer"
           >
-            View all 7 signals →
+            All Signals (5) →
           </button>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {DEMO_SIGNALS.map((signal) => (
+      {/* 21 Editorial Metric Layout with Horizontal Divisions (No generic round card grids) */}
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#1D1D1D] bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px]">
+        {/* Metric 1 */}
+        <div className="p-6 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-[10px] font-mono-tech text-[#8A8A8A] mb-2">
+              <span>PAYMENT SUCCESS RATE</span>
+              <span className="text-[#EF4444] font-semibold flex items-center gap-1">
+                <TrendingDown className="w-3 h-3" /> -4.1%
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold font-mono-tech text-[#F5F5F0]">94.2%</span>
+              <span className="text-xs font-mono-tech text-[#525252]">target: 98.5%</span>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-[#161616] text-[11px] font-mono-tech text-[#8A8A8A] flex items-center justify-between">
+            <span>DROP ON ₹10K+ TRANS</span>
+            <span className="text-[#EF4444]">U30 TIMEOUT</span>
+          </div>
+        </div>
+
+        {/* Metric 2 */}
+        <div className="p-6 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-[10px] font-mono-tech text-[#8A8A8A] mb-2">
+              <span>DAY-7 RETENTION</span>
+              <span className="text-[#10B981] font-semibold flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" /> +2.4%
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold font-mono-tech text-[#F5F5F0]">41.8%</span>
+              <span className="text-xs font-mono-tech text-[#525252]">steady benchmark</span>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-[#161616] text-[11px] font-mono-tech text-[#8A8A8A] flex items-center justify-between">
+            <span>P2P TRANS BOOST</span>
+            <span className="text-[#10B981]">+1,200 USERS</span>
+          </div>
+        </div>
+
+        {/* Metric 3 */}
+        <div className="p-6 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-[10px] font-mono-tech text-[#8A8A8A] mb-2">
+              <span>TRANSACTION VALUE (7D)</span>
+              <span className="text-[#10B981] font-semibold flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" /> +12.6%
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold font-mono-tech text-[#F5F5F0]">₹18.4Cr</span>
+              <span className="text-xs font-mono-tech text-[#525252]">GMV velocity</span>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-[#161616] text-[11px] font-mono-tech text-[#8A8A8A] flex items-center justify-between">
+            <span>₹18.4L IMPACTED</span>
+            <span className="text-[#0066FF]">OPP #014</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 22 Dominant Dashboard Hero: AI FOUND SOMETHING */}
+      <div className="p-8 bg-[#0D0E12] border border-[#0066FF]/35 rounded-[4px] relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
+        <div className="flex flex-col gap-2 max-w-2xl">
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 rounded-[2px] bg-[#0066FF]/15 border border-[#0066FF]/30 text-[#0066FF] text-[10px] font-mono-tech font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3" />
+              AI FOUND SOMETHING
+            </span>
+            <span className="text-[10px] font-mono-tech text-[#8A8A8A]">
+              HIGH PRIORITY ANOMALY · DETECTED 14 MIN AGO
+            </span>
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-bold text-[#F5F5F0] tracking-tight font-display">
+            Payment failures increased <span className="text-[#EF4444]">7.4%</span> in high-value transactions.
+          </h2>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono-tech text-[#8A8A8A] mt-1">
+            <span><strong>18,421</strong> users affected</span>
+            <span>•</span>
+            <span><strong>₹18.4L</strong> estimated GMV at risk</span>
+            <span>•</span>
+            <span className="text-[#0066FF]"><strong>91%</strong> AI confidence</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => onInvestigateSignal('sig-001')}
+          className="btn-magnetic flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/25"
+        >
+          <span>Investigate signal →</span>
+        </button>
+      </div>
+
+      {/* Triage Queue: Active Product Signals */}
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between text-xs font-mono-tech text-[#8A8A8A]">
+          <span className="uppercase tracking-wider">ACTIVE PRODUCT SIGNALS QUEUE (5)</span>
+          <span>SORTED BY ESTIMATED USER IMPACT</span>
+        </div>
+
+        <div className="flex flex-col divide-y divide-[#1D1D1D] bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px]">
+          {DEMO_SIGNALS.map((sig) => (
             <div
-              key={signal.id}
-              className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
-                signal.severity === 'HIGH'
-                  ? 'bg-red-950/10 border-red-500/25 hover:border-red-500/40'
-                  : signal.severity === 'MEDIUM'
-                  ? 'bg-amber-950/10 border-amber-500/25 hover:border-amber-500/40'
-                  : 'bg-white/[0.02] border-white/[0.06] hover:border-white/[0.12]'
-              }`}
+              key={sig.id}
+              className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-[#0E0E0E] transition-colors"
             >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                      signal.severity === 'HIGH'
-                        ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                        : signal.severity === 'MEDIUM'
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                        : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                    }`}>
-                      {signal.severity} SEVERITY
-                    </span>
-                    <span className="text-xs font-mono font-bold text-zinc-200">
-                      {signal.delta}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono text-zinc-500">{signal.timestamp.split('·')[0]}</span>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-[3px] bg-[#141414] border border-[#1D1D1D] flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <ShieldAlert className={`w-4 h-4 ${sig.severity === 'HIGH' ? 'text-[#EF4444]' : 'text-[#F59E0B]'}`} />
                 </div>
-
-                <h3 className="text-xs sm:text-sm font-bold text-white mb-1">
-                  {signal.title}
-                </h3>
-                <p className="text-[11px] text-zinc-400 leading-relaxed mb-3">
-                  {signal.description}
-                </p>
-
-                <div className="p-2.5 rounded-lg bg-black/40 border border-white/[0.04] text-[11px] font-mono text-zinc-300 space-y-1 mb-3">
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Users affected:</span>
-                    <span className="text-white font-medium">{signal.usersAffected}</span>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-bold text-[#F5F5F0]">{sig.title}</span>
+                    <span className="text-[10px] font-mono-tech px-1.5 py-0.2 rounded-[2px] bg-[#141414] border border-[#1D1D1D] text-[#8A8A8A]">
+                      {sig.metric} {sig.delta}
+                    </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Likely cause:</span>
-                    <span className="text-blue-300 font-medium">{signal.likelyCause}</span>
-                  </div>
+                  <p className="text-xs text-[#8A8A8A] font-mono-tech">
+                    {sig.usersAffected} users affected · {sig.likelyCause}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/[0.04]">
-                <span className="text-[10px] font-mono text-zinc-500">{signal.metric}</span>
+              <div className="flex items-center gap-3 flex-shrink-0">
+                <span className="text-xs font-mono-tech text-[#8A8A8A]">
+                  {sig.timestamp}
+                </span>
                 <button
-                  onClick={() => onInvestigateSignal(signal.id)}
-                  className="flex items-center gap-1 text-xs font-mono font-semibold text-blue-400 hover:text-blue-300 cursor-pointer"
+                  onClick={() => onInvestigateSignal(sig.id)}
+                  className="btn-magnetic flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer"
                 >
                   <span>Investigate</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3 h-3 text-[#0066FF]" />
                 </button>
               </div>
             </div>

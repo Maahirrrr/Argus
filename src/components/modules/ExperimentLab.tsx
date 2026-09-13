@@ -17,89 +17,89 @@ export const ExperimentLab: React.FC<ExperimentLabProps> = ({ onNavigateTab }) =
   const [isDeployed, setIsDeployed] = useState(false);
 
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto py-6 px-4 sm:px-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/[0.08] gap-4">
+    <div className="flex flex-col gap-8 max-w-7xl mx-auto py-8 px-4 sm:px-6 select-none">
+      {/* 32 Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">
+            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
               EXPERIMENT LAB · CAUSAL INFERENCE
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/25">
+            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#0066FF]/15 text-[#0066FF] border border-[#0066FF]/30">
               {isDeployed ? 'ACTIVE IN STATSIG' : exp.status.toUpperCase()}
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-            {exp.title}
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
+            EXPERIMENT 012 · {exp.title}
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
             Verify causal impact and statistical significance before 100% rollout.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => onNavigateTab('analytics')}
-            className="px-3.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-zinc-300 cursor-pointer"
+            className="px-3 py-2 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors"
           >
             Telemetry Chat →
           </button>
           <button
             onClick={() => setIsDeployed(true)}
-            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer shadow-sm transition-all ${
+            className={`btn-magnetic flex items-center gap-1.5 px-4 py-2 rounded-[3px] text-xs font-semibold cursor-pointer shadow-md transition-all ${
               isDeployed
-                ? 'bg-emerald-600 text-white cursor-default shadow-emerald-600/20'
-                : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30'
+                ? 'bg-[#10B981] text-white cursor-default shadow-[#10B981]/20'
+                : 'bg-[#0066FF] hover:bg-[#1A75FF] text-white shadow-[#0066FF]/25'
             }`}
           >
             {isDeployed ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-            <span>{isDeployed ? 'Deployed to Feature Flag' : 'Deploy to Flag'}</span>
+            <span>{isDeployed ? 'Deployed to Flag' : 'Deploy to Feature Flag'}</span>
           </button>
         </div>
       </div>
 
-      {/* Hypothesis Banner */}
-      <div className="p-5 rounded-2xl bg-[#090a0d] border border-blue-500/30 shadow-xl">
-        <span className="text-[10px] font-mono uppercase text-blue-400 font-bold block mb-1">
-          Causal Hypothesis Statement:
+      {/* 32 Structured Fields Banner: Hypothesis */}
+      <div className="p-5 bg-[#0A0A0A] border border-[#0066FF]/30 rounded-[4px]">
+        <span className="text-[10px] font-mono-tech uppercase text-[#0066FF] font-bold block mb-1">
+          HYPOTHESIS STATEMENT:
         </span>
-        <p className="text-xs sm:text-sm text-zinc-200 font-mono leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/[0.04]">
+        <p className="text-xs sm:text-sm text-[#F5F5F0] font-mono-tech leading-relaxed bg-[#050505] p-3.5 rounded-[3px] border border-[#161616]">
           "{exp.hypothesis}"
         </p>
       </div>
 
-      {/* Stats Grid: Sample Size, MDE, Duration, Decision Rule */}
+      {/* Structured Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-1">Sample Size</span>
-          <p className="text-base font-bold font-mono text-white">{exp.sampleSize}</p>
-          <p className="text-[10px] text-zinc-500 font-mono mt-0.5">80% statistical power (β)</p>
+        <div className="p-4 rounded-[3px] bg-[#0A0A0A] border border-[#1D1D1D]">
+          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">SAMPLE SIZE</span>
+          <p className="text-base font-bold font-mono-tech text-[#F5F5F0]">{exp.sampleSize}</p>
+          <p className="text-[10px] text-[#525252] font-mono-tech mt-0.5">80% statistical power (β)</p>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-1">Duration</span>
-          <p className="text-xl font-bold font-mono text-white">{exp.duration}</p>
-          <p className="text-[10px] text-zinc-500 font-mono mt-0.5">At 18k daily volume</p>
+        <div className="p-4 rounded-[3px] bg-[#0A0A0A] border border-[#1D1D1D]">
+          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">DURATION</span>
+          <p className="text-xl font-bold font-mono-tech text-[#F5F5F0]">{exp.duration}</p>
+          <p className="text-[10px] text-[#525252] font-mono-tech mt-0.5">At 18k daily volume</p>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-1">Expected Lift</span>
-          <p className="text-xl font-bold font-mono text-emerald-400">{exp.primaryMetric.expectedLift}</p>
-          <p className="text-[10px] text-zinc-500 font-mono mt-0.5">MDE: {exp.primaryMetric.mde}</p>
+        <div className="p-4 rounded-[3px] bg-[#0A0A0A] border border-[#1D1D1D]">
+          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">EXPECTED IMPACT</span>
+          <p className="text-xl font-bold font-mono-tech text-[#10B981]">{exp.primaryMetric.expectedLift}</p>
+          <p className="text-[10px] text-[#525252] font-mono-tech mt-0.5">MDE: {exp.primaryMetric.mde}</p>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.08]">
-          <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-1">Decision Rule</span>
-          <p className="text-xs font-mono text-blue-300 line-clamp-2">{exp.decisionRule}</p>
-          <p className="text-[10px] text-zinc-500 font-mono mt-0.5">Automatic ship threshold</p>
+        <div className="p-4 rounded-[3px] bg-[#0A0A0A] border border-[#1D1D1D]">
+          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">DECISION RULE</span>
+          <p className="text-xs font-mono-tech text-[#0066FF] line-clamp-2">{exp.decisionRule}</p>
+          <p className="text-[10px] text-[#525252] font-mono-tech mt-0.5">Automatic ship threshold</p>
         </div>
       </div>
 
-      {/* Traffic Split & Variant Comparison */}
-      <div className="p-6 rounded-2xl bg-[#090a0d] border border-white/[0.08] shadow-xl space-y-4">
-        <div className="flex items-center justify-between text-xs font-mono">
-          <span className="text-zinc-400">Traffic Allocation:</span>
-          <span className="text-blue-400 font-bold">Control: {100 - split}% | Treatment: {split}%</span>
+      {/* Traffic Allocation & Variants */}
+      <div className="p-6 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] space-y-4">
+        <div className="flex items-center justify-between text-xs font-mono-tech">
+          <span className="text-[#8A8A8A]">Traffic Allocation Split:</span>
+          <span className="text-[#0066FF] font-bold">Control: {100 - split}% | Treatment: {split}%</span>
         </div>
         <input
           type="range"
@@ -108,41 +108,41 @@ export const ExperimentLab: React.FC<ExperimentLabProps> = ({ onNavigateTab }) =
           step="5"
           value={split}
           onChange={(e) => setSplit(Number(e.target.value))}
-          className="w-full accent-blue-500 h-2 bg-zinc-800 rounded cursor-pointer"
+          className="w-full accent-[#0066FF] h-1.5 bg-[#1D1D1D] rounded cursor-pointer"
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+          <div className="p-4 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-bold text-zinc-300 font-mono">{exp.control.name}</span>
-              <span className="text-xs font-mono text-zinc-500">{100 - split}% Traffic</span>
+              <span className="text-xs font-bold text-[#F5F5F0] font-mono-tech">{exp.control.name}</span>
+              <span className="text-xs font-mono-tech text-[#525252]">{100 - split}% Traffic</span>
             </div>
-            <p className="text-xs text-zinc-400">{exp.control.description}</p>
+            <p className="text-xs text-[#8A8A8A] font-mono-tech">{exp.control.description}</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30">
+          <div className="p-4 rounded-[3px] bg-[#0E1016] border border-[#0066FF]/30">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-bold text-blue-300 font-mono">{exp.treatment.name}</span>
-              <span className="text-xs font-mono text-blue-400 font-bold">{split}% Traffic</span>
+              <span className="text-xs font-bold text-[#0066FF] font-mono-tech">{exp.treatment.name}</span>
+              <span className="text-xs font-mono-tech text-[#0066FF] font-bold">{split}% Traffic</span>
             </div>
-            <p className="text-xs text-zinc-300">{exp.treatment.description}</p>
+            <p className="text-xs text-[#F5F5F0] font-mono-tech">{exp.treatment.description}</p>
           </div>
         </div>
       </div>
 
       {/* Guardrail Circuit Breakers */}
-      <div className="p-5 rounded-2xl bg-red-950/10 border border-red-500/25 space-y-3">
+      <div className="p-5 bg-[#0A0A0A] border border-[#EF4444]/25 rounded-[4px] space-y-3">
         <div className="flex items-center gap-2">
-          <ShieldAlert className="w-4 h-4 text-red-400" />
-          <span className="text-xs font-mono font-bold text-red-300 uppercase tracking-wider">
-            Guardrail Constraints (Automated Circuit Breakers)
+          <ShieldAlert className="w-4 h-4 text-[#EF4444]" />
+          <span className="text-xs font-mono-tech font-bold text-[#EF4444] uppercase tracking-wider">
+            GUARDRAIL CONSTRAINTS (AUTOMATED CIRCUIT BREAKERS)
           </span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {exp.guardrails.map((g, i) => (
-            <div key={i} className="p-3 rounded-lg bg-black/40 border border-white/[0.04]">
-              <span className="text-xs font-semibold text-white block mb-0.5">{g.name}</span>
-              <span className="text-[10px] font-mono text-red-400">{g.threshold}</span>
+            <div key={i} className="p-3 rounded-[3px] bg-[#050505] border border-[#161616]">
+              <span className="text-xs font-semibold text-[#F5F5F0] block mb-0.5">{g.name}</span>
+              <span className="text-[10px] font-mono-tech text-[#EF4444]">{g.threshold}</span>
             </div>
           ))}
         </div>

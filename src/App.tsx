@@ -2,8 +2,9 @@ import { useState } from 'react';
 import type { NavigationTab, Opportunity, PrioritizationInitiative } from './types/finpilot';
 import { DEMO_OPPORTUNITIES, DEMO_INITIATIVES } from './data/demoData';
 
+import { LoadingSequence } from './components/landing/LoadingSequence';
 import { AppHeader } from './components/layout/AppHeader';
-import { Navigation } from './components/layout/Navigation';
+import { AppSidebar } from './components/layout/AppSidebar';
 import { CommandPalette } from './components/layout/CommandPalette';
 import { CaseStudyModal } from './components/layout/CaseStudyModal';
 
@@ -20,6 +21,7 @@ import { DataSourcesPage } from './components/modules/DataSourcesPage';
 import { SettingsPage } from './components/modules/SettingsPage';
 
 export function App() {
+  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<NavigationTab>('landing');
   const [isLandingMode, setIsLandingMode] = useState<boolean>(true);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
@@ -49,11 +51,11 @@ export function App() {
     }
   };
 
-  // ───── INTERACTIVE DEMO WORKFLOW HANDLERS (Section 35) ─────
+  // ───── INTERACTIVE DEMO WORKFLOW HANDLERS (Section 59) ─────
   const handleInvestigateSignal = (_signalId?: string) => {
     setIsLandingMode(false);
     setActiveTab('insights');
-    showToast('Signal investigated: 4.2M events analyzed across ClickHouse telemetry.');
+    showToast('Signal 014: 4.2M events analyzed across ClickHouse & NPCI telemetry.');
   };
 
   const handleCreateOpportunityFromInsight = (_insightId?: string) => {
@@ -67,17 +69,17 @@ export function App() {
   };
 
   const handleDismissOpportunity = (oppId: string) => {
-    setOpportunities(prev => prev.filter(o => o.id !== oppId));
+    setOpportunities((prev) => prev.filter((o) => o.id !== oppId));
     showToast('Opportunity dismissed from inbox.');
   };
 
   const handleSelectInitiativeForPrd = (init: PrioritizationInitiative) => {
     setActiveTab('prds');
-    showToast(`PRD generated for "${init.title}". AI Critic ready.`);
+    showToast(`PRD generated for "${init.title}". Embedded AI tools ready.`);
   };
 
   const handleDeployExperiment = () => {
-    showToast('A/B experiment configured. Guardrail circuit breakers active.');
+    showToast('A/B experiment deployed to feature flag. Circuit breakers active.');
   };
 
   const handleSelectCommandAction = (tab: NavigationTab, _payload?: any) => {
@@ -90,16 +92,22 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07080a] text-zinc-100 flex flex-col font-sans selection:bg-blue-600/30 selection:text-white">
+    <div className="min-h-screen bg-[#050505] text-[#F5F5F0] flex flex-col font-sans selection:bg-[#0066FF] selection:text-white">
+      {/* 05 Short Loading Sequence (1.2s max on first visit) */}
+      {!hasLoaded && <LoadingSequence onComplete={() => setHasLoaded(true)} />}
+
+      {/* Subtle Noise Texture */}
+      <div className="tapwise-noise" aria-hidden="true" />
+
       {/* Toast Notification Banner */}
       {toastMessage && (
-        <div className="fixed top-16 right-6 z-50 p-3 rounded-xl bg-blue-950 border border-blue-500/40 text-xs font-mono text-blue-200 shadow-2xl flex items-center gap-2 animate-fade-in">
-          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+        <div className="fixed top-20 right-6 z-50 px-4 py-2.5 rounded-[3px] bg-[#0A0A0A] border border-[#0066FF]/40 text-xs font-mono-tech text-[#F5F5F0] shadow-2xl flex items-center gap-2.5 animate-fade-in">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse-dot" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Main Header */}
+      {/* 06 Minimalist Sticky Header */}
       <AppHeader
         activeTab={activeTab}
         onSelectTab={(tab) => {
@@ -117,26 +125,26 @@ export function App() {
         onToggleMode={handleToggleMode}
       />
 
-      {/* OS Navigation Tabs (shown when in app mode) */}
-      {!isLandingMode && (
-        <Navigation
-          activeTab={activeTab}
-          onSelectTab={setActiveTab}
-          unresolvedSignalsCount={5}
-          unresolvedOpportunitiesCount={opportunities.filter(o => o.status === 'inbox').length}
-        />
-      )}
-
-      {/* Main Screen Router */}
-      <main className="flex-1 w-full relative z-10">
-        {isLandingMode ? (
+      {/* Main Experience: Landing Page OR Operating System with Left Sidebar */}
+      {isLandingMode ? (
+        <main className="flex-1 w-full relative z-10">
           <LandingPage
             onOpenApp={handleOpenApp}
             onOpenCaseStudy={() => setIsCaseStudyOpen(true)}
             onInvestigateSignal={handleInvestigateSignal}
           />
-        ) : (
-          <>
+        </main>
+      ) : (
+        /* 19 Application OS Layout: Left Sidebar + Large Content Canvas */
+        <div className="flex-1 flex w-full relative z-10">
+          <AppSidebar
+            activeTab={activeTab}
+            onSelectTab={setActiveTab}
+            unresolvedSignalsCount={5}
+            unresolvedOpportunitiesCount={opportunities.filter((o) => o.status === 'inbox').length}
+          />
+
+          <main className="flex-1 overflow-x-hidden min-h-[calc(100vh-68px)] bg-[#050505]">
             {activeTab === 'overview' && (
               <OverviewDashboard
                 onNavigateTab={setActiveTab}
@@ -201,11 +209,11 @@ export function App() {
             {activeTab === 'settings' && (
               <SettingsPage />
             )}
-          </>
-        )}
-      </main>
+          </main>
+        </div>
+      )}
 
-      {/* Global Command Palette (⌘K) */}
+      {/* 33 Global Command Palette (⌘K) */}
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
@@ -217,34 +225,6 @@ export function App() {
         isOpen={isCaseStudyOpen}
         onClose={() => setIsCaseStudyOpen(false)}
       />
-
-      {/* Footer */}
-      <footer className="mt-16 border-t border-white/[0.06] py-6 px-4 sm:px-6 bg-[#050608] text-xs text-zinc-500 font-mono">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-zinc-300">FinPilot OS</span>
-            <span>· AI Operating System for Fintech Teams</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setIsCaseStudyOpen(true)}
-              className="text-zinc-400 hover:text-white cursor-pointer"
-            >
-              AI PM Case Study
-            </button>
-            <button
-              onClick={() => {
-                setIsLandingMode(!isLandingMode);
-                setActiveTab(isLandingMode ? 'overview' : 'landing');
-              }}
-              className="text-zinc-400 hover:text-white cursor-pointer"
-            >
-              {isLandingMode ? 'Switch to App' : 'Switch to Landing'}
-            </button>
-            <span>Linear × Stripe × Bloomberg Design</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

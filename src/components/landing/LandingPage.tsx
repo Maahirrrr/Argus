@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import {
-  ArrowRight,
-  AlertTriangle,
-  ShieldCheck,
-  ArrowUpRight
+  Sparkles,
+  BookOpen
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/finpilot';
-import { DEMO_METRICS } from '../../data/demoData';
+import { HeroStreamVisualization } from './HeroStreamVisualization';
 
 interface LandingPageProps {
   onOpenApp: (tab?: NavigationTab) => void;
   onOpenCaseStudy: () => void;
-  onInvestigateSignal: (signalId: string) => void;
+  onInvestigateSignal?: (signalId: string) => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
@@ -19,324 +18,397 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onOpenCaseStudy,
   onInvestigateSignal,
 }) => {
+  const [isClarityActive, setIsClarityActive] = useState(false);
+  const [activeSystemStage, setActiveSystemStage] = useState<number>(1);
+
+  const chaosSignals = [
+    { id: 1, label: 'Payment failures', value: '+7.4%', category: 'TRANSACTIONS', risk: true, x: -140, y: -40 },
+    { id: 2, label: 'Refund tickets', value: '+21%', category: 'SUPPORT', risk: true, x: 120, y: -60 },
+    { id: 3, label: '7D Retention', value: '-1.4%', category: 'ANALYTICS', risk: true, x: -80, y: 50 },
+    { id: 4, label: 'Transaction volume', value: '₹18.4Cr', category: 'TRANSACTIONS', risk: false, x: 160, y: 30 },
+    { id: 5, label: 'Support requests', value: '2,481', category: 'SUPPORT', risk: false, x: -160, y: 110 },
+    { id: 6, label: 'Churn risk', value: 'HIGH', category: 'ANALYTICS', risk: true, x: 60, y: 120 },
+    { id: 7, label: 'KYC drop-off', value: '18.2%', category: 'FEEDBACK', risk: true, x: -20, y: -100 },
+  ];
+
+  const systemStages = [
+    {
+      num: '01',
+      title: 'SIGNALS',
+      subtitle: 'Continuous Telemetry Surveillance',
+      desc: 'TapWise monitors 4.2M daily transactional events across payment gateways, banking switches, and user support queues to catch micro-anomalies before they escalate.',
+      metrics: [
+        { label: 'PAYMENT SUCCESS', val: '94.2%', delta: '↓ 4.1%', bad: true },
+        { label: 'TRANSACTION VOLUME', val: '₹18.4Cr', delta: '↑ 12.6%', bad: false },
+        { label: 'SUPPORT TICKETS', val: '1,284', delta: '↑ 18.2%', bad: true },
+        { label: '7D RETENTION', val: '41.8%', delta: '↓ 0.8%', bad: true },
+      ],
+      tagline: 'TapWise watches what changes.',
+    },
+    {
+      num: '02',
+      title: 'INSIGHTS',
+      subtitle: 'Root Cause Decomposition',
+      desc: 'Instead of alerting you with noise, TapWise correlates millions of log records to decompose why the failure occurred and pinpoints exact system contributors.',
+      metrics: [
+        { label: 'BANK X TIMEOUTS', val: '52% share', delta: '48% cluster', bad: true },
+        { label: 'ANDROID 15 OS', val: '24% share', delta: '1.7x risk', bad: true },
+        { label: 'TICKETS > ₹10K', val: '15% share', delta: '2.4x failure', bad: true },
+        { label: 'EVENING PEAK', val: '9% share', delta: '8-10 PM', bad: false },
+      ],
+      tagline: 'TapWise doesn\'t just show the anomaly. It explains why it matters.',
+    },
+    {
+      num: '03',
+      title: 'PRIORITIES',
+      subtitle: 'Dynamic RICE Sensitivity Workbench',
+      desc: 'Fintech PMs test roadmap scenarios in real-time. Slide Reach, Impact, Confidence, or Effort to observe causal rank shifts and strategic trade-off commentary.',
+      metrics: [
+        { label: '#1 REDUCE PAYMENT FAILURES', val: 'RICE 74.6', delta: 'HIGH IMPACT', bad: false },
+        { label: '#2 REFUND VISIBILITY', val: 'RICE 68.2', delta: 'MED IMPACT', bad: false },
+        { label: '#3 AADHAAR FACE-RD', val: 'RICE 54.1', delta: 'COMPLIANCE', bad: false },
+        { label: '#4 REWARDS DASHBOARD', val: 'RICE 41.9', delta: 'ENGAGEMENT', bad: false },
+      ],
+      tagline: 'From "what could we build?" to "what should we build?"',
+    },
+    {
+      num: '04',
+      title: 'ACTION',
+      subtitle: 'PRD, Hypotheses & Guarded Rollouts',
+      desc: 'Bridge instantly from prioritization to execution. Generate engineering-ready PRDs with Gherkin user stories, and configure guarded A/B experiment circuit breakers.',
+      metrics: [
+        { label: 'HYPOTHESIS', val: 'Smart Failover', delta: 'Causal Inference', bad: false },
+        { label: 'PRIMARY METRIC', val: '+3.2% SR', delta: 'MDE: 1.8%', bad: false },
+        { label: 'CIRCUIT BREAKER', val: '< 4,500ms', delta: 'P99 Latency Cap', bad: false },
+        { label: 'FLAG STATUS', val: 'STATSIC READY', delta: '10/90 Split', bad: false },
+      ],
+      tagline: 'Opportunity → PRD → Experiment → Measurement.',
+    },
+  ];
+
   return (
-    <div className="flex flex-col gap-16 py-8 px-4 sm:px-6 max-w-7xl mx-auto text-zinc-100">
-      {/* ───── SECTION 1: HERO ───── */}
-      <section className="text-center max-w-4xl mx-auto pt-6 pb-2">
-        {/* Eyebrow */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/10 border border-blue-500/25 text-blue-400 text-xs font-mono font-semibold tracking-wide mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-          AI PRODUCT INTELLIGENCE FOR FINTECH
-        </div>
-
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight mb-6">
-          Turn fintech signals into <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-zinc-100 to-blue-200">
-            better product decisions.
-          </span>
-        </h1>
-
-        {/* Subheadline */}
-        <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed mb-8">
-          FinPilot connects product analytics, customer feedback, support data and fintech signals to help PMs discover opportunities, prioritize what matters and ship with confidence.
-        </p>
-
-        {/* Action CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <button
-            onClick={() => onOpenApp('overview')}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold cursor-pointer shadow-lg shadow-blue-600/25 transition-all"
-          >
-            <span>Open FinPilot OS</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={onOpenCaseStudy}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-sm font-medium text-zinc-300 hover:text-white cursor-pointer transition-colors"
-          >
-            <span>View AI PM Case Study</span>
-            <ArrowUpRight className="w-4 h-4 text-zinc-400" />
-          </button>
-        </div>
-      </section>
-
-      {/* ───── SECTION 2: HERO PRODUCT DEMO ───── */}
-      <section className="relative">
-        <div className="rounded-2xl bg-[#090a0f] border border-white/[0.12] shadow-2xl p-6 sm:p-8 overflow-hidden">
-          {/* Top Bar of Demo Widget */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-white/[0.08] gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-mono font-bold text-xs text-white">
-                FP
-              </div>
-              <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-zinc-500 block">
-                  Product Health
-                </span>
-                <span className="text-sm font-bold text-white font-mono">
-                  {DEMO_METRICS.date}
-                </span>
-              </div>
+    <div className="w-full flex flex-col bg-[#050505] text-[#F5F5F0] select-none">
+      {/* ───── 07 HERO SECTION ───── */}
+      <section className="relative min-h-[90vh] max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-16 flex flex-col justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column: Asymmetric Hero Typography */}
+          <div className="lg:col-span-7 flex flex-col items-start">
+            {/* Eyebrow */}
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-[#101010] border border-[#1D1D1D] text-[11px] font-mono-tech text-[#8A8A8A] mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse-dot" />
+              <span>AI PRODUCT INTELLIGENCE / FINTECH</span>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-mono text-xs font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                {DEMO_METRICS.healthGrade} · Score {DEMO_METRICS.healthScore}/100
-              </span>
-            </div>
-          </div>
+            {/* Massive Headline */}
+            <h1 className="font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-[84px] text-[#F5F5F0] tracking-tight mb-8">
+              MAKE SENSE<br />
+              OF THE<br />
+              <span className="text-[#0066FF]">SIGNALS.</span>
+            </h1>
 
-          {/* Metric Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">Payment Success</span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold font-mono text-white">{DEMO_METRICS.paymentSuccess.value}</span>
-                <span className="text-xs font-mono text-emerald-400">{DEMO_METRICS.paymentSuccess.delta}</span>
-              </div>
-            </div>
+            {/* Subtext */}
+            <p className="text-base sm:text-lg text-[#8A8A8A] leading-relaxed max-w-[48ch] mb-10 font-normal">
+              TapWise helps fintech product teams turn fragmented data into high-conviction product decisions.
+            </p>
 
-            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">7D Retention</span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold font-mono text-white">{DEMO_METRICS.retention7D.value}</span>
-                <span className="text-xs font-mono text-emerald-400">{DEMO_METRICS.retention7D.delta}</span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">Support Tickets</span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold font-mono text-white">{DEMO_METRICS.supportTickets.value}</span>
-                <span className="text-xs font-mono text-emerald-400">{DEMO_METRICS.supportTickets.delta}</span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">Transaction Volume</span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold font-mono text-white">{DEMO_METRICS.volume.value}</span>
-                <span className="text-xs font-mono text-emerald-400">{DEMO_METRICS.volume.delta}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* AI Product Signal Callout Card */}
-          <div className="p-5 rounded-xl bg-gradient-to-r from-red-950/20 via-black to-[#0b0c10] border border-red-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-400" />
-                <span className="text-xs font-mono font-bold text-red-400 uppercase tracking-wider">
-                  AI PRODUCT SIGNAL DETECTED
-                </span>
-              </div>
-              <h3 className="text-sm sm:text-base font-bold text-white">
-                Payment failures increased 7.4% in users attempting transactions above ₹10,000.
-              </h3>
-
-              <div className="flex flex-wrap gap-2 text-[11px] font-mono text-zinc-400 pt-1">
-                <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
-                  01 Bank timeout errors
-                </span>
-                <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
-                  02 Increased evening traffic (8–10 PM)
-                </span>
-                <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
-                  03 Android 15 timeout cluster
-                </span>
-              </div>
-
-              <p className="text-xs text-zinc-300 font-mono pt-1">
-                <strong className="text-blue-400">AI Recommendation:</strong> Investigate payment routing before prioritizing checkout UI changes.
-              </p>
-            </div>
-
-            <div className="flex-shrink-0">
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center gap-4">
               <button
-                onClick={() => onInvestigateSignal('sig-001')}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-xs cursor-pointer shadow-md shadow-red-600/20 transition-all flex items-center justify-center gap-2"
+                onClick={() => onOpenApp('overview')}
+                className="btn-magnetic flex items-center gap-2 px-6 py-3 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-semibold cursor-pointer shadow-lg shadow-white/5"
               >
-                <span>Investigate Signal →</span>
+                <span>Enter TapWise →</span>
+              </button>
+
+              <a
+                href="#problem"
+                className="flex items-center gap-2 px-5 py-3 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] transition-colors"
+              >
+                <span>Explore the system</span>
+              </a>
+
+              <button
+                onClick={onOpenCaseStudy}
+                className="flex items-center gap-1.5 px-3.5 py-3 text-xs font-mono-tech text-[#525252] hover:text-[#8A8A8A] transition-colors cursor-pointer"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-[#0066FF]" />
+                <span>Read AI PM Case Study</span>
               </button>
             </div>
           </div>
+
+          {/* Right Column: Abstract Live Stream Visualization */}
+          <div className="lg:col-span-5 w-full">
+            <HeroStreamVisualization />
+          </div>
         </div>
       </section>
 
-      {/* ───── SECTION 3: THE FINPILOT STORY (PROBLEM → DECISIONS) ───── */}
-      <section className="border-t border-white/[0.08] pt-12">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400 block mb-2">
-            The Decision Pipeline
+      {/* ───── 10 & 11 THE PROBLEM & CHAOS → CLARITY ANIMATION ───── */}
+      <section id="problem" className="relative py-28 border-t border-[#1D1D1D] bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+          <span className="text-[11px] font-mono-tech uppercase tracking-[0.25em] text-[#8A8A8A] mb-3">
+            THE PROBLEM
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            How FinPilot turns noise into roadmap momentum
+          <h2 className="font-editorial text-4xl sm:text-5xl md:text-6xl text-[#F5F5F0] tracking-tight max-w-[24ch] mb-6">
+            THE DATA ISN'T THE PROBLEM.<br />
+            <span className="text-[#0066FF]">THE DECISION IS.</span>
           </h2>
-        </div>
+          <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[58ch] mb-12 font-mono-tech">
+            Fintech generates hundreds of disconnected metrics across gateways, bank switches, and queues. Product managers are inundated with noise, yet starve for clear decision conviction.
+          </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          {[
-            {
-              step: '01',
-              stage: 'PROBLEM',
-              headline: 'Fintech PMs have too much data and too little clarity.',
-              sub: 'Logs in ClickHouse, errors in Sentry, tickets in Zendesk, webhooks from 18 banks.',
-            },
-            {
-              step: '02',
-              stage: 'SIGNALS',
-              headline: 'Continuous Telemetry Ingestion',
-              sub: 'Correlates failure codes (U30, U69), OS versions, and user cohorts across 4.2M daily events.',
-            },
-            {
-              step: '03',
-              stage: 'AI SYNTHESIS',
-              headline: 'Causal Anomaly Decomposition',
-              sub: 'Isolates root causes: 48% Bank X switch latency vs 24% Android 15 background service drops.',
-            },
-            {
-              step: '04',
-              stage: 'DECISION',
-              headline: 'RICE Prioritization & Simulator',
-              sub: 'Model trade-offs in real time. Modify effort or reach to simulate expected ROI ranking shifts.',
-            },
-            {
-              step: '05',
-              stage: 'OUTCOME',
-              headline: 'Ship Verified PRD & Experiment',
-              sub: 'Production specs with Gherkin BDD criteria, AI Critic review, and guardrailed A/B metrics.',
-            },
-          ].map((col, idx) => (
-            <div key={idx} className="p-4 rounded-xl bg-[#090a0d] border border-white/[0.06] flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono text-zinc-500 font-bold">{col.step}</span>
-                  <span className="text-[10px] font-mono font-bold text-blue-400">{col.stage}</span>
+          {/* Interactive Chaos to Clarity Canvas */}
+          <div className="w-full max-w-4xl p-6 sm:p-10 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] relative overflow-hidden min-h-[380px] flex flex-col justify-between">
+            <div className="flex items-center justify-between pb-4 border-b border-[#1D1D1D] text-[11px] font-mono-tech text-[#8A8A8A]">
+              <span>INTERACTIVE TELEMETRY HARMONIZER</span>
+              <button
+                onClick={() => setIsClarityActive(!isClarityActive)}
+                className="btn-magnetic flex items-center gap-1.5 px-3 py-1 rounded-[2px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer"
+              >
+                <Sparkles className="w-3 h-3 text-[#0066FF]" />
+                <span>{isClarityActive ? 'Reset to Chaos' : 'Demonstrate Clarity →'}</span>
+              </button>
+            </div>
+
+            {/* Chaotic vs Structured Field */}
+            <div className="relative h-[240px] flex items-center justify-center my-4">
+              {!isClarityActive ? (
+                /* Chaos State: Scattered metrics floating across space */
+                <div className="relative w-full h-full flex items-center justify-center">
+                  {chaosSignals.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      animate={{
+                        x: item.x,
+                        y: item.y,
+                        scale: 1,
+                        opacity: 1,
+                      }}
+                      transition={{ type: 'spring', stiffness: 70, damping: 14 }}
+                      className="absolute px-3 py-2 rounded-[3px] bg-[#101010] border border-[#1D1D1D] shadow-xl flex items-center gap-2.5 select-none"
+                    >
+                      <span className="text-[10px] font-mono-tech text-[#8A8A8A]">{item.category}</span>
+                      <span className="text-xs font-medium text-[#F5F5F0]">{item.label}</span>
+                      <span
+                        className={`text-xs font-mono-tech font-bold ${
+                          item.risk ? 'text-[#EF4444]' : 'text-[#10B981]'
+                        }`}
+                      >
+                        {item.value}
+                      </span>
+                    </motion.div>
+                  ))}
                 </div>
-                <h3 className="text-xs font-bold text-white mb-1.5 leading-snug">{col.headline}</h3>
-                <p className="text-[11px] text-zinc-400 leading-relaxed">{col.sub}</p>
-              </div>
+              ) : (
+                /* Clarity State: Harmonized into 4 structured pillars */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-full grid grid-cols-1 sm:grid-cols-4 gap-3 text-left"
+                >
+                  <div className="p-3 bg-[#101010] border border-[#1D1D1D] rounded-[3px]">
+                    <span className="text-[10px] font-mono-tech text-[#0066FF] uppercase block mb-1">01 · SIGNALS</span>
+                    <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">4.2M Events</p>
+                    <p className="text-[10px] text-[#8A8A8A] font-mono-tech">Payment drop detected</p>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#1D1D1D] rounded-[3px]">
+                    <span className="text-[10px] font-mono-tech text-[#0066FF] uppercase block mb-1">02 · INSIGHT</span>
+                    <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">Bank X Timeout</p>
+                    <p className="text-[10px] text-[#8A8A8A] font-mono-tech">52% failure share</p>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#1D1D1D] rounded-[3px]">
+                    <span className="text-[10px] font-mono-tech text-[#0066FF] uppercase block mb-1">03 · OPPORTUNITY</span>
+                    <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">Smart Failover</p>
+                    <p className="text-[10px] text-[#8A8A8A] font-mono-tech">Ranked #1 on RICE</p>
+                  </div>
+                  <div className="p-3 bg-[#101010] border border-[#0066FF]/40 rounded-[3px] bg-[#0066FF]/5">
+                    <span className="text-[10px] font-mono-tech text-[#10B981] uppercase block mb-1">04 · ACTION</span>
+                    <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">PRD & Experiment</p>
+                    <p className="text-[10px] text-[#10B981] font-mono-tech">+3.2% Lift Expected</p>
+                  </div>
+                </motion.div>
+              )}
             </div>
-          ))}
+
+            <div className="pt-4 border-t border-[#1D1D1D] flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono-tech text-[#525252] gap-2">
+              <span>{isClarityActive ? 'STATUS: SYNTHESIS LOCKED' : 'STATUS: UNFILTERED TELEMETRY CHAOS'}</span>
+              <span className="text-[#8A8A8A]">CLICK BUTTON ABOVE TO TOGGLE CLARITY</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ───── SECTION 4: REAL FINTECH PM PROBLEMS (CASE STUDIES) ───── */}
-      <section className="border-t border-white/[0.08] pt-12">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400 block mb-2">
-            Real Problem Scenarios
+      {/* ───── 12 PRODUCT STATEMENT (WORD BY WORD) ───── */}
+      <section className="py-28 border-t border-[#1D1D1D] bg-[#080808]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <span className="text-[10px] font-mono-tech uppercase tracking-[0.3em] text-[#8A8A8A] mb-4 block">
+            THE TAPWISE MANIFESTO
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Built for real fintech PM problems
+          <h2 className="font-editorial text-3xl sm:text-5xl md:text-6xl text-[#F5F5F0] tracking-tight leading-tight mb-8">
+            TapWise doesn't give PMs more information.{' '}
+            <span className="text-[#0066FF]">It gives them better decisions.</span>
           </h2>
+          <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[50ch] mx-auto leading-relaxed font-mono-tech">
+            Traditional analytics dashboards show what happened yesterday. TapWise acts as a cognitive copilot that isolates why it matters and what engineering initiative to ship next.
+          </p>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-xl bg-[#090a0d] border border-white/[0.06] flex flex-col justify-between">
+      {/* ───── 13-17 THE TAPWISE SYSTEM (STAGED WORKFLOW) ───── */}
+      <section id="system" className="py-28 border-t border-[#1D1D1D] bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
             <div>
-              <div className="w-8 h-8 rounded-lg bg-red-600/10 border border-red-500/20 flex items-center justify-center text-red-400 mb-3 font-mono text-xs font-bold">
-                01
-              </div>
-              <h3 className="text-sm font-bold text-white mb-1">Payment Failure Diagnostics</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed mb-4">
-                FinPilot detects abnormal payment failure patterns, correlates them with bank switch timeouts, and recommends dynamic fallback routing over UI redesigns.
-              </p>
+              <span className="text-[10px] font-mono-tech uppercase tracking-[0.25em] text-[#8A8A8A] block mb-2">
+                OPERATING SYSTEM ARCHITECTURE
+              </span>
+              <h2 className="font-editorial text-3xl sm:text-4xl md:text-5xl text-[#F5F5F0] tracking-tight">
+                THE TAPWISE SYSTEM.
+              </h2>
             </div>
-            <button
-              onClick={() => onOpenApp('insights')}
-              className="text-xs font-mono text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
-            >
-              Explore Failure Insights →
-            </button>
+
+            {/* Stage Selector Tabs */}
+            <div className="flex items-center gap-1.5 p-1 bg-[#101010] border border-[#1D1D1D] rounded-[3px]">
+              {systemStages.map((stage, idx) => (
+                <button
+                  key={stage.num}
+                  onClick={() => setActiveSystemStage(idx)}
+                  className={`px-3 py-1.5 rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer ${
+                    activeSystemStage === idx
+                      ? 'bg-[#0066FF] text-white font-bold'
+                      : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
+                  }`}
+                >
+                  {stage.num} {stage.title}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#090a0d] border border-white/[0.06] flex flex-col justify-between">
-            <div>
-              <div className="w-8 h-8 rounded-lg bg-amber-600/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3 font-mono text-xs font-bold">
-                02
-              </div>
-              <h3 className="text-sm font-bold text-white mb-1">Customer Voice Clustering</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed mb-4">
-                AI clusters thousands of Zendesk dispute tickets, Play Store reviews, and Twitter complaints into quantified product opportunities with estimated GMV at risk.
-              </p>
-            </div>
-            <button
-              onClick={() => onOpenApp('opportunities')}
-              className="text-xs font-mono text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
-            >
-              View Opportunity Inbox →
-            </button>
-          </div>
+          {/* Active Stage Presentation */}
+          <div className="p-8 sm:p-12 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] relative overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Stage Details */}
+              <div className="lg:col-span-6 flex flex-col items-start">
+                <span className="text-xs font-mono-tech font-bold text-[#0066FF] mb-2">
+                  STAGE {systemStages[activeSystemStage].num} / 04
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight mb-2">
+                  {systemStages[activeSystemStage].subtitle}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#8A8A8A] leading-relaxed mb-6 font-mono-tech max-w-[48ch]">
+                  {systemStages[activeSystemStage].desc}
+                </p>
 
-          <div className="p-5 rounded-xl bg-[#090a0d] border border-white/[0.06] flex flex-col justify-between">
-            <div>
-              <div className="w-8 h-8 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-3 font-mono text-xs font-bold">
-                03
+                <div className="p-3.5 rounded-[3px] bg-[#101010] border border-[#1D1D1D] text-xs font-mono-tech text-[#F5F5F0] mb-8">
+                  <span className="text-[#8A8A8A]">Core Proposition: </span>
+                  <span className="text-[#0066FF] font-medium">"{systemStages[activeSystemStage].tagline}"</span>
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (activeSystemStage === 1 && onInvestigateSignal) {
+                      onInvestigateSignal('sig-001');
+                    } else if (activeSystemStage === 2) {
+                      onOpenApp('prioritize');
+                    } else if (activeSystemStage === 3) {
+                      onOpenApp('prds');
+                    } else {
+                      onOpenApp('overview');
+                    }
+                  }}
+                  className="btn-magnetic flex items-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#141414] hover:bg-[#1C1C1C] border border-[#2E2E2E] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer"
+                >
+                  <span>Experience this stage in OS →</span>
+                </button>
               </div>
-              <h3 className="text-sm font-bold text-white mb-1">Roadmap Prioritization & Simulator</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed mb-4">
-                Dynamic RICE sensitivity engine with live engineering effort simulations. Explains why items move in natural language and generates production PRDs.
-              </p>
+
+              {/* Right Stage Live Feed / Telemetry Preview */}
+              <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {systemStages[activeSystemStage].metrics.map((m, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 bg-[#101010] border border-[#1D1D1D] rounded-[3px] flex flex-col justify-between h-28"
+                  >
+                    <span className="text-[10px] font-mono-tech text-[#8A8A8A]">{m.label}</span>
+                    <div>
+                      <p className="text-xl font-bold font-mono-tech text-[#F5F5F0]">{m.val}</p>
+                      <span
+                        className={`text-[10px] font-mono-tech ${
+                          m.bad ? 'text-[#EF4444]' : 'text-[#10B981]'
+                        }`}
+                      >
+                        {m.delta}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <button
-              onClick={() => onOpenApp('prioritize')}
-              className="text-xs font-mono text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
-            >
-              Test Decision Simulator →
-            </button>
           </div>
         </div>
       </section>
 
-      {/* ───── SECTION 5: ARCHITECTURE DIAGRAM ───── */}
-      <section className="border-t border-white/[0.08] pt-12 pb-6">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400 block mb-2">
-            System Architecture
+      {/* ───── 18 SIGNATURE APP TRANSITION ───── */}
+      <section className="py-24 border-t border-[#1D1D1D] bg-[#070707] text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <span className="text-[10px] font-mono-tech uppercase tracking-[0.25em] text-[#8A8A8A] block mb-3">
+            SEAMLESS ENVIRONMENT SHIFT
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            How the FinPilot OS is architected
+          <h2 className="font-editorial text-4xl sm:text-5xl text-[#F5F5F0] tracking-tight mb-6">
+            NOW LET'S MAKE A DECISION.
           </h2>
-        </div>
+          <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[50ch] mx-auto leading-relaxed mb-8 font-mono-tech">
+            Step inside the TapWise Operating System. Triage active payment anomalies, simulate roadmap trade-offs, challenge AI assumptions, and deploy guarded experiments.
+          </p>
 
-        <div className="p-6 rounded-2xl bg-[#08090d] border border-white/[0.08] font-mono text-xs">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] text-zinc-500 block mb-1">INGESTION LAYER</span>
-              <p className="text-white font-bold">ClickHouse Events</p>
-              <p className="text-[10px] text-zinc-400 mt-1">Zendesk Tickets · Bank Webhooks</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] text-zinc-500 block mb-1">INTELLIGENCE LAYER</span>
-              <p className="text-blue-400 font-bold">Causal Decomposition</p>
-              <p className="text-[10px] text-zinc-400 mt-1">Opportunity Scoring · Sentry</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] text-zinc-500 block mb-1">DECISION LAYER</span>
-              <p className="text-cyan-400 font-bold">RICE Simulator</p>
-              <p className="text-[10px] text-zinc-400 mt-1">PRD Generator · AI Critic</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-              <span className="text-[10px] text-zinc-500 block mb-1">EXECUTION LAYER</span>
-              <p className="text-emerald-400 font-bold">A/B Experiment Lab</p>
-              <p className="text-[10px] text-zinc-400 mt-1">Guardrail Rollback · Feature Flags</p>
-            </div>
-          </div>
+          <button
+            onClick={() => onOpenApp('overview')}
+            className="btn-magnetic inline-flex items-center gap-2 px-8 py-3.5 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-bold tracking-wider uppercase cursor-pointer shadow-xl shadow-white/5"
+          >
+            <span>Enter TapWise OS →</span>
+          </button>
         </div>
       </section>
 
-      {/* ───── SECTION 6: RESPONSIBLE AI NOTICE ───── */}
-      <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-xs text-zinc-400 font-mono">
-        <span className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-blue-400" />
-          FinPilot AI recommendations are decision support tools for PMs, not autonomous financial systems.
-        </span>
-        <span className="hidden sm:inline text-zinc-500">Human in the loop required</span>
-      </div>
+      {/* ───── 42 EDITORIAL FOOTER ───── */}
+      <footer className="border-t border-[#1D1D1D] py-10 px-4 sm:px-6 bg-[#050505] text-[11px] font-mono-tech text-[#525252]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-5 h-5 bg-[#F5F5F0] rounded-[2px] flex items-center justify-center font-bold text-[10px] text-[#050505]">
+              TW
+            </div>
+            <div>
+              <span className="font-bold text-[#F5F5F0] tracking-wider">TAPWISE</span>
+              <span className="text-[#8A8A8A] ml-2">AI PRODUCT INTELLIGENCE</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6 text-[#8A8A8A]">
+            <button onClick={() => onOpenApp('overview')} className="hover:text-[#F5F5F0] cursor-pointer">
+              Product OS
+            </button>
+            <button onClick={onOpenCaseStudy} className="hover:text-[#F5F5F0] cursor-pointer">
+              Case Study
+            </button>
+            <a
+              href="https://github.com/Maahirrrr/TapWise"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[#F5F5F0]"
+            >
+              GitHub
+            </a>
+          </div>
+
+          <p className="text-[#525252]">
+            Built as an AI Product Management portfolio project.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };

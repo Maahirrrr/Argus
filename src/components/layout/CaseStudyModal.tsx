@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import {
   X,
-  BookOpen,
-  Target,
-  Users,
-  Cpu,
-  GitBranch,
-  ShieldCheck
+  BookOpen
 } from 'lucide-react';
 import { PORTFOLIO_CASE_STUDY } from '../../data/portfolioCaseStudy';
 
@@ -23,31 +18,31 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose 
   const data = PORTFOLIO_CASE_STUDY;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="w-full max-w-4xl max-h-[90vh] rounded-2xl bg-[#0a0b0e] border border-white/[0.12] shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm select-none">
+      <div className="w-full max-w-4xl max-h-[90vh] rounded-[4px] bg-[#0A0A0A] border border-[#1D1D1D] shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-white/[0.08] flex items-center justify-between bg-white/[0.01]">
+        <div className="px-6 py-4 border-b border-[#1D1D1D] flex items-center justify-between bg-[#0A0A0A]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <div className="w-7 h-7 rounded-[2px] bg-[#0066FF]/15 border border-[#0066FF]/30 flex items-center justify-center text-[#0066FF]">
               <BookOpen className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white tracking-tight">{data.title}</h2>
-              <p className="text-[11px] text-zinc-400 font-mono">
+              <h2 className="text-sm font-bold text-[#F5F5F0] tracking-tight font-display">{data.title}</h2>
+              <p className="text-[11px] text-[#8A8A8A] font-mono-tech">
                 {data.role} · {data.timeline}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] cursor-pointer"
+            className="p-1.5 rounded-[2px] text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#141414] cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Section Tabs */}
-        <div className="flex items-center gap-1 px-6 py-2 border-b border-white/[0.06] bg-black/30 overflow-x-auto">
+        <div className="flex items-center gap-1 px-6 py-2 border-b border-[#1D1D1D] bg-[#070707] overflow-x-auto text-xs font-mono-tech">
           {[
             { id: 'problem', label: '1. Problem & User Research' },
             { id: 'architecture', label: '2. Multi-Agent Architecture' },
@@ -57,10 +52,10 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose 
             <button
               key={tab.id}
               onClick={() => setActiveSection(tab.id as any)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-[2px] cursor-pointer transition-colors whitespace-nowrap ${
                 activeSection === tab.id
-                  ? 'bg-blue-600 text-white font-semibold'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-[#141414] text-[#F5F5F0] font-bold border border-[#2E2E2E]'
+                  : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
               }`}
             >
               {tab.label}
@@ -68,68 +63,47 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose 
           ))}
         </div>
 
-        {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6 text-xs leading-relaxed text-zinc-300">
+        {/* Content Body */}
+        <div className="p-6 overflow-y-auto flex flex-col gap-6 text-xs font-mono-tech text-[#8A8A8A] leading-relaxed">
           {activeSection === 'problem' && (
-            <div className="space-y-6">
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-                <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
-                  <Target className="w-4 h-4 text-blue-400" />
-                  The Problem
-                </h3>
-                <p className="text-zinc-300 leading-relaxed">{data.problem}</p>
-              </div>
-
+            <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                  <Users className="w-4 h-4 text-blue-400" />
-                  User Research & Key Personas
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {data.userResearch.map((res, i) => (
-                    <div key={i} className="p-4 rounded-xl bg-[#0e1015] border border-white/[0.06]">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400 block mb-1">
-                        {res.persona}
-                      </span>
-                      <p className="text-xs italic text-zinc-200 mb-2">{res.quote}</p>
-                      <p className="text-[11px] text-zinc-400">
-                        <strong className="text-zinc-300">Pain point:</strong> {res.painPoint}
-                      </p>
+                <span className="text-[10px] uppercase text-[#0066FF] font-bold block mb-1">THE PROBLEM STATEMENT</span>
+                <p className="text-xs text-[#F5F5F0] leading-relaxed bg-[#050505] p-3 rounded-[3px] border border-[#161616]">
+                  {data.problem}
+                </p>
+              </div>
+              <div className="space-y-2">
+                <span className="text-[10px] uppercase text-[#8A8A8A] font-bold block">USER RESEARCH & FIELD INTERVIEWS</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {data.userResearch.map((ur, i) => (
+                    <div key={i} className="p-3.5 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
+                      <span className="text-xs font-bold text-[#F5F5F0] block mb-1">{ur.persona}</span>
+                      <p className="text-[11px] text-[#8A8A8A] italic mb-2">{ur.quote}</p>
+                      <span className="text-[10px] text-[#EF4444]">Pain point: {ur.painPoint}</span>
                     </div>
                   ))}
                 </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-300 block mb-1">
-                  Product Hypothesis
-                </span>
-                <p className="text-xs text-zinc-200 font-mono leading-relaxed">{data.productHypothesis}</p>
               </div>
             </div>
           )}
 
           {activeSection === 'architecture' && (
-            <div className="space-y-6">
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-                <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-blue-400" />
-                  Multi-Agent Fintech Intelligence Architecture
-                </h3>
-                <p className="text-xs text-zinc-400 mb-4">
-                  FinPilot replaces generic chat interfaces with specialized deterministic + statistical agent pipelines:
+            <div className="space-y-4">
+              <div>
+                <span className="text-[10px] uppercase text-[#0066FF] font-bold block mb-1">PRODUCT HYPOTHESIS</span>
+                <p className="text-xs text-[#F5F5F0] leading-relaxed bg-[#050505] p-3 rounded-[3px] border border-[#161616]">
+                  {data.productHypothesis}
                 </p>
-
-                <div className="flex flex-col gap-3">
-                  {data.solutionArchitecture.map((arch, i) => (
-                    <div key={i} className="p-3.5 rounded-xl bg-[#0e1015] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div>
-                        <span className="text-xs font-bold text-white block">{arch.layer}</span>
-                        <p className="text-[11px] text-zinc-400">{arch.purpose}</p>
-                      </div>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-blue-300 border border-white/[0.08] flex-shrink-0">
-                        {arch.technologies}
-                      </span>
+              </div>
+              <div className="space-y-2">
+                <span className="text-[10px] uppercase text-[#8A8A8A] font-bold block">SYSTEM ARCHITECTURE LAYERS</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {data.solutionArchitecture.map((sa, i) => (
+                    <div key={i} className="p-3.5 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
+                      <span className="text-xs font-bold text-[#F5F5F0] block mb-1">{sa.layer}</span>
+                      <p className="text-[11px] text-[#8A8A8A] mb-2">{sa.purpose}</p>
+                      <span className="text-[10px] text-[#0066FF]">Stack: {sa.technologies}</span>
                     </div>
                   ))}
                 </div>
@@ -138,66 +112,42 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose 
           )}
 
           {activeSection === 'decisions' && (
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <GitBranch className="w-4 h-4 text-blue-400" />
-                Strategic Product Decisions & Trade-Offs
-              </h3>
-              {data.keyProductDecisions.map((dec, i) => (
-                <div key={i} className="p-4 rounded-xl bg-[#0e1015] border border-white/[0.06] space-y-2">
-                  <h4 className="text-xs font-bold text-white">{dec.decision}</h4>
-                  <p className="text-xs text-zinc-300 leading-relaxed">
-                    <strong className="text-blue-400 font-semibold">Rationale:</strong> {dec.rationale}
-                  </p>
-                  <p className="text-[11px] text-zinc-400 font-mono">
-                    <strong className="text-amber-400 font-semibold">Trade-off:</strong> {dec.tradeoff}
-                  </p>
+            <div className="space-y-3">
+              <span className="text-[10px] uppercase text-[#0066FF] font-bold block">KEY PM DECISIONS & STRATEGIC TRADE-OFFS</span>
+              {data.keyProductDecisions.map((kd, i) => (
+                <div key={i} className="p-3.5 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
+                  <span className="text-xs font-bold text-[#F5F5F0] block mb-1">{kd.decision}</span>
+                  <p className="text-[11px] text-[#8A8A8A] mb-1.5"><strong>Rationale:</strong> {kd.rationale}</p>
+                  <p className="text-[10px] text-[#525252]"><strong>Trade-off:</strong> {kd.tradeoff}</p>
                 </div>
               ))}
             </div>
           )}
 
           {activeSection === 'impact' && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  Product Metrics & Business Impact
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {data.metricsAndImpact.map((met, i) => (
-                    <div key={i} className="p-4 rounded-xl bg-[#0e1015] border border-white/[0.06]">
-                      <span className="text-[10px] font-mono text-zinc-400 block mb-1">{met.metric}</span>
-                      <p className="text-xl font-bold font-mono text-emerald-400 mb-1">{met.result}</p>
-                      <p className="text-[11px] text-zinc-400">{met.context}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-                <h3 className="text-sm font-bold text-white mb-2">Future Product Roadmap</h3>
-                <ul className="space-y-2 text-xs text-zinc-300">
-                  {data.futureRoadmap.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-blue-400 font-bold">→</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+            <div className="space-y-4">
+              <span className="text-[10px] uppercase text-[#0066FF] font-bold block">EVALUATED OUTCOMES & IMPACT</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {data.metricsAndImpact.map((mi, i) => (
+                  <div key={i} className="p-3.5 rounded-[3px] bg-[#050505] border border-[#1D1D1D]">
+                    <span className="text-[10px] text-[#525252] block mb-1">{mi.metric}</span>
+                    <p className="text-lg font-bold text-[#10B981]">{mi.result}</p>
+                    <p className="text-[10px] text-[#8A8A8A] mt-1">{mi.context}</p>
+                  </div>
+                ))}
               </div>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-white/[0.08] bg-black/40 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-          <span>Designed as an AI Product Manager Portfolio System</span>
+        <div className="px-6 py-3 border-t border-[#1D1D1D] bg-[#050505] flex items-center justify-between text-[11px] font-mono-tech text-[#525252]">
+          <span>PORTFOLIO SHOWCASE · TAPWISE</span>
           <button
             onClick={onClose}
-            className="px-3 py-1 rounded bg-white/[0.06] hover:bg-white/[0.1] text-white text-xs font-semibold cursor-pointer"
+            className="text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer"
           >
-            Close Case Study
+            Close
           </button>
         </div>
       </div>

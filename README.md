@@ -1,4 +1,4 @@
-# FinPilot — AI Copilot for Fintech Product Managers
+# TapWise — AI Copilot for Fintech Product Managers
 
 [![Live App](https://img.shields.io/badge/live%20app-maahirrrr.github.io%2FTapWise-indigo.svg)](https://maahirrrr.github.io/TapWise/)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
@@ -12,11 +12,11 @@
 
 ---
 
-## 🎯 What is FinPilot?
+## 🎯 What is TapWise?
 
-FinPilot is an **AI Product Management Decision Cockpit** built specifically for fintech product teams managing high-volume payment systems, onboarding funnels, and fraud/compliance pipelines.
+TapWise is an **AI Product Management Decision Cockpit** built specifically for fintech product teams managing high-volume payment systems, onboarding funnels, and fraud/compliance pipelines.
 
-When a product anomaly occurs—such as a 4.1% drop in UPI checkout success rate—FinPilot correlates millions of telemetry events, decomposes the root contributors, lets PMs test roadmap trade-offs on an interactive RICE workbench, drafts an engineering-ready PRD, and configures guarded A/B experiments.
+When a product anomaly occurs—such as a 4.1% drop in UPI checkout success rate—TapWise correlates millions of telemetry events, decomposes the root contributors, lets PMs test roadmap trade-offs on an interactive RICE workbench, drafts an engineering-ready PRD, and configures guarded A/B experiments.
 
 ---
 
@@ -34,7 +34,7 @@ When a product anomaly occurs—such as a 4.1% drop in UPI checkout success rate
 ### 2. 🧠 AI Prioritization Engine (The Centerpiece)
 * **Dynamic Sensitivity & Trade-Off Workbench**: Live interactive sliders for **Reach**, **Impact (1-10)**, **Confidence (1-10)**, and **Effort (Sprints)**.
 * **Instant Re-Ranking**: Dynamically re-sorts initiatives across **RICE**, **ICE**, or **MoSCoW** algorithms.
-* **Causal Sensitivity Explainer**: FinPilot automatically explains *why* the ranking shifted (e.g., *"Increasing effort on Dynamic Failover from 3 to 6 sprints reduces RICE score by 44%, dropping it to #3 below Aadhaar Face-RD"*).
+* **Causal Sensitivity Explainer**: TapWise automatically explains *why* the ranking shifted (e.g., *"Increasing effort on Dynamic Failover from 3 to 6 sprints reduces RICE score by 44%, dropping it to #3 below Aadhaar Face-RD"*).
 
 ### 3. 📄 PRD Copilot (Production-Grade Specs)
 * Generates comprehensive product requirements:
