@@ -1,13 +1,24 @@
 import React from 'react';
 import {
   LayoutDashboard,
-  Radio,
-  Sparkles,
   Inbox,
-  SlidersHorizontal,
-  FileText,
+  Users,
   FlaskConical,
-  Terminal,
+  Radar,
+  Activity,
+  Lightbulb,
+  GitFork,
+  Target,
+  CalendarRange,
+  FileText,
+  Boxes,
+  Cpu,
+  TestTube2,
+  BarChart3,
+  Bot,
+  Rocket,
+  History,
+  BookOpen,
   Settings
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
@@ -17,121 +28,150 @@ interface AppSidebarProps {
   onSelectTab: (tab: NavigationTab) => void;
   unresolvedSignalsCount?: number;
   unresolvedOpportunitiesCount?: number;
+  enabledModules: NavigationTab[];
+  aiPmMode: boolean;
 }
 
 interface NavItem {
   id: NavigationTab;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  shortcut?: string;
+  icon: React.FC<{ className?: string }>;
   badge?: number | string;
   badgeColor?: string;
+  isAiPmOnly?: boolean;
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
 }
 
 export const AppSidebar: React.FC<AppSidebarProps> = ({
   activeTab,
   onSelectTab,
-  unresolvedSignalsCount = 5,
-  unresolvedOpportunitiesCount = 3,
+  unresolvedSignalsCount = 2,
+  unresolvedOpportunitiesCount = 4,
+  enabledModules,
+  aiPmMode: _aiPmMode,
 }) => {
-  const intelligenceNav: NavItem[] = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard, shortcut: 'G O' },
-    { id: 'signals', label: 'Signals', icon: Radio, badge: unresolvedSignalsCount, badgeColor: '#EF4444', shortcut: 'G S' },
-    { id: 'insights', label: 'Insights', icon: Sparkles, shortcut: 'G I' },
-    { id: 'opportunities', label: 'Opportunities', icon: Inbox, badge: unresolvedOpportunitiesCount, badgeColor: '#0066FF', shortcut: 'G P' },
+  const groups: NavGroup[] = [
+    {
+      label: 'WORK',
+      items: [
+        { id: 'home', label: 'PM Cockpit', icon: LayoutDashboard },
+        { id: 'inbox', label: 'Triage Inbox', icon: Inbox, badge: 4, badgeColor: 'bg-[#0066FF]' },
+      ],
+    },
+    {
+      label: 'DISCOVER',
+      items: [
+        { id: 'customers', label: 'Feedback Engine', icon: Users },
+        { id: 'research', label: 'Research Lab', icon: FlaskConical },
+        { id: 'intelligence', label: 'Competitive Radar', icon: Radar },
+        { id: 'signals', label: 'Telemetry Signals', icon: Activity, badge: unresolvedSignalsCount, badgeColor: 'bg-[#FF3333]' },
+        { id: 'insights', label: 'Causal Insights', icon: Lightbulb },
+      ],
+    },
+    {
+      label: 'DECIDE',
+      items: [
+        { id: 'opportunities', label: 'Opportunity Trees', icon: GitFork, badge: unresolvedOpportunitiesCount, badgeColor: 'bg-[#0066FF]' },
+        { id: 'prioritize', label: 'RICE Workbench', icon: Target },
+        { id: 'roadmap', label: 'Product Roadmap', icon: CalendarRange },
+      ],
+    },
+    {
+      label: 'BUILD',
+      items: [
+        { id: 'prds', label: 'PRD & BDD Studio', icon: FileText },
+        { id: 'prototypes', label: 'Prototype Studio', icon: Boxes },
+        { id: 'ai_lab', label: 'AI Product Lab', icon: Cpu, badge: 'EVALS', badgeColor: 'bg-[#00CC66]', isAiPmOnly: true },
+      ],
+    },
+    {
+      label: 'MEASURE',
+      items: [
+        { id: 'experiments', label: 'A/B Experiments', icon: TestTube2 },
+        { id: 'analytics', label: 'Telemetry SQL', icon: BarChart3 },
+        { id: 'ai_copilot', label: 'Contextual Copilot', icon: Bot },
+        { id: 'launch', label: 'Release Center', icon: Rocket },
+      ],
+    },
+    {
+      label: 'WORKSPACE',
+      items: [
+        { id: 'decisions', label: 'Decision Log (ADR)', icon: History },
+        { id: 'documents', label: 'Knowledge Hub', icon: BookOpen },
+        { id: 'settings', label: 'Settings', icon: Settings },
+      ],
+    },
   ];
-
-  const executionNav: NavItem[] = [
-    { id: 'prioritize', label: 'Prioritize', icon: SlidersHorizontal, shortcut: 'G R' },
-    { id: 'prds', label: 'PRDs', icon: FileText, shortcut: 'G D' },
-    { id: 'experiments', label: 'Experiments', icon: FlaskConical, shortcut: 'G E' },
-  ];
-
-  const copilotConfigNav: NavItem[] = [
-    { id: 'ai_copilot', label: 'AI Copilot & SQL', icon: Terminal, shortcut: 'G C' },
-    { id: 'settings', label: 'Settings & Sources', icon: Settings },
-  ];
-
-  const renderNavGroup = (title: string, items: NavItem[]) => (
-    <div className="flex flex-col gap-0.5">
-      <span className="px-3 py-1 text-[10px] font-mono-tech text-[#525252] uppercase tracking-wider font-bold">
-        {title}
-      </span>
-      {items.map((item) => {
-        const Icon = item.icon;
-        const isActive = activeTab === item.id;
-
-        return (
-          <button
-            key={item.id}
-            onClick={() => onSelectTab(item.id)}
-            className={`group relative w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-[3px] transition-all duration-150 cursor-pointer ${
-              isActive
-                ? 'bg-[#141414] text-[#F5F5F0]'
-                : 'text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#101010]'
-            }`}
-          >
-            {/* Left active line */}
-            {isActive && (
-              <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[#0066FF] rounded-r" />
-            )}
-
-            <div className="flex items-center gap-2.5 transition-transform duration-150 group-hover:translate-x-[2px]">
-              <Icon
-                className={`w-4 h-4 transition-colors ${
-                  isActive ? 'text-[#0066FF]' : 'text-[#525252] group-hover:text-[#8A8A8A]'
-                }`}
-              />
-              <span>{item.label}</span>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              {'badge' in item && item.badge !== undefined && (
-                <span
-                  className="text-[9px] font-mono-tech px-1.5 py-0.2 rounded-[2px]"
-                  style={{
-                    backgroundColor: `${item.badgeColor || '#0066FF'}18`,
-                    color: item.badgeColor || '#0066FF',
-                    border: `1px solid ${item.badgeColor || '#0066FF'}30`,
-                  }}
-                >
-                  {item.badge}
-                </span>
-              )}
-
-              {'shortcut' in item && (
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] font-mono-tech text-[#525252]">
-                  {item.shortcut}
-                </span>
-              )}
-            </div>
-          </button>
-        );
-      })}
-    </div>
-  );
 
   return (
-    <aside className="hidden md:flex w-60 flex-shrink-0 bg-[#0A0A0A] border-r border-[#1D1D1D] flex-col justify-between select-none min-h-[calc(100vh-68px)]">
-      {/* Navigation groups */}
-      <div className="py-4 px-3 flex flex-col gap-4 overflow-y-auto">
-        {renderNavGroup('Core Intelligence', intelligenceNav)}
-        {renderNavGroup('Execution Engine', executionNav)}
-        {renderNavGroup('Copilot & Systems', copilotConfigNav)}
+    <aside className="hidden md:flex flex-col w-60 bg-[#050505] border-r border-[#1D1D1D] h-[calc(100vh-3.5rem)] sticky top-14 select-none overflow-y-auto">
+      <div className="p-3 space-y-5 flex-1">
+        {groups.map((group) => {
+          // Filter items based on user settings
+          const visibleItems = group.items.filter((item) => {
+            if (item.id === 'home' || item.id === 'settings') return true;
+            return enabledModules.includes(item.id);
+          });
+
+          if (visibleItems.length === 0) return null;
+
+          return (
+            <div key={group.label} className="space-y-1">
+              <div className="px-2.5 py-1 text-[10px] font-mono-tech font-bold text-[#555] tracking-wider uppercase">
+                {group.label}
+              </div>
+
+              <div className="space-y-0.5">
+                {visibleItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id ||
+                    (item.id === 'home' && activeTab === 'overview') ||
+                    (item.id === 'customers' && activeTab === 'feedback') ||
+                    (item.id === 'settings' && activeTab === 'data_sources');
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => onSelectTab(item.id)}
+                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-[2px] text-xs font-mono-tech transition-all ${
+                        isActive
+                          ? 'bg-[#0066FF]/10 text-[#0066FF] border border-[#0066FF]/30 font-semibold'
+                          : 'text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#0E0E0E] border border-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 truncate">
+                        <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isActive ? 'text-[#0066FF]' : 'text-[#666]'}`} />
+                        <span className="truncate">{item.label}</span>
+                      </div>
+
+                      {item.badge !== undefined && (
+                        <span className={`text-[9px] font-mono-tech font-bold px-1.5 py-0.2 rounded-[2px] text-white flex-shrink-0 ${
+                          item.badgeColor || 'bg-[#1D1D1D]'
+                        }`}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Bottom Status Feed */}
-      <div className="p-3 border-t border-[#1D1D1D] text-[10px] font-mono-tech text-[#525252] flex flex-col gap-1.5 bg-[#080808]">
-        <div className="flex items-center justify-between">
-          <span>ENVIRONMENT</span>
-          <span className="text-[#8A8A8A]">DEMO WORKSPACE</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>TELEMETRY FEED</span>
-          <span className="text-[#10B981] flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
-            ACTIVE
-          </span>
+      {/* Footer System Status */}
+      <div className="p-3 border-t border-[#1D1D1D] bg-[#080808]">
+        <div className="flex items-center justify-between text-[10px] font-mono-tech text-[#8A8A8A]">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00CC66] animate-pulse" />
+            <span>ARGUS OS v2.4</span>
+          </div>
+          <span className="text-[#555]">PROD-IN-01</span>
         </div>
       </div>
     </aside>

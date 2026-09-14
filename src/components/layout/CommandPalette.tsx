@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
   Search,
-  Sparkles,
-  SlidersHorizontal,
-  FileText,
-  FlaskConical,
-  BookOpen,
   ArrowRight,
-  Inbox,
-  AlertTriangle,
-  Radio,
-  Terminal,
-  Settings,
-  LayoutDashboard,
-  Compass,
-  Zap,
+  FileText,
+  Boxes,
+  Cpu,
+  CalendarRange,
+  Target,
+  Sparkles,
+  Flame,
+  HelpCircle,
   X
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
@@ -22,7 +17,16 @@ import type { NavigationTab } from '../../types/argus';
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectAction: (tab: NavigationTab, actionPayload?: any) => void;
+  onSelectAction: (tab: NavigationTab, actionId?: string) => void;
+}
+
+interface PaletteAction {
+  id: string;
+  title: string;
+  description: string;
+  tab: NavigationTab;
+  icon: React.FC<{ className?: string }>;
+  group: string;
 }
 
 export const CommandPalette: React.FC<CommandPaletteProps> = ({
@@ -30,233 +34,143 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onClose,
   onSelectAction,
 }) => {
-  const [query, setQuery] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [query, setQuery] = useState<string>('');
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const actions = [
-    {
-      id: 'cmd-why',
-      icon: AlertTriangle,
-      title: 'Why did payment success drop?',
-      subtitle: 'Analyze +7.4% failures in ₹10k+ transactions and bank timeout clusters',
-      tab: 'insights' as NavigationTab,
-      category: 'Intelligence',
-    },
-    {
-      id: 'cmd-overview',
-      icon: LayoutDashboard,
-      title: 'Go to Overview Cockpit',
-      subtitle: 'Executive metrics, product health scorecard, and telemetry feed',
-      tab: 'overview' as NavigationTab,
-      category: 'Navigation',
-    },
-    {
-      id: 'cmd-signals',
-      icon: Radio,
-      title: 'View Active Product Signals',
-      subtitle: '5 active signals in triage queue across ClickHouse & NPCI',
-      tab: 'signals' as NavigationTab,
-      category: 'Navigation',
-    },
-    {
-      id: 'cmd-opp',
-      icon: Inbox,
-      title: 'Find my biggest opportunity.',
-      subtitle: 'Open Opportunity #014: High-Value Payment Routing (₹18.4L GMV/wk)',
-      tab: 'opportunities' as NavigationTab,
-      category: 'Intelligence',
-    },
-    {
-      id: 'cmd-prioritize',
-      icon: SlidersHorizontal,
-      title: 'Prioritize roadmap with RICE / ICE.',
-      subtitle: 'Simulate RICE ranking scenarios and sensitivity trade-offs',
-      tab: 'prioritize' as NavigationTab,
-      category: 'Execution',
-    },
-    {
-      id: 'cmd-challenge',
-      icon: Sparkles,
-      title: 'Challenge my roadmap assumptions.',
-      subtitle: 'Examine missing assumptions, device regressions, and confidence limits',
-      tab: 'prioritize' as NavigationTab,
-      category: 'Execution',
-    },
-    {
-      id: 'cmd-prd',
-      icon: FileText,
-      title: 'Generate engineering-ready PRD.',
-      subtitle: 'Open PRD Workspace with Gherkin user stories & rollout criteria',
-      tab: 'prds' as NavigationTab,
-      category: 'Execution',
-    },
-    {
-      id: 'cmd-experiment',
-      icon: FlaskConical,
-      title: 'Design A/B Causal Experiment.',
-      subtitle: 'Design A/B test with sample size, MDE, and circuit breaker guardrails',
-      tab: 'experiments' as NavigationTab,
-      category: 'Execution',
-    },
-    {
-      id: 'cmd-copilot',
-      icon: Terminal,
-      title: 'Open AI Copilot & SQL Studio.',
-      subtitle: 'Ask Argus anything or run ClickHouse SQL queries across 4.2M events',
-      tab: 'ai_copilot' as NavigationTab,
-      category: 'Copilot',
-    },
-    {
-      id: 'cmd-settings',
-      icon: Settings,
-      title: 'Configure Settings & Sources.',
-      subtitle: 'Anomaly sensitivity, confidence floors, alert webhooks & telemetry pipelines',
-      tab: 'settings' as NavigationTab,
-      category: 'Configuration',
-    },
-        {
-      id: 'cmd-tutorial',
-      icon: Compass,
-      title: 'Start Interactive Feature Tutorial.',
-      subtitle: 'Step-by-step onboarding walkthrough of all Argus modules, tools, and shortcuts',
-      tab: 'overview' as NavigationTab,
-      category: 'Tutorial',
-    },
-    {
-      id: 'cmd-chaos',
-      icon: Zap,
-      title: 'Simulate Bank Gateway Outage (Live Chaos).',
-      subtitle: 'Inject simulated latency spike, trigger dynamic failover, and view salvaged GMV',
-      tab: 'overview' as NavigationTab,
-      category: 'Simulation',
-    },
-    {
-      id: 'cmd-case-study',
-      icon: BookOpen,
-      title: 'Read AI PM Portfolio Case Study.',
-      subtitle: 'Architecture, trade-offs, metrics, and multi-agent system design',
-      tab: 'landing' as NavigationTab,
-      category: 'Portfolio',
-    },
+  const actions: PaletteAction[] = [
+    { id: 'act-inbox', title: 'Triage Unified Inbox', description: 'Review raw customer complaints, anomalies, and competitive moves', tab: 'inbox', icon: Sparkles, group: 'WORK' },
+    { id: 'act-opps', title: 'Open Opportunity Tree', description: 'Teresa Torres hierarchical tree of user pain points and bets', tab: 'opportunities', icon: Target, group: 'DECIDE' },
+    { id: 'act-rice', title: 'RICE & WSJF Prioritization', description: 'Calculate Reach, Impact, Confidence & Effort scores', tab: 'prioritize', icon: Target, group: 'DECIDE' },
+    { id: 'act-roadmap', title: 'Strategic Roadmap & Kanban', description: 'Multi-quarter roadmap with dependency conflict detection', tab: 'roadmap', icon: CalendarRange, group: 'DECIDE' },
+    { id: 'act-prds', title: 'PRD Studio & BDD Spec Writer', description: 'Autonomous PRD synthesis with executable Gherkin scenarios', tab: 'prds', icon: FileText, group: 'BUILD' },
+    { id: 'act-proto', title: 'Interactive Prototype Studio', description: 'Low-code UI sandbox with live semantic POS parser', tab: 'prototypes', icon: Boxes, group: 'BUILD' },
+    { id: 'act-evals', title: 'AI Product Lab & LLM Evals', description: 'Benchmark Claude vs Groq, prompt versioning & batch test runner', tab: 'ai_lab', icon: Cpu, group: 'BUILD' },
+    { id: 'act-exps', title: 'A/B Experiment Lab', description: 'Bayesian sequential analysis and automated rollback breakers', tab: 'experiments', icon: Sparkles, group: 'MEASURE' },
+    { id: 'act-launch', title: 'Release Center & Canary Sliders', description: 'Multi-team sign-offs, canary percentage allocation', tab: 'launch', icon: Sparkles, group: 'MEASURE' },
+    { id: 'act-adr', title: 'Decision Log (ADR)', description: 'Architectural decision records and tradeoff documentation', tab: 'decisions', icon: FileText, group: 'WORKSPACE' },
+    { id: 'cmd-chaos', title: 'Simulate Production Chaos / Outage', description: 'Trigger NPCI switch latency spike to test automated circuit breaker', tab: 'home', icon: Flame, group: 'SYSTEM SIMULATION' },
+    { id: 'cmd-tutorial', title: 'Open Interactive Guided Tutorial', description: '5-minute deep walkthrough of every core workspace feature', tab: 'home', icon: HelpCircle, group: 'SYSTEM SIMULATION' },
   ];
 
-  const filtered = actions.filter(
-    (s) =>
-      s.title.toLowerCase().includes(query.toLowerCase()) ||
-      s.subtitle.toLowerCase().includes(query.toLowerCase()) ||
-      s.category.toLowerCase().includes(query.toLowerCase())
+  const filtered = actions.filter((a) =>
+    a.title.toLowerCase().includes(query.toLowerCase()) ||
+    a.description.toLowerCase().includes(query.toLowerCase()) ||
+    a.group.toLowerCase().includes(query.toLowerCase())
   );
 
   useEffect(() => {
     setSelectedIndex(0);
   }, [query]);
 
+  // Keyboard navigation
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        if (isOpen) onClose();
-      }
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-      if (!isOpen) return;
+    if (!isOpen) return;
 
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         setSelectedIndex((prev) => (prev + 1) % (filtered.length || 1));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex((prev) => (prev - 1 + filtered.length) % (filtered.length || 1));
+        setSelectedIndex((prev) => (prev - 1 + (filtered.length || 1)) % (filtered.length || 1));
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (filtered[selectedIndex]) {
-          onSelectAction(filtered[selectedIndex].tab, filtered[selectedIndex].id);
+          const act = filtered[selectedIndex];
+          onSelectAction(act.tab, act.id);
           onClose();
         }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, filtered, selectedIndex, onSelectAction]);
+  }, [isOpen, filtered, selectedIndex, onSelectAction, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-10 sm:pt-24 px-3 sm:px-4 bg-black/85 backdrop-blur-sm select-none">
-      <div className="w-full max-w-2xl bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-        {/* Search Input */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[#1D1D1D] bg-[#0A0A0A]">
-          <Search className="w-4 h-4 text-[#8A8A8A] flex-shrink-0" />
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-start justify-center pt-16 sm:pt-24 px-4 animate-fade-in">
+      <div className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px] w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col">
+        {/* Search Input Bar */}
+        <div className="flex items-center px-4 py-3.5 border-b border-[#1D1D1D]">
+          <Search className="w-4 h-4 text-[#0066FF] mr-3" />
           <input
-            type="text"
             autoFocus
+            type="text"
+            placeholder="Type a command or workspace (e.g. 'PRD', 'Evals', 'Chaos')..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a command or search actions..."
-            className="flex-1 bg-transparent text-xs sm:text-sm text-[#F5F5F0] placeholder:text-[#525252] outline-none font-mono-tech min-h-[38px]"
+            className="flex-1 bg-transparent text-sm font-mono-tech text-[#F5F5F0] placeholder-[#666] outline-none"
           />
           <button
             onClick={onClose}
-            className="text-[#8A8A8A] hover:text-[#F5F5F0] text-xs font-mono-tech p-1.5 rounded-[2px] border border-[#2E2E2E] cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+            className="p-1 text-[#8A8A8A] hover:text-[#F5F5F0]"
           >
-            <X className="w-4 h-4 sm:hidden" />
-            <span className="hidden sm:inline">ESC</span>
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Suggestion list */}
-        <div className="overflow-y-auto p-2 flex flex-col gap-1 flex-1 no-scrollbar">
-          <span className="text-[10px] font-mono-tech uppercase tracking-wider text-[#525252] px-3 py-1.5">
-            COMMANDS & ACTIONS ({filtered.length})
-          </span>
-          {filtered.map((item, idx) => {
-            const Icon = item.icon;
+        {/* Results List */}
+        <div className="max-h-[380px] overflow-y-auto p-2 space-y-1">
+          {filtered.map((act, idx) => {
+            const Icon = act.icon;
             const isSelected = idx === selectedIndex;
             return (
-              <button
-                key={item.id}
+              <div
+                key={act.id}
                 onClick={() => {
-                  onSelectAction(item.tab);
+                  onSelectAction(act.tab, act.id);
                   onClose();
                 }}
-                onMouseEnter={() => setSelectedIndex(idx)}
-                className={`flex items-start gap-3 p-3 rounded-[3px] text-left cursor-pointer transition-colors min-h-[48px] ${
-                  isSelected ? 'bg-[#141414] border-l-2 border-[#0066FF]' : 'hover:bg-[#0E0E0E]'
+                className={`p-3 rounded-[2px] flex items-center justify-between cursor-pointer transition-all ${
+                  isSelected ? 'bg-[#0066FF] text-white' : 'hover:bg-[#121212] text-[#F5F5F0]'
                 }`}
               >
-                <div className={`w-7 h-7 rounded-[2px] border flex items-center justify-center flex-shrink-0 transition-colors mt-0.5 ${
-                  isSelected
-                    ? 'bg-[#141414] border-[#0066FF]/40 text-[#0066FF]'
-                    : 'bg-[#101010] border-[#1D1D1D] text-[#8A8A8A]'
-                }`}>
-                  <Icon className="w-3.5 h-3.5" />
-                </div>
-                <div className="flex-1 min-w-0 font-mono-tech">
-                  <div className="flex items-center gap-2">
-                    <p className={`text-xs font-bold transition-colors truncate ${
-                      isSelected ? 'text-[#F5F5F0]' : 'text-[#8A8A8A]'
-                    }`}>
-                      {item.title}
-                    </p>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-[2px] bg-[#141414] text-[#525252] flex-shrink-0">
-                      {item.category}
-                    </span>
+                <div className="flex items-center gap-3">
+                  <div className={`w-7 h-7 rounded-[2px] flex items-center justify-center ${
+                    isSelected ? 'bg-white/20 text-white' : 'bg-[#141414] text-[#0066FF]'
+                  }`}>
+                    <Icon className="w-4 h-4" />
                   </div>
-                  <p className="text-[11px] text-[#8A8A8A] truncate mt-0.5">{item.subtitle}</p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold font-display">{act.title}</span>
+                      <span className={`text-[9px] font-mono-tech px-1 py-0.2 rounded-[2px] ${
+                        isSelected ? 'bg-white/20 text-white' : 'bg-[#181818] text-[#8A8A8A]'
+                      }`}>
+                        {act.group}
+                      </span>
+                    </div>
+                    <p className={`text-[11px] ${isSelected ? 'text-white/80' : 'text-[#8A8A8A]'}`}>
+                      {act.description}
+                    </p>
+                  </div>
                 </div>
-                <ArrowRight className={`w-3.5 h-3.5 flex-shrink-0 mt-1 ${
-                  isSelected ? 'text-[#F5F5F0]' : 'text-[#525252]'
-                }`} />
-              </button>
+
+                <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#444]'}`} />
+              </div>
             );
           })}
+
+          {filtered.length === 0 && (
+            <div className="text-center py-8 text-xs font-mono-tech text-[#666]">
+              No matching commands found.
+            </div>
+          )}
         </div>
 
-        {/* Footer */}
-        <div className="px-4 py-2.5 bg-[#050505] border-t border-[#1D1D1D] flex items-center justify-between text-[10px] font-mono-tech text-[#525252]">
-          <span>Tap to select or use ↑ ↓ ↵</span>
-          <span className="text-[#8A8A8A]">ARGUS COMMANDS</span>
+        {/* Footer info */}
+        <div className="px-4 py-2 bg-[#080808] border-t border-[#1D1D1D] flex items-center justify-between text-[10px] font-mono-tech text-[#8A8A8A]">
+          <div className="flex items-center gap-3">
+            <span>↑↓ Navigate</span>
+            <span>↵ Select</span>
+            <span>ESC Close</span>
+          </div>
+          <span>ARGUS UNIVERSAL PALETTE</span>
         </div>
       </div>
     </div>

@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
-  Search,
-    ArrowUpRight,
-  Terminal,
+  Sparkles,
+  Command,
+  HelpCircle,
+  BookOpen,
   Keyboard,
-  Menu,
   ChevronLeft,
   ChevronRight,
-  Compass
+  Compass,
+  LayoutDashboard,
+  Menu,
+  GraduationCap
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
 
@@ -17,14 +20,16 @@ interface AppHeaderProps {
   onOpenCommandPalette: () => void;
   onOpenCaseStudy: () => void;
   onOpenKeyboardShortcuts: () => void;
-  onToggleMobileDrawer: () => void;
+  onOpenHelpCenter: () => void;
   isLandingMode: boolean;
   onToggleMode: () => void;
-  canGoBack?: boolean;
-  canGoForward?: boolean;
-  onGoBack?: () => void;
-  onGoForward?: () => void;
-  onOpenTutorial?: () => void;
+  onToggleMobileDrawer: () => void;
+  canGoBack: boolean;
+  canGoForward: boolean;
+  onGoBack: () => void;
+  onGoForward: () => void;
+  onOpenTutorial: () => void;
+  aiPmMode: boolean;
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({
@@ -33,179 +38,209 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onOpenCommandPalette,
   onOpenCaseStudy,
   onOpenKeyboardShortcuts,
-  onToggleMobileDrawer,
+  onOpenHelpCenter,
   isLandingMode,
   onToggleMode,
-  canGoBack = false,
-  canGoForward = false,
+  onToggleMobileDrawer,
+  canGoBack,
+  canGoForward,
   onGoBack,
   onGoForward,
   onOpenTutorial,
+  aiPmMode,
 }) => {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const getBreadcrumb = (tab: NavigationTab) => {
+  const getTabBreadcrumb = (tab: NavigationTab): string => {
     switch (tab) {
-      case 'overview': return 'OVERVIEW / COCKPIT';
-      case 'signals': return 'SIGNALS / ANOMALIES';
-      case 'insights': return 'INSIGHTS / ROOT CAUSE';
-      case 'opportunities': return 'OPPORTUNITIES / INBOX';
-      case 'prioritize': return 'PRIORITIZE / RICE';
-      case 'prds': return 'PRDS / SPEC EDITOR';
-      case 'experiments': return 'EXPERIMENTS / CAUSAL';
+      case 'home':
+      case 'overview':
+        return 'WORK / Cockpit';
+      case 'inbox':
+        return 'WORK / Triage Inbox';
+      case 'customers':
+      case 'feedback':
+        return 'DISCOVER / Feedback';
+      case 'research':
+        return 'DISCOVER / Research Lab';
+      case 'intelligence':
+        return 'DISCOVER / Radar';
+      case 'signals':
+        return 'DISCOVER / Signals';
+      case 'insights':
+        return 'DISCOVER / Insights';
+      case 'opportunities':
+        return 'DECIDE / Opportunities';
+      case 'prioritize':
+        return 'DECIDE / Prioritize';
+      case 'roadmap':
+        return 'DECIDE / Roadmap';
+      case 'prds':
+        return 'BUILD / PRD Studio';
+      case 'prototypes':
+        return 'BUILD / Prototypes';
+      case 'ai_lab':
+        return 'BUILD / AI Lab';
+      case 'experiments':
+        return 'MEASURE / Experiments';
+      case 'analytics':
+        return 'MEASURE / Analytics';
       case 'ai_copilot':
-      case 'analytics': return 'AI COPILOT & SQL';
+        return 'MEASURE / Copilot';
+      case 'launch':
+        return 'MEASURE / Release';
+      case 'decisions':
+        return 'WORKSPACE / Decision Log';
+      case 'documents':
+        return 'WORKSPACE / Specs';
       case 'settings':
-      case 'data_sources': return 'SETTINGS & SOURCES';
-      default: return 'PRODUCT INTELLIGENCE';
+      case 'data_sources':
+        return 'WORKSPACE / Settings';
+      default:
+        return 'ARGUS / Operating System';
     }
   };
 
   return (
-    <header
-      className={`sticky top-0 z-40 h-14 sm:h-16 transition-all duration-200 select-none ${
-        scrolled
-          ? 'bg-[#050505]/95 backdrop-blur-xl border-b border-[#1D1D1D]'
-          : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-full flex items-center justify-between gap-2 sm:gap-4">
-        {/* Brand & History & Breadcrumb */}
-        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-          <button
-            onClick={() => onSelectTab(isLandingMode ? 'landing' : 'overview')}
-            className="flex items-center gap-2 cursor-pointer group text-left flex-shrink-0"
-          >
-            <div className="w-6 h-6 bg-[#0066FF] rounded-[2px] flex items-center justify-center font-bold text-xs text-white tracking-wider shadow-sm shadow-[#0066FF]/30">A</div>
-            <span className="font-bold text-sm tracking-[0.15em] text-[#F5F5F0] group-hover:text-white transition-colors font-display">
+    <header className="sticky top-0 z-40 w-full bg-[#050505]/95 backdrop-blur-md border-b border-[#1D1D1D] px-3 sm:px-6 h-14 flex items-center justify-between">
+      {/* Left: Brand & Browser History */}
+      <div className="flex items-center gap-3">
+        {/* Mobile drawer trigger */}
+        <button
+          onClick={onToggleMobileDrawer}
+          className="md:hidden p-1.5 text-[#8A8A8A] hover:text-[#F5F5F0]"
+          title="Open Navigation Menu"
+        >
+          <Menu className="w-4 h-4" />
+        </button>
+
+        {/* Brand */}
+        <div
+          onClick={() => onSelectTab('home')}
+          className="flex items-center gap-2 cursor-pointer group"
+        >
+          <div className="w-6 h-6 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs tracking-wider shadow-md shadow-[#0066FF]/20">
+            A
+          </div>
+          <div className="flex flex-col">
+            <span className="font-display font-extrabold text-sm tracking-widest text-[#F5F5F0] group-hover:text-[#0066FF] transition-colors">
               ARGUS
             </span>
-          </button>
+          </div>
+        </div>
 
-          {/* In-App Back & Forward History Controls */}
-          <div className="flex items-center gap-0.5 pl-1 border-l border-[#1D1D1D]/70">
+        {/* Browser History Nav Buttons */}
+        {!isLandingMode && (
+          <div className="hidden sm:flex items-center gap-0.5 ml-2 pl-2 border-l border-[#1D1D1D]">
             <button
               onClick={onGoBack}
               disabled={!canGoBack}
-              className={`p-1.5 rounded-[2px] transition-colors flex items-center justify-center min-h-[34px] min-w-[34px] ${
-                canGoBack
-                  ? 'text-[#CCCCCC] hover:text-white bg-[#101010] hover:bg-[#181818] border border-[#1D1D1D] cursor-pointer'
-                  : 'text-[#383838] bg-transparent border border-transparent cursor-not-allowed opacity-40'
+              className={`p-1 rounded-[2px] transition-colors ${
+                canGoBack ? 'text-[#8A8A8A] hover:text-[#F5F5F0]' : 'text-[#333] cursor-not-allowed'
               }`}
-              title="Go Back in History (Alt+Left)"
+              title="Go Back (Alt + Left)"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={onGoForward}
               disabled={!canGoForward}
-              className={`p-1.5 rounded-[2px] transition-colors flex items-center justify-center min-h-[34px] min-w-[34px] ${
-                canGoForward
-                  ? 'text-[#CCCCCC] hover:text-white bg-[#101010] hover:bg-[#181818] border border-[#1D1D1D] cursor-pointer'
-                  : 'text-[#383838] bg-transparent border border-transparent cursor-not-allowed opacity-40'
+              className={`p-1 rounded-[2px] transition-colors ${
+                canGoForward ? 'text-[#8A8A8A] hover:text-[#F5F5F0]' : 'text-[#333] cursor-not-allowed'
               }`}
-              title="Go Forward in History (Alt+Right)"
+              title="Go Forward (Alt + Right)"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
+        )}
 
-          {/* Landing Mode Desktop Links */}
+        {/* Active Workspace Breadcrumb */}
+        {!isLandingMode && (
+          <div className="hidden lg:flex items-center gap-1.5 text-[11px] font-mono-tech text-[#8A8A8A] ml-2">
+            <span className="text-[#333]">/</span>
+            <span className="text-[#F5F5F0] font-medium">{getTabBreadcrumb(activeTab)}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Center: Command Palette Trigger */}
+      <div className="flex-1 max-w-xs sm:max-w-md mx-2 sm:mx-4">
+        <button
+          onClick={onOpenCommandPalette}
+          className="w-full flex items-center justify-between bg-[#0D0D0D] hover:bg-[#121212] border border-[#1D1D1D] hover:border-[#0066FF]/40 rounded-[2px] px-3 py-1.5 text-xs text-[#8A8A8A] transition-all group"
+        >
+          <div className="flex items-center gap-2 truncate">
+            <Command className="w-3.5 h-3.5 text-[#0066FF] group-hover:scale-105 transition-transform" />
+            <span className="truncate">Search workspaces, PRDs, models...</span>
+          </div>
+          <kbd className="hidden sm:inline-flex items-center text-[10px] font-mono-tech px-1.5 py-0.5 rounded-[2px] bg-[#171717] border border-[#262626] text-[#8A8A8A]">
+            ⌘K
+          </kbd>
+        </button>
+      </div>
+
+      {/* Right: AI PM Status & Utilities */}
+      <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* AI PM Status Pill */}
+        {aiPmMode && (
+          <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-[2px] bg-[#0066FF]/10 border border-[#0066FF]/30 text-[10px] font-mono-tech text-[#0066FF]">
+            <Sparkles className="w-3 h-3 animate-pulse" />
+            <span>AI PM</span>
+          </div>
+        )}
+
+        {/* Interactive Tutorial Button */}
+        <button
+          onClick={onOpenTutorial}
+          className="hidden sm:flex items-center gap-1 p-1.5 text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#121212] rounded-[2px] transition-colors"
+          title="Guided Tutorial (T)"
+        >
+          <GraduationCap className="w-4 h-4" />
+        </button>
+
+        {/* Help Center */}
+        <button
+          onClick={onOpenHelpCenter}
+          className="p-1.5 text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#121212] rounded-[2px] transition-colors"
+          title="Argus Help Center"
+        >
+          <HelpCircle className="w-4 h-4" />
+        </button>
+
+        {/* Keyboard Shortcuts */}
+        <button
+          onClick={onOpenKeyboardShortcuts}
+          className="hidden sm:block p-1.5 text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#121212] rounded-[2px] transition-colors"
+          title="Keyboard Shortcuts (?)"
+        >
+          <Keyboard className="w-4 h-4" />
+        </button>
+
+        {/* Case Study */}
+        <button
+          onClick={onOpenCaseStudy}
+          className="hidden md:flex items-center gap-1 px-2.5 py-1 text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#121212] border border-transparent hover:border-[#1D1D1D] rounded-[2px] transition-all"
+        >
+          <BookOpen className="w-3.5 h-3.5" />
+          <span>Case Study</span>
+        </button>
+
+        {/* Landing / App View Mode Toggle */}
+        <button
+          onClick={onToggleMode}
+          className="flex items-center gap-1 px-2.5 py-1 text-xs font-mono-tech bg-[#121212] hover:bg-[#1A1A1A] border border-[#222] text-[#F5F5F0] rounded-[2px] transition-colors ml-1"
+        >
           {isLandingMode ? (
-            <nav className="hidden md:flex items-center gap-6 text-xs text-[#8A8A8A] font-mono-tech pl-2">
-              <a href="#problem" className="hover:text-[#F5F5F0] transition-colors">
-                The Problem
-              </a>
-              <a href="#system" className="hover:text-[#F5F5F0] transition-colors">
-                Platform Architecture
-              </a>
-              <button
-                onClick={onOpenCaseStudy}
-                className="hover:text-[#F5F5F0] transition-colors cursor-pointer"
-              >
-                AI PM Case Study
-              </button>
-            </nav>
+            <>
+              <LayoutDashboard className="w-3.5 h-3.5 text-[#0066FF]" />
+              <span className="hidden sm:inline">Open Cockpit</span>
+            </>
           ) : (
-            /* App Mode Breadcrumb */
-            <div className="hidden sm:flex items-center gap-2 text-xs font-mono-tech text-[#8A8A8A] pl-3 border-l border-[#1D1D1D] truncate">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse-dot flex-shrink-0" />
-              <span className="tracking-wider truncate">{getBreadcrumb(activeTab)}</span>
-            </div>
+            <>
+              <Compass className="w-3.5 h-3.5 text-[#0066FF]" />
+              <span className="hidden sm:inline">Tour</span>
+            </>
           )}
-        </div>
-
-        {/* Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
-          {/* Interactive Feature Tutorial Trigger */}
-          {onOpenTutorial && (
-            <button
-              onClick={onOpenTutorial}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[3px] bg-[#0066FF]/10 hover:bg-[#0066FF]/20 border border-[#0066FF]/30 text-xs text-[#0066FF] hover:text-[#3B82F6] cursor-pointer transition-colors min-h-[40px]"
-              title="Feature Tutorial & Onboarding Guide (T)"
-            >
-              <Compass className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline font-mono-tech text-[11px] font-bold">Tutorial</span>
-            </button>
-          )}
-
-          {/* Command Palette Trigger */}
-          <button
-            onClick={onOpenCommandPalette}
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors min-h-[40px]"
-            title="Open Command Palette (⌘K)"
-          >
-            <Search className="w-3.5 h-3.5 text-[#8A8A8A]" />
-            <span className="hidden sm:inline font-mono-tech text-[11px]">Search</span>
-            <kbd className="hidden sm:inline-flex items-center text-[10px] font-mono-tech bg-[#1A1A1A] px-1.5 py-0.5 rounded-[2px] text-[#8A8A8A] border border-[#2E2E2E]">
-              ⌘K
-            </kbd>
-          </button>
-
-          {/* Mode Switcher: Landing vs OS Mode */}
-          <button
-            onClick={onToggleMode}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors min-h-[40px]"
-          >
-            {isLandingMode ? (
-              <>
-                <Terminal className="w-3.5 h-3.5 text-[#0066FF]" />
-                <span>Open OS</span>
-              </>
-            ) : (
-              <>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-                <span>Landing</span>
-              </>
-            )}
-          </button>
-
-          {/* Keyboard Shortcuts Trigger (Desktop only) */}
-          <button
-            onClick={onOpenKeyboardShortcuts}
-            className="hidden sm:flex p-2 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer transition-colors min-h-[40px] min-w-[40px] items-center justify-center"
-            title="Keyboard Shortcuts (?)"
-          >
-            <Keyboard className="w-4 h-4" />
-          </button>
-
-          {/* Mobile Navigation Drawer Trigger (Visible < 768px) */}
-          <button
-            onClick={onToggleMobileDrawer}
-            className="md:hidden p-2 rounded-[3px] bg-[#101010] border border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors"
-            title="Open Mobile Navigation Menu"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-        </div>
+        </button>
       </div>
     </header>
   );
