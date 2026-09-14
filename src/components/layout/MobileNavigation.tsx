@@ -60,7 +60,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
   return (
     <>
       {/* 1. Touch Bottom Dock */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#050505]/95 backdrop-blur-xl border-t border-[#1D1D1D] px-2 py-1.5 flex items-center justify-around">
+      <nav className="md:hidden fixed bottom-3 left-4 right-4 z-50 bg-[#070707]/92 backdrop-blur-xl border border-[#1D1D1D] rounded-[4px] px-2 py-1.5 flex items-center justify-around shadow-2xl">
         {bottomTabs.map((t) => {
           const Icon = t.icon;
           const isActive = activeTab === t.id || (t.id === 'home' && activeTab === 'overview');

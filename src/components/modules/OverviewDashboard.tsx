@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Activity,
   Sparkles,
   Target,
   ChevronRight,
@@ -16,12 +15,18 @@ import {
   ExternalLink,
   Layers,
   ArrowUpRight,
-  CheckCircle2
+  CheckCircle2,
+  Activity,
+  Maximize2,
+  Minimize2,
+  ArrowRight
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
 import { ArgusDrawer } from '../ui/ArgusDrawer';
 import { ArgusBadge } from '../ui/ArgusBadge';
 import { ArgusButton } from '../ui/ArgusButton';
+import { CardSpotlight } from '../ui/CardSpotlight';
+import { FocusCards, FocusCardItem } from '../ui/FocusCards';
 
 interface OverviewDashboardProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -52,7 +57,15 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   const [showCustomizer, setShowCustomizer] = useState(false);
   const [activeDrawer, setActiveDrawer] = useState<DrawerContentData | null>(null);
 
-  // Handle Box Click: normal click navigates, Cmd/Ctrl click opens Drawer
+  // Expandable card preview state (without navigating away)
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
+  const toggleExpand = (e: React.MouseEvent, cardId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExpandedCard((prev) => (prev === cardId ? null : cardId));
+  };
+
   const handleBoxInteraction = (
     e: React.MouseEvent,
     tab: NavigationTab,
@@ -99,7 +112,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               <button
                 key={p}
                 onClick={() => setPreset(p)}
-                className={`px-2.5 py-1 rounded-[2px] transition-colors uppercase text-[10px] font-bold ${
+                className={`px-2.5 py-1 rounded-[2px] transition-colors uppercase text-[10px] font-bold cursor-pointer ${
                   preset === p
                     ? 'bg-[#1D1D1D] text-[#F5F5F0]'
                     : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
@@ -112,7 +125,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
 
           <button
             onClick={() => setShowCustomizer(!showCustomizer)}
-            className={`p-1.5 border rounded-[2px] text-xs font-mono-tech transition-colors ${
+            className={`p-1.5 border rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer ${
               showCustomizer
                 ? 'bg-[#141414] border-[#0066FF] text-[#0066FF]'
                 : 'bg-[#0E0E0E] border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0]'
@@ -124,7 +137,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
 
           <button
             onClick={onOpenChaosSimulator}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#EF4444]/10 hover:bg-[#EF4444]/20 border border-[#EF4444]/25 text-[#EF4444] text-xs font-mono-tech rounded-[2px] transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#EF4444]/10 hover:bg-[#EF4444]/20 border border-[#EF4444]/25 text-[#EF4444] text-xs font-mono-tech rounded-[2px] transition-colors cursor-pointer"
           >
             <Flame className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Simulate Outage</span>
@@ -146,7 +159,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
       )}
 
       {/* ─── 1. LARGE CARD: ARGUS DAILY BRIEF ─── */}
-      <div className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3">
+      <CardSpotlight className="p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#F5F5F0]" />
@@ -214,10 +227,10 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </button>
           ))}
         </div>
-      </div>
+      </CardSpotlight>
 
       {/* ─── 2. LARGE CARD: PRODUCT HEALTH HUD ─── */}
-      <div className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-4">
+      <CardSpotlight className="p-4 sm:p-5 space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-[#1D1D1D]">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-[#10B981]" />
@@ -229,7 +242,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {/* Activation Rate */}
           <div className="bg-[#0E0E0E] border border-[#1D1D1D] p-3.5 rounded-[2px] space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A]">
               <span>ACTIVATION RATE</span>
@@ -239,7 +251,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">43.8%</span>
               <span className="text-[11px] font-mono-tech text-[#525252]">/ 40.0% goal</span>
             </div>
-            {/* Progress Bar */}
             <div className="w-full bg-[#1A1A1A] h-1.5 rounded-full overflow-hidden">
               <div className="bg-[#10B981] h-full rounded-full" style={{ width: '87.6%' }} />
             </div>
@@ -249,7 +260,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </div>
           </div>
 
-          {/* Retention Rate */}
           <div className="bg-[#0E0E0E] border border-[#1D1D1D] p-3.5 rounded-[2px] space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A]">
               <span>WEEK 4 RETENTION</span>
@@ -268,7 +278,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </div>
           </div>
 
-          {/* Engagement Rate */}
           <div className="bg-[#0E0E0E] border border-[#1D1D1D] p-3.5 rounded-[2px] space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A]">
               <span>FEATURE ENGAGEMENT</span>
@@ -287,10 +296,10 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </div>
           </div>
         </div>
-      </div>
+      </CardSpotlight>
 
-      {/* ─── 3. STRATEGIC ROADMAP Q4 (LARGE CARD) ─── */}
-      <div
+      {/* ─── 3. STRATEGIC ROADMAP Q4 (EXPANDABLE LARGE CARD) ─── */}
+      <CardSpotlight
         onClick={(e) =>
           handleBoxInteraction(e, 'roadmap', {
             title: 'Strategic Roadmap Q4 2026',
@@ -310,7 +319,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               'Review and merge ADR-041 to release the engineering blocker before Friday cutoff.',
           })
         }
-        className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
+        className="p-4 sm:p-5 space-y-3 cursor-pointer group"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -320,6 +329,13 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </h2>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={(e) => toggleExpand(e, 'roadmap')}
+              className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#141414] border border-[#222]"
+            >
+              {expandedCard === 'roadmap' ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
+              <span>{expandedCard === 'roadmap' ? 'Collapse' : 'Expand'}</span>
+            </button>
             <button
               onClick={(e) =>
                 handleOpenDrawerDirect(e, {
@@ -343,7 +359,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
             >
               <Info className="w-3 h-3" />
-              <span>Why this matters</span>
+              <span>Why</span>
             </button>
             <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
           </div>
@@ -383,320 +399,351 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ─── 4. MEDIUM CARDS (OPPORTUNITIES, AI LAB, SIGNALS, RESEARCH) ─── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Card 1: Opportunities with Progress Bar */}
-        <div
-          onClick={(e) =>
-            handleBoxInteraction(e, 'opportunities', {
-              title: 'Opportunity Tree Execution',
-              subtitle: 'Validated problems with expected business yield',
-              badge: 'OPPORTUNITIES',
-              targetTab: 'opportunities',
-              what: 'Structured opportunity solution tree mapping customer churn to validated bets.',
-              state: '82% of current quarterly opportunity value allocated to active initiatives.',
-              whyThisMatters:
-                'Focusing exclusively on high-leverage opportunities prevents engineering drift and feature creep.',
-              evidence: [
-                'Top bet: Zero-friction checkout fallback has estimated +$320k ARR impact',
-                'Validation score: 9.4/10 based on 42 customer interview transcripts',
-                'Engineering complexity: Low (estimated 1.5 sprints)',
-              ],
-              recommendation:
-                'Promote Zero-friction checkout from Tree into sprint backlog.',
-            })
-          }
-          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <GitFork className="w-4 h-4 text-[#0066FF]" />
-              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
-                OPPORTUNITIES · PIPELINE HEALTH
-              </h3>
+        {/* Expandable inline view */}
+        {expandedCard === 'roadmap' && (
+          <div className="pt-3 border-t border-[#1D1D1D] space-y-2 bg-[#0C0C0C] p-3 rounded-[2px] text-xs font-mono-tech animate-fade-in">
+            <div className="flex items-center justify-between text-[#10B981]">
+              <span>CURRENT SPRINT VELOCITY: 48 SP (Target: 42 SP)</span>
+              <span>ESTIMATED SHIP: OCT 28</span>
             </div>
-            <div className="flex items-center gap-2">
+            <p className="text-[#8A8A8A] leading-relaxed">
+              Active engineering blocker identified: ADR-041 schema migration required before Vector Search integration can proceed.
+            </p>
+            <div className="pt-2 flex justify-end">
               <button
-                onClick={(e) =>
-                  handleOpenDrawerDirect(e, {
-                    title: 'Opportunity Tree Execution',
-                    subtitle: 'Validated problems with expected business yield',
-                    badge: 'OPPORTUNITIES',
-                    targetTab: 'opportunities',
-                    what: 'Structured opportunity solution tree mapping customer churn to validated bets.',
-                    state: '82% of current quarterly opportunity value allocated to active initiatives.',
-                    whyThisMatters:
-                      'Focusing exclusively on high-leverage opportunities prevents engineering drift and feature creep.',
-                    evidence: [
-                      'Top bet: Zero-friction checkout fallback has estimated +$320k ARR impact',
-                      'Validation score: 9.4/10 based on 42 customer interview transcripts',
-                      'Engineering complexity: Low (estimated 1.5 sprints)',
-                    ],
-                    recommendation:
-                      'Promote Zero-friction checkout from Tree into sprint backlog.',
-                  })
-                }
-                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
+                onClick={() => onNavigateTab('roadmap')}
+                className="px-3 py-1 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-mono-tech rounded-[2px] cursor-pointer flex items-center gap-1.5"
               >
-                <Info className="w-3 h-3" />
-                <span>Why</span>
+                <span>Open Roadmap Module</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
-              <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
             </div>
           </div>
+        )}
+      </CardSpotlight>
 
-          <div className="flex items-baseline justify-between text-xs font-mono-tech">
-            <span className="text-[#8A8A8A]">Active Opportunity Allocation</span>
-            <span className="text-sm font-bold text-[#F5F5F0]">82% Allocated</span>
-          </div>
-
-          {/* Explicit 82% Progress Bar */}
-          <div className="w-full bg-[#1A1A1A] h-2 rounded-full overflow-hidden">
-            <div className="bg-[#0066FF] h-full rounded-full" style={{ width: '82%' }} />
-          </div>
-
-          <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A] pt-1">
-            <span>Top Bet: POS Fallback</span>
-            <span className="text-[#10B981] font-bold">+$320k ARR Est.</span>
-          </div>
-        </div>
-
-        {/* Card 2: AI Product Lab (Eval Stats) */}
-        <div
-          onClick={(e) =>
-            handleBoxInteraction(e, 'ai_lab', {
-              title: 'AI Product Lab & Model Telemetry',
-              subtitle: 'LLM benchmark evaluations, latency, and drift monitoring',
-              badge: 'AI LAB',
-              targetTab: 'ai_lab',
-              what: 'Automated evaluation harness verifying prompt accuracy and hallucination rates.',
-              state: '98.8% eval pass rate across 1,240 automated test assertions.',
-              whyThisMatters:
-                'Maintains rigorous model trust and prevents regressions before prompts are deployed to production.',
-              evidence: [
-                'Latency p95: 340ms (comfortably within 500ms budget)',
-                'Drift score: 0.012 (statistically negligible)',
-                'Cost per execution: $0.0014 (-40% after prompt distillation)',
-              ],
-              recommendation:
-                'Promote distilled system prompt v4 to canary rollout.',
-            })
-          }
-          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-[#10B981]" />
-              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
-                AI PRODUCT LAB · EVAL BENCHMARK
-              </h3>
+      {/* ─── 4. FOCUS CARDS GROUP: MEDIUM CARDS (OPPORTUNITIES, AI LAB, SIGNALS, RESEARCH) ─── */}
+      <FocusCards className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Card 1: Opportunities with Expandable Preview */}
+        <FocusCardItem index={0}>
+          <CardSpotlight
+            onClick={(e) =>
+              handleBoxInteraction(e, 'opportunities', {
+                title: 'Opportunity Tree Execution',
+                subtitle: 'Validated problems with expected business yield',
+                badge: 'OPPORTUNITIES',
+                targetTab: 'opportunities',
+                what: 'Structured opportunity solution tree mapping customer churn to validated bets.',
+                state: '82% of current quarterly opportunity value allocated to active initiatives.',
+                whyThisMatters:
+                  'Focusing exclusively on high-leverage opportunities prevents engineering drift and feature creep.',
+                evidence: [
+                  'Top bet: Zero-friction checkout fallback has estimated +$320k ARR impact',
+                  'Validation score: 9.4/10 based on 42 customer interview transcripts',
+                  'Engineering complexity: Low (estimated 1.5 sprints)',
+                ],
+                recommendation:
+                  'Promote Zero-friction checkout from Tree into sprint backlog.',
+              })
+            }
+            className="p-4 sm:p-5 space-y-3 cursor-pointer group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <GitFork className="w-4 h-4 text-[#0066FF]" />
+                <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                  OPPORTUNITIES · PIPELINE HEALTH
+                </h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => toggleExpand(e, 'opportunities')}
+                  className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#141414] border border-[#222]"
+                >
+                  {expandedCard === 'opportunities' ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
+                  <span>{expandedCard === 'opportunities' ? 'Collapse' : 'Expand'}</span>
+                </button>
+                <button
+                  onClick={(e) =>
+                    handleOpenDrawerDirect(e, {
+                      title: 'Opportunity Tree Execution',
+                      subtitle: 'Validated problems with expected business yield',
+                      badge: 'OPPORTUNITIES',
+                      targetTab: 'opportunities',
+                      what: 'Structured opportunity solution tree mapping customer churn to validated bets.',
+                      state: '82% of current quarterly opportunity value allocated to active initiatives.',
+                      whyThisMatters:
+                        'Focusing exclusively on high-leverage opportunities prevents engineering drift and feature creep.',
+                      evidence: [
+                        'Top bet: Zero-friction checkout fallback has estimated +$320k ARR impact',
+                        'Validation score: 9.4/10 based on 42 customer interview transcripts',
+                        'Engineering complexity: Low (estimated 1.5 sprints)',
+                      ],
+                      recommendation:
+                        'Promote Zero-friction checkout from Tree into sprint backlog.',
+                    })
+                  }
+                  className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
+                >
+                  <Info className="w-3 h-3" />
+                  <span>Why</span>
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={(e) =>
-                  handleOpenDrawerDirect(e, {
-                    title: 'AI Product Lab & Model Telemetry',
-                    subtitle: 'LLM benchmark evaluations, latency, and drift monitoring',
-                    badge: 'AI LAB',
-                    targetTab: 'ai_lab',
-                    what: 'Automated evaluation harness verifying prompt accuracy and hallucination rates.',
-                    state: '98.8% eval pass rate across 1,240 automated test assertions.',
-                    whyThisMatters:
-                      'Maintains rigorous model trust and prevents regressions before prompts are deployed to production.',
-                    evidence: [
-                      'Latency p95: 340ms (comfortably within 500ms budget)',
-                      'Drift score: 0.012 (statistically negligible)',
-                      'Cost per execution: $0.0014 (-40% after prompt distillation)',
-                    ],
-                    recommendation:
-                      'Promote distilled system prompt v4 to canary rollout.',
-                  })
-                }
-                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
-              >
-                <Info className="w-3 h-3" />
-                <span>Why</span>
-              </button>
-              <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
-            </div>
-          </div>
 
-          <div className="grid grid-cols-3 gap-2 text-center pt-1">
-            <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
-              <div className="text-base font-bold font-mono-tech text-[#10B981]">98.8%</div>
-              <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">Eval Pass</div>
+            <div className="flex items-baseline justify-between text-xs font-mono-tech">
+              <span className="text-[#8A8A8A]">Active Opportunity Allocation</span>
+              <span className="text-sm font-bold text-[#F5F5F0]">82% Allocated</span>
             </div>
-            <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
-              <div className="text-base font-bold font-mono-tech text-[#F5F5F0]">340ms</div>
-              <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">p95 Latency</div>
-            </div>
-            <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
-              <div className="text-base font-bold font-mono-tech text-[#0066FF]">0.012</div>
-              <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">Drift Score</div>
-            </div>
-          </div>
 
-          <div className="text-[11px] font-mono-tech text-[#8A8A8A] flex justify-between">
-            <span>Model in Prod: Sonnet-3.5-Turbo</span>
-            <span className="text-[#10B981]">Zero Hallucination Flag</span>
-          </div>
-        </div>
+            {/* Explicit 82% Progress Bar */}
+            <div className="w-full bg-[#1A1A1A] h-2 rounded-full overflow-hidden">
+              <div className="bg-[#0066FF] h-full rounded-full" style={{ width: '82%' }} />
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A] pt-1">
+              <span>Top Bet: POS Fallback</span>
+              <span className="text-[#10B981] font-bold">+$320k ARR Est.</span>
+            </div>
+
+            {/* Expandable inline view */}
+            {expandedCard === 'opportunities' && (
+              <div className="pt-3 border-t border-[#1D1D1D] space-y-2 bg-[#0C0C0C] p-3 rounded-[2px] text-xs font-mono-tech animate-fade-in">
+                <div className="text-[10px] font-mono-tech text-[#0066FF] font-bold uppercase">
+                  TOP OPPORTUNITY BET: ZERO-FRICTION CHECKOUT
+                </div>
+                <ul className="space-y-1 text-xs text-[#8A8A8A]">
+                  <li>• Evidence: 42 interview transcripts + 3 gateway telemetry spikes</li>
+                  <li>• Impact: High (+$320k ARR) | Confidence: 94%</li>
+                  <li>• Recommended Action: Promote from Tree to Sprint Backlog</li>
+                </ul>
+                <div className="pt-2 flex justify-end">
+                  <button
+                    onClick={() => onNavigateTab('opportunities')}
+                    className="px-3 py-1 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-mono-tech rounded-[2px] cursor-pointer flex items-center gap-1.5"
+                  >
+                    <span>Open Opportunities →</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </CardSpotlight>
+        </FocusCardItem>
+
+        {/* Card 2: AI Product Lab with Expandable Preview */}
+        <FocusCardItem index={1}>
+          <CardSpotlight
+            onClick={(e) =>
+              handleBoxInteraction(e, 'ai_lab', {
+                title: 'AI Product Lab & Model Telemetry',
+                subtitle: 'LLM benchmark evaluations, latency, and drift monitoring',
+                badge: 'AI LAB',
+                targetTab: 'ai_lab',
+                what: 'Automated evaluation harness verifying prompt accuracy and hallucination rates.',
+                state: '98.8% eval pass rate across 1,240 automated test assertions.',
+                whyThisMatters:
+                  'Maintains rigorous model trust and prevents regressions before prompts are deployed to production.',
+                evidence: [
+                  'Latency p95: 340ms (comfortably within 500ms budget)',
+                  'Drift score: 0.012 (statistically negligible)',
+                  'Cost per execution: $0.0014 (-40% after prompt distillation)',
+                ],
+                recommendation:
+                  'Promote distilled system prompt v4 to canary rollout.',
+              })
+            }
+            className="p-4 sm:p-5 space-y-3 cursor-pointer group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-[#10B981]" />
+                <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                  AI PRODUCT LAB · EVAL BENCHMARK
+                </h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => toggleExpand(e, 'ai_lab')}
+                  className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#141414] border border-[#222]"
+                >
+                  {expandedCard === 'ai_lab' ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
+                  <span>{expandedCard === 'ai_lab' ? 'Collapse' : 'Expand'}</span>
+                </button>
+                <button
+                  onClick={(e) =>
+                    handleOpenDrawerDirect(e, {
+                      title: 'AI Product Lab & Model Telemetry',
+                      subtitle: 'LLM benchmark evaluations, latency, and drift monitoring',
+                      badge: 'AI LAB',
+                      targetTab: 'ai_lab',
+                      what: 'Automated evaluation harness verifying prompt accuracy and hallucination rates.',
+                      state: '98.8% eval pass rate across 1,240 automated test assertions.',
+                      whyThisMatters:
+                        'Maintains rigorous model trust and prevents regressions before prompts are deployed to production.',
+                      evidence: [
+                        'Latency p95: 340ms (comfortably within 500ms budget)',
+                        'Drift score: 0.012 (statistically negligible)',
+                        'Cost per execution: $0.0014 (-40% after prompt distillation)',
+                      ],
+                      recommendation:
+                        'Promote distilled system prompt v4 to canary rollout.',
+                    })
+                  }
+                  className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
+                >
+                  <Info className="w-3 h-3" />
+                  <span>Why</span>
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 text-center pt-1">
+              <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
+                <div className="text-base font-bold font-mono-tech text-[#10B981]">98.8%</div>
+                <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">Eval Pass</div>
+              </div>
+              <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
+                <div className="text-base font-bold font-mono-tech text-[#F5F5F0]">340ms</div>
+                <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">p95 Latency</div>
+              </div>
+              <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
+                <div className="text-base font-bold font-mono-tech text-[#0066FF]">0.012</div>
+                <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">Drift Score</div>
+              </div>
+            </div>
+
+            <div className="text-[11px] font-mono-tech text-[#8A8A8A] flex justify-between">
+              <span>Model in Prod: Sonnet-3.5-Turbo</span>
+              <span className="text-[#10B981]">Zero Hallucination Flag</span>
+            </div>
+
+            {/* Expandable inline view */}
+            {expandedCard === 'ai_lab' && (
+              <div className="pt-3 border-t border-[#1D1D1D] space-y-2 bg-[#0C0C0C] p-3 rounded-[2px] text-xs font-mono-tech animate-fade-in">
+                <div className="text-[10px] font-mono-tech text-[#10B981] font-bold uppercase">
+                  ACTIVE BENCHMARK SUITE (1,240 ASSERTIONS)
+                </div>
+                <p className="text-[#8A8A8A] leading-relaxed">
+                  System prompt v4 distilled from 2,800 tokens to 840 tokens with zero accuracy degradation.
+                </p>
+                <div className="pt-2 flex justify-end">
+                  <button
+                    onClick={() => onNavigateTab('ai_lab')}
+                    className="px-3 py-1 bg-[#10B981] hover:bg-[#059669] text-white text-xs font-mono-tech rounded-[2px] cursor-pointer flex items-center gap-1.5"
+                  >
+                    <span>Open AI Lab →</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </CardSpotlight>
+        </FocusCardItem>
 
         {/* Card 3: Telemetry Signals */}
-        <div
-          onClick={(e) =>
-            handleBoxInteraction(e, 'signals', {
-              title: 'Production Telemetry Signals',
-              subtitle: 'Causal anomaly detection and event streaming',
-              badge: 'SIGNALS',
-              targetTab: 'signals',
-              what: 'Automated telemetry ingestion highlighting deviations from steady-state user behavior.',
-              state: '2 active anomalies flagged in APAC payment checkout pipeline.',
-              whyThisMatters:
-                'Early detection allows PMs to triage issues before they degrade App Store ratings or user trust.',
-              evidence: [
-                'Timeout rates increased from 0.4% to 2.8% at 04:15 UTC',
-                'Impacted gateway: Razorpay UPI fallback route',
-                'Affected users: ~480 active checkouts in India region',
-              ],
-              recommendation:
-                'Inspect Telemetry Signals to review trace logs or trigger circuit breaker.',
-            })
-          }
-          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Activity className="w-4 h-4 text-[#EF4444]" />
-              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
-                TELEMETRY SIGNALS · LIVE FEED
-              </h3>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={(e) =>
-                  handleOpenDrawerDirect(e, {
-                    title: 'Production Telemetry Signals',
-                    subtitle: 'Causal anomaly detection and event streaming',
-                    badge: 'SIGNALS',
-                    targetTab: 'signals',
-                    what: 'Automated telemetry ingestion highlighting deviations from steady-state user behavior.',
-                    state: '2 active anomalies flagged in APAC payment checkout pipeline.',
-                    whyThisMatters:
-                      'Early detection allows PMs to triage issues before they degrade App Store ratings or user trust.',
-                    evidence: [
-                      'Timeout rates increased from 0.4% to 2.8% at 04:15 UTC',
-                      'Impacted gateway: Razorpay UPI fallback route',
-                      'Affected users: ~480 active checkouts in India region',
-                    ],
-                    recommendation:
-                      'Inspect Telemetry Signals to review trace logs or trigger circuit breaker.',
-                  })
-                }
-                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
-              >
-                <Info className="w-3 h-3" />
-                <span>Why</span>
-              </button>
+        <FocusCardItem index={2}>
+          <CardSpotlight
+            onClick={(e) =>
+              handleBoxInteraction(e, 'signals', {
+                title: 'Production Telemetry Signals',
+                subtitle: 'Causal anomaly detection and event streaming',
+                badge: 'SIGNALS',
+                targetTab: 'signals',
+                what: 'Automated telemetry ingestion highlighting deviations from steady-state user behavior.',
+                state: '2 active anomalies flagged in APAC payment checkout pipeline.',
+                whyThisMatters:
+                  'Early detection allows PMs to triage issues before they degrade App Store ratings or user trust.',
+                evidence: [
+                  'Timeout rates increased from 0.4% to 2.8% at 04:15 UTC',
+                  'Impacted gateway: Razorpay UPI fallback route',
+                  'Affected users: ~480 active checkouts in India region',
+                ],
+                recommendation:
+                  'Inspect Telemetry Signals to review trace logs or trigger circuit breaker.',
+              })
+            }
+            className="p-4 sm:p-5 space-y-3 cursor-pointer group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="w-4 h-4 text-[#EF4444]" />
+                <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                  TELEMETRY SIGNALS · LIVE FEED
+                </h3>
+              </div>
               <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <div className="p-2.5 bg-[#0E0E0E] rounded-[2px] border border-[#EF4444]/25 flex items-center justify-between text-xs font-mono-tech">
-              <span className="text-[#EF4444] font-bold">APAC Checkout Drop</span>
-              <span className="text-[#8A8A8A]">45m ago</span>
+            <div className="space-y-2">
+              <div className="p-2.5 bg-[#0E0E0E] rounded-[2px] border border-[#EF4444]/25 flex items-center justify-between text-xs font-mono-tech">
+                <span className="text-[#EF4444] font-bold">APAC Checkout Drop</span>
+                <span className="text-[#8A8A8A]">45m ago</span>
+              </div>
+              <div className="p-2.5 bg-[#0E0E0E] rounded-[2px] border border-[#1D1D1D] flex items-center justify-between text-xs font-mono-tech">
+                <span className="text-[#10B981]">Onboarding Flow Normal</span>
+                <span className="text-[#525252]">Steady</span>
+              </div>
             </div>
-            <div className="p-2.5 bg-[#0E0E0E] rounded-[2px] border border-[#1D1D1D] flex items-center justify-between text-xs font-mono-tech">
-              <span className="text-[#10B981]">Onboarding Flow Normal</span>
-              <span className="text-[#525252]">Steady</span>
-            </div>
-          </div>
-        </div>
+          </CardSpotlight>
+        </FocusCardItem>
 
         {/* Card 4: Research & Radar */}
-        <div
-          onClick={(e) =>
-            handleBoxInteraction(e, 'research', {
-              title: 'Customer Research & Competitive Radar',
-              subtitle: 'Synthesized qualitative feedback and market monitoring',
-              badge: 'DISCOVER',
-              targetTab: 'research',
-              what: 'Qualitative customer research synthesis paired with automated competitor changelog analysis.',
-              state: '18 customer interviews synthesized. Superhuman changelog updated.',
-              whyThisMatters:
-                'Ensures product decisions reflect actual user pain points while anticipating competitor strategic moves.',
-              evidence: [
-                'Cluster #1 theme: 74% of enterprise PMs request automated BDD scenario generation',
-                'Competitor alert: Superhuman added AI automated triage',
-                'NPS qualitative sentiment: 68 (+4 pts this month)',
-              ],
-              recommendation:
-                'Synthesize BDD scenario user requests directly into PRD Studio backlog.',
-            })
-          }
-          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <FlaskConical className="w-4 h-4 text-[#8B5CF6]" />
-              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
-                RESEARCH & RADAR · SYNTHESIS
-              </h3>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={(e) =>
-                  handleOpenDrawerDirect(e, {
-                    title: 'Customer Research & Competitive Radar',
-                    subtitle: 'Synthesized qualitative feedback and market monitoring',
-                    badge: 'DISCOVER',
-                    targetTab: 'research',
-                    what: 'Qualitative customer research synthesis paired with automated competitor changelog analysis.',
-                    state: '18 customer interviews synthesized. Superhuman changelog updated.',
-                    whyThisMatters:
-                      'Ensures product decisions reflect actual user pain points while anticipating competitor strategic moves.',
-                    evidence: [
-                      'Cluster #1 theme: 74% of enterprise PMs request automated BDD scenario generation',
-                      'Competitor alert: Superhuman added AI automated triage',
-                      'NPS qualitative sentiment: 68 (+4 pts this month)',
-                    ],
-                    recommendation:
-                      'Synthesize BDD scenario user requests directly into PRD Studio backlog.',
-                  })
-                }
-                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
-              >
-                <Info className="w-3 h-3" />
-                <span>Why</span>
-              </button>
+        <FocusCardItem index={3}>
+          <CardSpotlight
+            onClick={(e) =>
+              handleBoxInteraction(e, 'research', {
+                title: 'Customer Research & Competitive Radar',
+                subtitle: 'Synthesized qualitative feedback and market monitoring',
+                badge: 'DISCOVER',
+                targetTab: 'research',
+                what: 'Qualitative customer research synthesis paired with automated competitor changelog analysis.',
+                state: '18 customer interviews synthesized. Superhuman changelog updated.',
+                whyThisMatters:
+                  'Ensures product decisions reflect actual user pain points while anticipating competitor strategic moves.',
+                evidence: [
+                  'Cluster #1 theme: 74% of enterprise PMs request automated BDD scenario generation',
+                  'Competitor alert: Superhuman added AI automated triage',
+                  'NPS qualitative sentiment: 68 (+4 pts this month)',
+                ],
+                recommendation:
+                  'Synthesize BDD scenario user requests directly into PRD Studio backlog.',
+              })
+            }
+            className="p-4 sm:p-5 space-y-3 cursor-pointer group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FlaskConical className="w-4 h-4 text-[#8B5CF6]" />
+                <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                  RESEARCH & RADAR · SYNTHESIS
+                </h3>
+              </div>
               <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
             </div>
-          </div>
 
-          <div className="space-y-1.5 text-xs font-mono-tech">
-            <div className="flex justify-between text-[#8A8A8A]">
-              <span>Customer Pain Point:</span>
-              <span className="text-[#F5F5F0]">Manual BDD Writing</span>
+            <div className="space-y-1.5 text-xs font-mono-tech">
+              <div className="flex justify-between text-[#8A8A8A]">
+                <span>Customer Pain Point:</span>
+                <span className="text-[#F5F5F0]">Manual BDD Writing</span>
+              </div>
+              <div className="flex justify-between text-[#8A8A8A]">
+                <span>Competitor Signal:</span>
+                <span className="text-[#0066FF]">Superhuman v2 Triage</span>
+              </div>
+              <div className="flex justify-between text-[#8A8A8A]">
+                <span>Qualitative Sentiment:</span>
+                <span className="text-[#10B981] font-bold">NPS 68 (Strong)</span>
+              </div>
             </div>
-            <div className="flex justify-between text-[#8A8A8A]">
-              <span>Competitor Signal:</span>
-              <span className="text-[#0066FF]">Superhuman v2 Triage</span>
-            </div>
-            <div className="flex justify-between text-[#8A8A8A]">
-              <span>Qualitative Sentiment:</span>
-              <span className="text-[#10B981] font-bold">NPS 68 (Strong)</span>
-            </div>
-          </div>
-        </div>
-      </div>
+          </CardSpotlight>
+        </FocusCardItem>
+      </FocusCards>
 
       {/* ─── 5. COMPACT CARDS (EXPERIMENTS, LAUNCH, DECISIONS) ─── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        {/* Experiments */}
-        <div
+        <CardSpotlight
           onClick={(e) =>
             handleBoxInteraction(e, 'experiments', {
               title: 'A/B Experimentation Engine',
@@ -715,7 +762,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               recommendation: 'Graduate Exp #104 from 50% to 100% full rollout.',
             })
           }
-          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-3.5 space-y-2 argus-card-interactive cursor-pointer group"
+          className="p-3.5 space-y-2 cursor-pointer group"
         >
           <div className="flex items-center justify-between text-[11px] font-mono-tech">
             <div className="flex items-center gap-1.5 text-[#10B981]">
@@ -728,10 +775,9 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           <p className="text-[11px] font-mono-tech text-[#8A8A8A] leading-tight">
             +4.8% conversion lift detected over control. Ready to ship.
           </p>
-        </div>
+        </CardSpotlight>
 
-        {/* Launch Center */}
-        <div
+        <CardSpotlight
           onClick={(e) =>
             handleBoxInteraction(e, 'launch', {
               title: 'Release Center & Canary Deployments',
@@ -751,7 +797,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                 'Monitor canary telemetry for another 60 minutes, then proceed to 50% stage.',
             })
           }
-          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-3.5 space-y-2 argus-card-interactive cursor-pointer group"
+          className="p-3.5 space-y-2 cursor-pointer group"
         >
           <div className="flex items-center justify-between text-[11px] font-mono-tech">
             <div className="flex items-center gap-1.5 text-[#0066FF]">
@@ -764,10 +810,9 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           <p className="text-[11px] font-mono-tech text-[#8A8A8A] leading-tight">
             15% user cohort active. 0 rollbacks. Healthy error budget.
           </p>
-        </div>
+        </CardSpotlight>
 
-        {/* Decisions (ADR) */}
-        <div
+        <CardSpotlight
           onClick={(e) =>
             handleBoxInteraction(e, 'decisions', {
               title: 'Architectural & Product Decision Log (ADR)',
@@ -787,7 +832,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                 'Sign off ADR-041 to unblock infrastructure engineering sprint.',
             })
           }
-          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-3.5 space-y-2 argus-card-interactive cursor-pointer group"
+          className="p-3.5 space-y-2 cursor-pointer group"
         >
           <div className="flex items-center justify-between text-[11px] font-mono-tech">
             <div className="flex items-center gap-1.5 text-[#8B5CF6]">
@@ -800,7 +845,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           <p className="text-[11px] font-mono-tech text-[#8A8A8A] leading-tight">
             Awaiting Lead PM sign-off to release engineering blocker.
           </p>
-        </div>
+        </CardSpotlight>
       </div>
 
       {/* ─── 6. Slide-Out Inspection Drawer ─── */}
@@ -814,7 +859,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           width="lg"
         >
           <div className="space-y-5 select-text">
-            {/* What is happening */}
             <div className="space-y-1.5 bg-[#0E0E0E] p-3.5 rounded-[2px] border border-[#1D1D1D]">
               <div className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase font-bold">
                 WHAT IS HAPPENING
@@ -827,7 +871,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               </div>
             </div>
 
-            {/* Why This Matters */}
             <div className="space-y-1.5 bg-[#0E0E0E] p-3.5 rounded-[2px] border border-[#0066FF]/30">
               <div className="text-[10px] font-mono-tech text-[#0066FF] uppercase font-bold flex items-center gap-1.5">
                 <Info className="w-3.5 h-3.5" />
@@ -838,7 +881,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               </p>
             </div>
 
-            {/* Key Evidence */}
             <div className="space-y-2 bg-[#0E0E0E] p-3.5 rounded-[2px] border border-[#1D1D1D]">
               <div className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase font-bold">
                 EVIDENCE & DATA POINTS
@@ -853,7 +895,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               </ul>
             </div>
 
-            {/* Recommended Action */}
             <div className="space-y-2 bg-[#121212] p-3.5 rounded-[2px] border border-[#2E2E2E]">
               <div className="text-[10px] font-mono-tech text-[#10B981] uppercase font-bold">
                 RECOMMENDED ACTION

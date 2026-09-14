@@ -3,9 +3,10 @@ import { motion } from 'motion/react';
 
 export interface ArgusLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'custom';
-  variant?: 'default' | 'monochrome' | 'subtle' | 'drawing';
+  variant?: 'default' | 'monochrome' | 'subtle' | 'drawing' | 'white' | 'dark';
   className?: string;
   withText?: boolean;
+  showWordmark?: boolean;
   textClassName?: string;
   animated?: boolean;
   onClick?: () => void;
@@ -17,11 +18,14 @@ export const ArgusLogo: React.FC<ArgusLogoProps> = ({
   size = 'md',
   variant = 'default',
   className = '',
-  withText = false,
+  withText,
+  showWordmark,
   textClassName = '',
   animated = false,
   onClick,
 }) => {
+  const hasWordmark = showWordmark !== undefined ? showWordmark : Boolean(withText);
+
   const sizeMap = {
     sm: 'w-5 h-5',
     md: 'w-7 h-7',
@@ -30,9 +34,13 @@ export const ArgusLogo: React.FC<ArgusLogoProps> = ({
     custom: '',
   };
 
-  const variantClassMap = {
+  const isDark = variant === 'dark';
+
+  const variantClassMap: Record<string, string> = {
     default: 'text-white argus-logo-hover',
     monochrome: 'text-white',
+    white: 'text-white argus-logo-hover',
+    dark: 'text-[#050505]',
     subtle: 'text-zinc-400 hover:text-white transition-colors duration-150',
     drawing: 'text-white',
   };
@@ -66,7 +74,7 @@ export const ArgusLogo: React.FC<ArgusLogoProps> = ({
       whileHover={{ scale: 1.04 }}
       whileTap={{ scale: 0.96 }}
       transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-      className={`${sizeMap[size]} ${variantClassMap[variant]} ${className} select-none cursor-pointer`}
+      className={`${sizeMap[size]} ${variantClassMap[variant] || 'text-white'} ${className} select-none cursor-pointer`}
       aria-label="Argus Logo"
     >
       <path fillRule="evenodd" clipRule="evenodd" d={MONOGRAM_SVG_PATH} />
@@ -75,14 +83,14 @@ export const ArgusLogo: React.FC<ArgusLogoProps> = ({
     <svg
       viewBox="0 0 100 100"
       fill="currentColor"
-      className={`${sizeMap[size]} ${variantClassMap[variant]} ${className} select-none`}
+      className={`${sizeMap[size]} ${variantClassMap[variant] || 'text-white'} ${className} select-none`}
       aria-label="Argus Logo"
     >
       <path fillRule="evenodd" clipRule="evenodd" d={MONOGRAM_SVG_PATH} />
     </svg>
   );
 
-  if (!withText) {
+  if (!hasWordmark) {
     return onClick ? (
       <button
         type="button"
@@ -103,9 +111,9 @@ export const ArgusLogo: React.FC<ArgusLogoProps> = ({
     >
       {logoMarkup}
       <span
-        className={`font-display font-extrabold tracking-widest text-[#F5F5F0] ${
-          onClick ? 'group-hover:text-white' : ''
-        } ${textClassName || 'text-sm'}`}
+        className={`font-display font-extrabold tracking-widest ${
+          isDark ? 'text-[#050505]' : 'text-[#F5F5F0]'
+        } ${onClick && !isDark ? 'group-hover:text-white' : ''} ${textClassName || 'text-sm'}`}
       >
         ARGUS
       </span>

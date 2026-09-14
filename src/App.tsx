@@ -20,7 +20,8 @@ import { OverviewDashboard } from './components/modules/OverviewDashboard';
 import { UnifiedInbox } from './components/modules/UnifiedInbox';
 import { CustomerFeedback } from './components/modules/CustomerFeedback';
 import { ResearchLab } from './components/modules/ResearchLab';
-import { CompetitiveIntel } from './components/modules/CompetitiveIntel';
+import { IntelligencePage } from './components/modules/IntelligencePage';
+import { PageTransition } from './components/ui/PageTransition';
 import { OpportunityTree } from './components/modules/OpportunityTree';
 import { PrioritizationModule } from './components/modules/PrioritizationModule';
 import { RoadmapModule } from './components/modules/RoadmapModule';
@@ -416,11 +417,13 @@ export default function App() {
           <main className="flex-1 overflow-x-hidden min-w-0 bg-[#050505]">
             {/* WORK GROUP */}
             {(activeTab === 'home' || activeTab === 'overview') && (
-              <OverviewDashboard
+              <PageTransition>
+                <OverviewDashboard
                 onNavigateTab={(t) => navigateTo(t)}
                 onInvestigateSignal={handleInvestigateSignal}
                 onOpenChaosSimulator={() => setIsChaosSimulatorOpen(true)}
               />
+              </PageTransition>
             )}
 
             {activeTab === 'inbox' && (
@@ -446,10 +449,12 @@ export default function App() {
             )}
 
             {activeTab === 'intelligence' && (
-              <CompetitiveIntel
-                onNavigateTab={(t) => navigateTo(t)}
-                onShowToast={showToast}
-              />
+              <PageTransition>
+                <IntelligencePage
+                  onNavigateTab={(t) => navigateTo(t)}
+                  onShowToast={showToast}
+                />
+              </PageTransition>
             )}
 
             {activeTab === 'signals' && (

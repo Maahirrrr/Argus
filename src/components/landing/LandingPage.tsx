@@ -5,7 +5,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
-import { HeroStreamVisualization } from './HeroStreamVisualization';
+import { SignalGraph } from '../argus/SignalGraph';
 
 interface LandingPageProps {
   onOpenApp: (tab?: NavigationTab) => void;
@@ -92,7 +92,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section className="relative min-h-[85vh] max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-16 flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Asymmetric Hero Typography */}
-          <div className="lg:col-span-7 flex flex-col items-start">
+          <div className="lg:col-span-6 flex flex-col items-start">
             {/* Eyebrow */}
             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-[#101010] border border-[#1D1D1D] text-[10px] sm:text-[11px] font-mono-tech text-[#8A8A8A] mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse-dot" />
@@ -138,8 +138,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           {/* Right Column: Abstract Live Stream Visualization */}
-          <div className="lg:col-span-5 w-full mt-4 lg:mt-0">
-            <HeroStreamVisualization />
+          <div className="lg:col-span-6 w-full mt-4 lg:mt-0">
+            <SignalGraph onNavigateTab={(tab) => onOpenApp(tab)} isHeroMode={true} />
           </div>
         </div>
       </section>
