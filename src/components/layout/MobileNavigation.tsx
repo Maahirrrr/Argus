@@ -93,11 +93,20 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
         <div className="md:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end animate-fade-in">
           <div className="bg-[#0A0A0A] border-t border-[#1D1D1D] rounded-t-[4px] p-5 max-h-[80vh] overflow-y-auto space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-[#1D1D1D]">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs">
+              <div
+                onClick={() => {
+                  onSelectTab('landing');
+                  onToggleDrawer();
+                }}
+                className="flex items-center gap-2 cursor-pointer group"
+                title="Argus — Operating System (https://maahirrrr.github.io/Argus/#)"
+              >
+                <div className="w-5 h-5 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs shadow-md shadow-[#0066FF]/20">
                   A
                 </div>
-                <span className="font-display font-extrabold text-sm text-[#F5F5F0]">ARGUS WORKSPACES</span>
+                <span className="font-display font-extrabold text-sm text-[#F5F5F0] group-hover:text-[#0066FF] transition-colors">
+                  ARGUS
+                </span>
               </div>
               <button
                 onClick={onToggleDrawer}

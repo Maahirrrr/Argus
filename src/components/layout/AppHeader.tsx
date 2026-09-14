@@ -113,11 +113,18 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         </button>
 
         {/* Brand */}
-        <div
-          onClick={() => onSelectTab('home')}
-          className="flex items-center gap-2 cursor-pointer group"
+        <a
+          href="./#"
+          onClick={(e) => {
+            e.preventDefault();
+            onSelectTab('landing');
+            window.location.hash = '#';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="flex items-center gap-2 cursor-pointer group no-underline text-inherit"
+          title="Argus — Operating System (https://maahirrrr.github.io/Argus/#)"
         >
-          <div className="w-6 h-6 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs tracking-wider shadow-md shadow-[#0066FF]/20">
+          <div className="w-6 h-6 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs tracking-wider shadow-md shadow-[#0066FF]/20 group-hover:scale-105 transition-transform">
             A
           </div>
           <div className="flex flex-col">
@@ -125,7 +132,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               ARGUS
             </span>
           </div>
-        </div>
+        </a>
 
         {/* Browser History Nav Buttons */}
         {!isLandingMode && (

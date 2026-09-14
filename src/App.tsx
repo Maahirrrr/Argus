@@ -114,16 +114,22 @@ export default function App() {
 
   // 2. Centralized Navigation Handler with Browser History Push
   const navigateTo = (tab: NavigationTab, replace: boolean = false) => {
-    if (tab === activeTab && isLandingMode === (tab === 'landing')) return;
-
     if (tab === 'landing') {
       setIsLandingMode(true);
-    } else {
-      setIsLandingMode(false);
+      setActiveTab('landing');
+      if (window.location.hash !== '#' && window.location.hash !== '') {
+        window.history.pushState({ tab: 'landing' }, '', '#');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
+
+    if (tab === activeTab && !isLandingMode) return;
+
+    setIsLandingMode(false);
     setActiveTab(tab);
 
-    const hashUrl = tab === 'landing' ? '#' : `#${tab}`;
+    const hashUrl = `#${tab}`;
     if (replace) {
       window.history.replaceState({ tab }, '', hashUrl);
     } else {
