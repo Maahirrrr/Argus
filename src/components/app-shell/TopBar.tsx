@@ -43,8 +43,8 @@ export const TopBar: React.FC<TopBarProps> = ({
           <ChevronDown className="w-3 h-3 text-[var(--text-tertiary)]" />
         </button>
 
-        {/* Simulation mode indicator: small 6px dot + text, no pulse, only visible when running */}
-        {isSimulating && (
+        {/* Simulation mode indicator: small 6px dot + text, no pulse, only visible on simulation pages */}
+        {isSimulating && ['overview', 'home', 'chaos', 'prioritize'].includes(activeTab) && (
           <div className="flex items-center gap-1.5 text-[11px] font-sans text-[var(--signal-amber)]">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-amber)]" />
             <span>Simulation</span>

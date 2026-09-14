@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Search,
   Users,
-  Brain,
+  Info
 } from 'lucide-react';
 import type { InboxItem, NavigationTab } from '../../types/argus';
 import { DEMO_INBOX_ITEMS } from '../../data/demoData';
@@ -72,22 +72,22 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
   const getPriorityColor = (urgency: string) => {
     switch (urgency) {
       case 'P0':
-        return 'text-[var(--signal-red)]';
+        return 'text-[#FF3B30]';
       case 'P1':
-        return 'text-[var(--signal-amber)]';
+        return 'text-[#F59E0B]';
       default:
-        return 'text-[var(--text-tertiary)]';
+        return 'text-[#6B7280]';
     }
   };
 
   const getPriorityBorderClass = (urgency: string) => {
     switch (urgency) {
       case 'P0':
-        return 'border-l-[3px] border-l-[var(--signal-red)]';
+        return 'border-l-[3px] border-l-[#FF3B30]';
       case 'P1':
-        return 'border-l-[3px] border-l-[var(--signal-amber)]';
+        return 'border-l-[3px] border-l-[#F59E0B]';
       default:
-        return 'border-l-[3px] border-l-[var(--border-default)]';
+        return 'border-l-[3px] border-l-[#2A2A2A]';
     }
   };
 
@@ -170,18 +170,18 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
                       <span className={`text-[10px] font-mono font-bold ${getPriorityColor(item.urgency)}`}>
                         {item.urgency}
                       </span>
-                      <span className="text-[11px] font-normal text-[var(--text-tertiary)] font-sans">
+                      <span className="text-[11px] font-normal text-[#6B7280] font-sans">
                         {item.source}
                       </span>
                     </div>
 
                     {isUnread && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-blue)] flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] flex-shrink-0" />
                     )}
                   </div>
 
                   {/* Title: Space Grotesk 14px/600 */}
-                  <h3 className="text-[14px] font-semibold font-['Space_Grotesk',sans-serif] text-[var(--text-primary)] mb-1 leading-snug">
+                  <h3 className="text-[14px] font-semibold font-display text-[var(--text-primary)] mb-1 leading-snug">
                     {item.title}
                   </h3>
 
@@ -211,8 +211,8 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
               {/* Header: Category dot + name, timestamp right */}
               <div className="pb-3 border-b border-[var(--border-subtle)]">
                 <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <div className="flex items-center gap-1.5 text-[12px] font-medium font-sans text-[var(--text-tertiary)]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-blue)]" />
+                  <div className="flex items-center gap-1.5 text-[12px] font-normal font-sans text-[#6B7280]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF]" />
                     <span>Analytics anomaly</span>
                   </div>
                   <span className="text-[11px] font-sans text-[var(--text-tertiary)]">
@@ -220,7 +220,7 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
                   </span>
                 </div>
 
-                <h2 className="text-[20px] font-bold font-['Space_Grotesk',sans-serif] text-[var(--text-primary)] leading-snug">
+                <h2 className="text-[20px] font-bold font-display text-[var(--text-primary)] leading-snug">
                   {selectedItem.title}
                 </h2>
               </div>
@@ -260,10 +260,10 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
 
               {/* Structured Causal Deduction: TYPE C style card with left border in --signal-blue */}
               <div className="p-4 rounded-[var(--radius-sm)] bg-[var(--surface-2)] border-l-2 border-l-[var(--signal-blue)] space-y-3">
-                {/* Header row: Lucide Brain + "Argus analysis" */}
+                {/* Header row: Lucide Info + "Argus analysis" */}
                 <div className="flex items-center gap-1.5 text-[var(--text-accent)]">
-                  <Brain className="w-3.5 h-3.5 text-[var(--signal-blue)]" />
-                  <span className="text-[12px] font-semibold font-['Space_Grotesk',sans-serif]">
+                  <Info className="w-3.5 h-3.5 text-[#0066FF]" />
+                  <span className="text-[12px] font-semibold font-display">
                     Argus analysis
                   </span>
                 </div>
@@ -301,31 +301,31 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
                   <div className="text-[10px] font-medium font-sans text-[var(--signal-blue)]">
                     Action
                   </div>
-                  <div className="text-[13px] font-semibold font-['Space_Grotesk',sans-serif] text-[var(--text-primary)] mt-0.5">
+                  <div className="text-[13px] font-semibold font-display text-[var(--text-primary)] mt-0.5">
                     Convert this signal into Opportunity #014 for RICE scoring.
                   </div>
                 </div>
               </div>
 
-              {/* Action Buttons: Left-aligned, no arrows */}
+              {/* Action Buttons: 3-level hierarchy */}
               <div className="pt-3 border-t border-[var(--border-subtle)] flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => handleConvertToOpportunity(selectedItem)}
-                  className="px-4 py-2 rounded-[var(--radius-sm)] bg-[var(--signal-blue)] hover:bg-[var(--signal-blue-dim)] text-white text-[13px] font-semibold font-sans transition-colors cursor-pointer"
+                  className="h-9 px-4 rounded-[4px] bg-[#0066FF] hover:bg-[#0052CC] text-white text-[13px] font-medium font-sans transition-colors cursor-pointer"
                 >
                   Convert to opportunity
                 </button>
 
                 <button
                   onClick={() => handleAddToRoadmap(selectedItem)}
-                  className="px-4 py-2 rounded-[var(--radius-sm)] bg-transparent hover:bg-[var(--surface-2)] border border-[var(--border-default)] text-[var(--text-primary)] text-[13px] font-medium font-sans transition-colors cursor-pointer"
+                  className="h-9 px-4 rounded-[4px] bg-transparent hover:bg-[#141414] border border-[#2A2A2A] text-[#F0F0F0] text-[13px] font-medium font-sans transition-colors cursor-pointer"
                 >
                   Add to roadmap
                 </button>
 
                 <button
                   onClick={() => handleArchive(selectedItem.id)}
-                  className="px-2 py-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] text-[13px] font-normal font-sans transition-colors cursor-pointer bg-transparent border-0"
+                  className="h-9 px-2 text-[#555555] hover:text-[#8A8A8A] text-[12px] font-normal font-sans transition-colors cursor-pointer bg-transparent border-0"
                 >
                   Archive
                 </button>

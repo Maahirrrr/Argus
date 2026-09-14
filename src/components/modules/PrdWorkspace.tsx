@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Copy,
-  Check,
   FlaskConical,
   GitCompare,
   MessageSquare,
@@ -98,45 +96,49 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
           <div>
             <div className="flex items-center gap-2.5">
               <h1 className="argus-module-title">PRD Studio</h1>
-              <span className="px-1.5 py-0.5 rounded bg-[#111111] border border-[#1A1A1A] font-mono text-[11px] text-[#9CA3AF]">
-                v2.1 · Synthesized from Incident #47
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="px-1.5 py-0.5 rounded-[4px] bg-[#1C1C1C] border border-[#2A2A2A] font-mono text-[10px] text-[#8A8A8A]">
+                  v2.1
+                </span>
+                <span className="px-1.5 py-0.5 rounded-[4px] bg-[#1C1C1C] border border-[#2A2A2A] font-mono text-[10px] text-[#8A8A8A]">
+                  Incident #47
+                </span>
+              </div>
             </div>
-            <p className="argus-prose text-xs text-[#6B7280] mt-0.5">
+            <p className="font-sans text-[13px] text-[#8A8A8A] mt-1 font-normal">
               Automated PRD synthesizer with adversarial critique mode, diff tracking, and executable BDD test cases.
             </p>
           </div>
 
           <div className="flex items-center gap-2.5">
-            {/* v1 vs v2 diff toggle */}
+            {/* 1. Diff v1 → v2 (ghost) */}
             <button
               onClick={() => setShowDiff(!showDiff)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono border transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] text-xs font-mono border transition-colors cursor-pointer ${
                 showDiff
                   ? 'bg-[#0066FF] text-[#FFFFFF] border-[#0066FF]'
-                  : 'bg-[#0A0A0A] text-[#9CA3AF] hover:text-[#FFFFFF] border-[#1A1A1A]'
+                  : 'bg-transparent text-[#8A8A8A] hover:text-[#FFFFFF] border-[#2A2A2A]'
               }`}
             >
               <GitCompare className="w-3.5 h-3.5" />
-              <span>{showDiff ? 'Diff Active (v1 vs v2)' : 'Compare v1 vs v2 Diff'}</span>
+              <span>{showDiff ? 'Diff v1 → v2 (Active)' : 'Diff v1 → v2'}</span>
             </button>
 
-            {/* Copy markdown */}
+            {/* 2. Copy MD (ghost, no icon) */}
             <button
               onClick={handleCopy}
-              className="argus-btn-secondary py-1.5 px-3 text-xs cursor-pointer"
+              className="px-3 py-1.5 rounded-[4px] border border-[#2A2A2A] text-xs font-sans text-[#8A8A8A] hover:text-[#FFFFFF] hover:border-[#3A3A3A] bg-transparent transition-colors cursor-pointer"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-[#00FF88]" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Copied' : 'Copy MD'}</span>
+              {copied ? 'Copied' : 'Copy MD'}
             </button>
 
-            {/* Create experiment CTA */}
+            {/* 3. Deploy Experiment (primary blue) */}
             <button
               onClick={() => {
                 if (onDeployExperiment) onDeployExperiment();
                 onNavigateTab('experiments');
               }}
-              className="argus-btn-primary py-1.5 px-3.5 text-xs font-medium cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-[4px] bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-sans font-medium transition-colors cursor-pointer"
             >
               <FlaskConical className="w-3.5 h-3.5" />
               <span>Deploy Experiment</span>
@@ -146,33 +148,35 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
       </div>
 
       {/* Input Problem Statement Canvas */}
-      <section className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[6px] p-5 space-y-3">
+      <section className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[8px] p-5 space-y-3">
         <label className="argus-section-label block">Problem Statement & Strategic Context</label>
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="space-y-2.5">
           <textarea
             rows={2}
             value={problemInput}
             onChange={(e) => setProblemInput(e.target.value)}
-            className="flex-1 bg-[#050505] border border-[#1A1A1A] focus:border-[#0066FF] rounded-[4px] p-3 text-xs font-mono text-[#FFFFFF] placeholder:text-[#6B7280] outline-none leading-relaxed"
+            className="w-full bg-[#050505] border border-[#1A1A1A] focus:border-[#0066FF] rounded-[4px] p-3 text-xs font-mono text-[#FFFFFF] placeholder:text-[#6B7280] outline-none leading-relaxed"
           />
-          <button className="argus-btn-primary py-2 px-4 text-xs self-start sm:self-auto flex-shrink-0 cursor-pointer">
-            Regenerate Spec
-          </button>
+          <div className="flex justify-end">
+            <button className="px-3 py-1.5 rounded-[4px] border border-[#0066FF] text-[#0066FF] hover:bg-[#0066FF]/10 font-sans text-[13px] font-medium transition-colors cursor-pointer">
+              Regenerate
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Structured Document Canvas (Single Editor Panel Default) */}
-      <div className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[6px] p-6 space-y-8">
+      <div className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[8px] p-6 space-y-8">
         {/* Section 1: Problem Statement */}
-        <div className="border-l-2 border-[#1A1A1A] pl-5 space-y-3">
+        <div className="group prd-section border-l-2 border-[#1A1A1A] pl-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="argus-module-title text-[15px]">1. Problem Statement</h3>
             <button
               onClick={() => toggleCritique('problem')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer border ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-[4px] text-[11px] font-mono transition-all cursor-pointer border ${
                 activeCritiques.problem
-                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30'
-                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A]'
+                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30 opacity-100'
+                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A] opacity-0 group-hover:opacity-100'
               }`}
             >
               <MessageSquare className="w-3 h-3" />
@@ -199,15 +203,15 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
         </div>
 
         {/* Section 2: Scope & Non-Goals */}
-        <div className="border-l-2 border-[#1A1A1A] pl-5 space-y-3">
+        <div className="group prd-section border-l-2 border-[#1A1A1A] pl-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="argus-module-title text-[15px]">2. Scope & Non-Goals</h3>
             <button
               onClick={() => toggleCritique('scope')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer border ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-[4px] text-[11px] font-mono transition-all cursor-pointer border ${
                 activeCritiques.scope
-                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30'
-                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A]'
+                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30 opacity-100'
+                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A] opacity-0 group-hover:opacity-100'
               }`}
             >
               <MessageSquare className="w-3 h-3" />
@@ -217,7 +221,7 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
 
           <div className="space-y-2 text-xs">
             <div>
-              <span className="font-mono text-[11px] text-[#00FF88] block mb-1">IN-SCOPE (MVP):</span>
+              <span className="font-sans text-[11px] font-semibold text-[#00FF88] block mb-1">In scope (MVP)</span>
               <ul className="list-disc list-inside text-[#D1D5DB] space-y-1">
                 <li>Automated circuit-breaker tripping at 1,200ms timeout threshold.</li>
                 <li>Dynamic traffic redirection: 85% to ICICI direct acquiring switch.</li>
@@ -251,15 +255,15 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
         </div>
 
         {/* Section 3: Functional Specifications */}
-        <div className="border-l-2 border-[#1A1A1A] pl-5 space-y-3">
+        <div className="group prd-section border-l-2 border-[#1A1A1A] pl-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="argus-module-title text-[15px]">3. Functional Specifications</h3>
             <button
               onClick={() => toggleCritique('specs')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer border ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-[4px] text-[11px] font-mono transition-all cursor-pointer border ${
                 activeCritiques.specs
-                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30'
-                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A]'
+                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30 opacity-100'
+                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A] opacity-0 group-hover:opacity-100'
               }`}
             >
               <MessageSquare className="w-3 h-3" />
@@ -269,14 +273,18 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
 
           <div className="divide-y divide-[#1A1A1A] border border-[#1A1A1A] rounded-[4px] overflow-hidden">
             {prd.requirements.map((spec, i) => (
-              <div key={i} className="p-3 bg-[#050505] flex items-start justify-between gap-4">
-                <div>
-                  <span className="text-xs font-medium text-[#FFFFFF] block">{spec.title}</span>
-                  <span className="text-[11px] text-[#9CA3AF] leading-relaxed">{spec.description}</span>
-                </div>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#111111] border border-[#1A1A1A] text-[#6B7280] flex-shrink-0">
+              <div key={i} className="p-3 bg-[#050505] flex items-start gap-3">
+                <span className={`font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[4px] flex-shrink-0 mt-0.5 ${
+                  spec.priority === 'P0' ? 'bg-[#FF3B30]/15 text-[#FF3B30] border border-[#FF3B30]/30' :
+                  spec.priority === 'P1' ? 'bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30' :
+                  'bg-[#1C1C1C] text-[#6B7280] border border-[#2A2A2A]'
+                }`}>
                   {spec.priority}
                 </span>
+                <div className="min-w-0 flex-1">
+                  <span className="font-display text-[13px] font-semibold text-[#F0F0F0] block">{spec.title}</span>
+                  <span className="font-sans text-[12px] text-[#8A8A8A] leading-relaxed block mt-0.5">{spec.description}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -295,15 +303,15 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
         </div>
 
         {/* Section 4: Gherkin BDD Test Cases in #0D1117 Code Block */}
-        <div className="border-l-2 border-[#1A1A1A] pl-5 space-y-3">
+        <div className="group prd-section border-l-2 border-[#1A1A1A] pl-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="argus-module-title text-[15px]">4. Executable BDD Acceptance Criteria (Gherkin)</h3>
             <button
               onClick={() => toggleCritique('bdd')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer border ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-[4px] text-[11px] font-mono transition-all cursor-pointer border ${
                 activeCritiques.bdd
-                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30'
-                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A]'
+                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30 opacity-100'
+                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A] opacity-0 group-hover:opacity-100'
               }`}
             >
               <MessageSquare className="w-3 h-3" />
@@ -330,15 +338,15 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
         </div>
 
         {/* Section 5: Rollout Phases & Metric Guardrails */}
-        <div className="border-l-2 border-[#1A1A1A] pl-5 space-y-3">
+        <div className="group prd-section border-l-2 border-[#1A1A1A] pl-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="argus-module-title text-[15px]">5. Rollout Phases & Guardrails</h3>
             <button
               onClick={() => toggleCritique('rollout')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer border ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-[4px] text-[11px] font-mono transition-all cursor-pointer border ${
                 activeCritiques.rollout
-                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30'
-                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A]'
+                  ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/30 opacity-100'
+                  : 'bg-[#111111] text-[#6B7280] hover:text-[#FFFFFF] border-[#1A1A1A] opacity-0 group-hover:opacity-100'
               }`}
             >
               <MessageSquare className="w-3 h-3" />
@@ -347,19 +355,19 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            <div className="p-3 bg-[#050505] border border-[#1A1A1A] rounded">
+            <div className="p-3 bg-[#050505] border border-[#1A1A1A] rounded-[4px]">
               <span className="font-mono text-[10px] text-[#6B7280] block">PHASE 1: CANARY</span>
               <span className="font-bold text-[#FFFFFF] block mt-0.5">5% Traffic</span>
               <span className="text-[11px] text-[#9CA3AF] mt-1 block">Tier-1 merchants (Swiggy, Blinkit)</span>
             </div>
 
-            <div className="p-3 bg-[#050505] border border-[#1A1A1A] rounded">
+            <div className="p-3 bg-[#050505] border border-[#1A1A1A] rounded-[4px]">
               <span className="font-mono text-[10px] text-[#6B7280] block">PHASE 2: RAMP</span>
               <span className="font-bold text-[#FFFFFF] block mt-0.5">50% Traffic</span>
               <span className="text-[11px] text-[#9CA3AF] mt-1 block">If P99 latency remains &lt; 2,400ms</span>
             </div>
 
-            <div className="p-3 bg-[#050505] border border-[#1A1A1A] rounded">
+            <div className="p-3 bg-[#050505] border border-[#1A1A1A] rounded-[4px]">
               <span className="font-mono text-[10px] text-[#6B7280] block">PHASE 3: GENERAL</span>
               <span className="font-bold text-[#00FF88] block mt-0.5">100% Rollout</span>
               <span className="text-[11px] text-[#9CA3AF] mt-1 block">Auto-ship threshold achieved</span>

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Terminal,
   Play,
-  Copy,
   Check
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
@@ -89,12 +87,12 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Horizontal Funnel Data
-  const funnelSteps = [
-    { name: '1. Cart Checkout Initiated', count: '100,000', pct: '100%' },
-    { name: '2. Bank Switch Handshake', count: '94,200', pct: '94.2%', drop: '-5.8% switch drop' },
-    { name: '3. MPIN Authorization Prompt', count: '88,600', pct: '88.6%', drop: '-5.6% auth drop' },
-    { name: '4. Settlement Verification', count: '86,200', pct: '86.2%', drop: '-2.4% timeout drop' },
+  // Horizontal Funnel Data with progressive width capacity
+  const funnelStages = [
+    { name: '1. Cart Checkout Initiated', count: '100,000', pct: '100%', barWidth: '100%', drop: null },
+    { name: '2. Bank Switch Handshake', count: '94,200', pct: '94.2%', barWidth: '76%', drop: '↓ 5.8% drop' },
+    { name: '3. MPIN Authorization Prompt', count: '88,600', pct: '88.6%', barWidth: '58%', drop: '↓ 5.6% drop' },
+    { name: '4. Settlement Verification', count: '86,200', pct: '86.2%', barWidth: '43%', drop: '↓ 2.4% drop' },
   ];
 
   return (
@@ -121,72 +119,64 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
       </div>
 
       {/* 1. Terminal-Adjacent Query Panel: Dark #0D1117 */}
-      <section className="bg-[#0D1117] border border-[#1A1A1A] rounded-[6px] overflow-hidden space-y-0">
+      <section className="bg-[#0D1117] border border-[#1A1A1A] rounded-[8px] overflow-hidden space-y-0">
         {/* Preset Query Chips Row */}
-        <div className="p-3 border-b border-[#1A1A1A] flex items-center justify-between gap-2 overflow-x-auto">
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-[11px] font-mono text-[#6B7280]">Presets:</span>
-            {presets.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => handleSelectPreset(p)}
-                className={`px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer whitespace-nowrap ${
-                  activePreset === p.id
-                    ? 'bg-[#0066FF] text-[#FFFFFF] font-medium'
-                    : 'bg-[#111111] text-[#9CA3AF] hover:text-[#FFFFFF] border border-[#1A1A1A]'
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-
-          <button
-            onClick={handleCopySql}
-            className="text-xs font-mono text-[#9CA3AF] hover:text-[#FFFFFF] flex items-center gap-1.5 px-2 py-1 rounded bg-[#111111] border border-[#1A1A1A] cursor-pointer flex-shrink-0"
-          >
-            {copied ? <Check className="w-3 h-3 text-[#00FF88]" /> : <Copy className="w-3 h-3" />}
-            <span>{copied ? 'Copied' : 'Copy SQL'}</span>
-          </button>
+        <div className="p-3 border-b border-[#1A1A1A] flex items-center gap-2 overflow-x-auto">
+          <span className="text-[11px] font-sans text-[#6B7280] mr-1">Presets:</span>
+          {presets.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => handleSelectPreset(p)}
+              className={`px-3 py-1 rounded-[4px] text-[12px] font-sans transition-colors cursor-pointer whitespace-nowrap border ${
+                activePreset === p.id
+                  ? 'bg-[#0066FF]/12 border-[#0066FF] text-[#0066FF] font-medium'
+                  : 'bg-[#141414] border-[#2A2A2A] text-[#8A8A8A] hover:text-[#FFFFFF]'
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
         </div>
 
-        {/* Input: Textarea for Prompt */}
+        {/* Input: Textarea without redundant label, with descriptive placeholder */}
         <div className="p-4 space-y-3">
-          <div>
-            <label className="text-[11px] font-mono text-[#6B7280] block mb-1.5">
-              Natural Language Intent / Telemetry Hypothesis
-            </label>
-            <textarea
-              rows={2}
-              value={nlQuery}
-              onChange={(e) => setNlQuery(e.target.value)}
-              className="w-full bg-[#050505] border border-[#1A1A1A] focus:border-[#0066FF] rounded-[4px] p-3 text-xs font-mono text-[#FFFFFF] outline-none leading-relaxed"
-            />
-          </div>
+          <textarea
+            rows={2}
+            value={nlQuery}
+            onChange={(e) => setNlQuery(e.target.value)}
+            placeholder="Ask anything about your payment telemetry — e.g. 'Show UPI success rate by bank for last 24h'"
+            className="w-full bg-[#050505] border border-[#1A1A1A] focus:border-[#0066FF] rounded-[4px] p-3 text-xs font-mono text-[#FFFFFF] placeholder:text-[#6B7280] outline-none leading-relaxed"
+          />
 
-          {/* Generated SQL Display */}
+          {/* Generated SQL Display with Copy button inside top-right */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-[11px] font-mono text-[#6B7280] flex items-center gap-1.5">
-                <Terminal className="w-3.5 h-3.5 text-[#0066FF]" />
-                <span>Generated ClickHouse SQL</span>
-              </label>
-              <span className="text-[10px] font-mono text-[#6B7280]">ClickHouse ANSI · Optimized</span>
+              <span className="font-sans text-[11px] font-medium text-[#6B7280]">Generated SQL</span>
+              <span className="font-sans text-[10px] text-[#555555]">ClickHouse · Optimized</span>
             </div>
-            <pre className="p-3 bg-[#050505] border border-[#1A1A1A] rounded-[4px] font-mono text-xs text-[#00FF88] overflow-x-auto whitespace-pre leading-relaxed">
-              {sqlQuery}
-            </pre>
+            <div className="relative">
+              <pre className="p-3 pr-24 bg-[#050505] border border-[#1A1A1A] rounded-[4px] font-mono text-xs text-[#00FF88] overflow-x-auto whitespace-pre leading-relaxed">
+                {sqlQuery}
+              </pre>
+              <button
+                onClick={handleCopySql}
+                className="absolute top-2.5 right-2.5 px-2 py-1 rounded-[4px] bg-[#141414] hover:bg-[#1E1E1E] border border-[#2A2A2A] text-[11px] font-sans text-[#8A8A8A] hover:text-[#FFFFFF] transition-colors cursor-pointer flex items-center gap-1"
+              >
+                {copied && <Check className="w-3 h-3 text-[#00FF88]" />}
+                <span>{copied ? 'Copied' : 'Copy SQL'}</span>
+              </button>
+            </div>
           </div>
 
-          {/* Run Query Action Button */}
+          {/* Run Query Action Button & Scanned Stats */}
           <div className="flex items-center justify-between pt-1">
-            <span className="text-[11px] font-mono text-[#6B7280]">
-              Scans ~4,281,940 events · Estimated runtime: 34ms
+            <span className="text-[11px] font-sans text-[#6B7280]">
+              Scanned ~4.28M events · 34ms
             </span>
             <button
               onClick={handleRunQuery}
               disabled={isRunning}
-              className="argus-btn-primary py-1.5 px-4 text-xs font-mono cursor-pointer"
+              className="argus-btn-primary py-1.5 px-4 text-xs font-sans font-medium cursor-pointer"
             >
               <Play className="w-3 h-3 fill-current" />
               <span>{isRunning ? 'Executing...' : 'Run Query'}</span>
@@ -195,8 +185,8 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
         </div>
       </section>
 
-      {/* 2. Compact, Dense, Sortable Results Table (Fixed height with internal scroll) */}
-      <section className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[6px] p-5 space-y-4">
+      {/* 2. Compact, Dense, Sortable Results Table */}
+      <section className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[8px] p-5 space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-[#1A1A1A]">
           <div>
             <h2 className="argus-module-title text-[15px]">Query Result Set</h2>
@@ -206,24 +196,24 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
         </div>
 
         <div className="max-h-64 overflow-y-auto border border-[#1A1A1A] rounded-[4px]">
-          <table className="w-full text-left text-xs font-mono">
-            <thead className="sticky top-0 bg-[#0D1117] border-b border-[#1A1A1A] text-[#6B7280]">
+          <table className="w-full text-left text-xs">
+            <thead className="sticky top-0 bg-[#0D1117] border-b border-[#1A1A1A]">
               <tr>
-                <th className="py-2.5 px-3 font-normal cursor-pointer hover:text-[#FFFFFF]">Acquirer Switch</th>
-                <th className="py-2.5 px-3 font-normal cursor-pointer hover:text-[#FFFFFF]">Total Volume (24h)</th>
-                <th className="py-2.5 px-3 font-normal cursor-pointer hover:text-[#FFFFFF]">Success Rate</th>
-                <th className="py-2.5 px-3 font-normal cursor-pointer hover:text-[#FFFFFF]">P99 Latency</th>
-                <th className="py-2.5 px-3 font-normal cursor-pointer hover:text-[#FFFFFF]">Failed GMV</th>
-                <th className="py-2.5 px-3 font-normal">Health State</th>
+                <th className="py-2.5 px-3 font-sans text-[11px] font-medium text-[#6B7280]">Bank</th>
+                <th className="py-2.5 px-3 font-sans text-[11px] font-medium text-[#6B7280]">Volume 24h</th>
+                <th className="py-2.5 px-3 font-sans text-[11px] font-medium text-[#6B7280]">SR %</th>
+                <th className="py-2.5 px-3 font-sans text-[11px] font-medium text-[#6B7280]">P99 ms</th>
+                <th className="py-2.5 px-3 font-sans text-[11px] font-medium text-[#6B7280]">Failed GMV</th>
+                <th className="py-2.5 px-3 font-sans text-[11px] font-medium text-[#6B7280]">Health</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#1A1A1A] bg-[#050505]">
               {tableData.map((row, idx) => (
-                <tr key={idx} className="hover:bg-[#111111] transition-colors">
-                  <td className="py-2.5 px-3 text-[#FFFFFF] font-medium">{row.col1}</td>
-                  <td className="py-2.5 px-3 text-[#9CA3AF]">{row.col2}</td>
+                <tr key={idx} className="h-10 hover:bg-[#141414] transition-colors">
+                  <td className="px-3 text-[#FFFFFF] font-sans text-[13px] font-medium">{row.col1}</td>
+                  <td className="px-3 font-mono text-[13px] text-[#F0F0F0]">{row.col2}</td>
                   <td
-                    className={`py-2.5 px-3 font-bold ${
+                    className={`px-3 font-mono text-[13px] font-bold ${
                       row.status === 'critical'
                         ? 'text-[#FF3B30]'
                         : row.status === 'degraded'
@@ -233,9 +223,9 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
                   >
                     {row.col3}
                   </td>
-                  <td className="py-2.5 px-3 text-[#9CA3AF]">{row.col4}</td>
-                  <td className="py-2.5 px-3 text-[#FF3B30]">{row.col5}</td>
-                  <td className="py-2.5 px-3">
+                  <td className="px-3 font-mono text-[13px] text-[#F0F0F0]">{row.col4}</td>
+                  <td className="px-3 font-mono text-[13px] text-[#FF3B30]">{row.col5}</td>
+                  <td className="px-3">
                     <div className="flex items-center gap-2">
                       <span
                         className={`w-2 h-2 rounded-full ${
@@ -246,7 +236,7 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
                             : 'bg-[#00FF88]'
                         }`}
                       />
-                      <span className="text-[11px] text-[#9CA3AF] capitalize">{row.status}</span>
+                      <span className="font-sans text-[11px] text-[#8A8A8A] capitalize">{row.status}</span>
                     </div>
                   </td>
                 </tr>
@@ -256,40 +246,44 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
         </div>
       </section>
 
-      {/* 3. Horizontal Funnel Visualization with Labeled Connectors */}
-      <section className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[6px] p-5 space-y-4">
+      {/* 3. Proportional Horizontal Funnel Visualization */}
+      <section className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-[8px] p-5 space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-[#1A1A1A]">
           <div>
             <h2 className="argus-module-title text-[15px]">Horizontal Checkout Conversion Funnel</h2>
-            <span className="argus-section-label text-[11px]">Exact drop-off percentage displayed per stage</span>
+            <span className="argus-section-label text-[11px]">Proportional drop-off visualizer across 24h aggregate</span>
           </div>
           <span className="font-mono text-xs text-[#9CA3AF]">24h Aggregate Window</span>
         </div>
 
-        {/* Horizontal Funnel Sequence */}
+        {/* Proportional Bar Funnel Sequence */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2">
-          {funnelSteps.map((step, idx) => (
+          {funnelStages.map((step, idx) => (
             <div key={idx} className="relative flex flex-col justify-between p-3.5 bg-[#050505] border border-[#1A1A1A] rounded-[4px] space-y-3">
               <div>
-                <span className="text-[11px] font-mono text-[#6B7280] block mb-1">{step.name}</span>
-                <div className="flex items-baseline justify-between">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <span className="font-sans text-[11px] text-[#6B7280]">{step.name}</span>
+                  {step.drop && (
+                    <span className="font-mono text-[11px] font-semibold text-[#FF3B30]">{step.drop}</span>
+                  )}
+                </div>
+                <div className="flex items-baseline justify-between mb-2">
                   <span className="font-mono text-lg font-bold text-[#FFFFFF]">{step.count}</span>
                   <span className="font-mono text-xs text-[#00FF88]">{step.pct}</span>
                 </div>
+                {/* Visual proportional bar */}
+                <div className="w-full h-1.5 bg-[#141414] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#0066FF] rounded-full transition-all duration-300"
+                    style={{ width: step.barWidth }}
+                  />
+                </div>
               </div>
 
-              {/* Labeled connector tag directly below stage per spec (not in a tooltip) */}
-              {step.drop ? (
-                <div className="pt-2 border-t border-[#1A1A1A] flex items-center justify-between text-[11px] font-mono">
-                  <span className="text-[#6B7280]">Drop-off:</span>
-                  <span className="text-[#FF3B30] font-bold">{step.drop}</span>
-                </div>
-              ) : (
-                <div className="pt-2 border-t border-[#1A1A1A] flex items-center justify-between text-[11px] font-mono">
-                  <span className="text-[#6B7280]">Stage:</span>
-                  <span className="text-[#00FF88]">Funnel Ingress</span>
-                </div>
-              )}
+              <div className="pt-2 border-t border-[#1A1A1A] flex items-center justify-between text-[10px] font-sans text-[#6B7280]">
+                <span>Stage Capacity</span>
+                <span className="font-mono text-[#F0F0F0]">{step.barWidth}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -297,3 +291,4 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
     </div>
   );
 };
+
