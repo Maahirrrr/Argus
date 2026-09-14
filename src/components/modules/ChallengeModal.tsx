@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
   ShieldAlert,
-  Sparkles,
+  HelpCircle,
   ArrowRight,
   FlaskConical
 } from 'lucide-react';
@@ -84,8 +84,8 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({
             {/* Right: AI Counterargument & Missing Variables */}
             <div className="flex flex-col gap-3 sm:gap-4 pt-4 md:pt-0">
               <span className="text-[10px] font-mono-tech uppercase tracking-wider text-[#0066FF] font-bold flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                AI COUNTERARGUMENT & SENSITIVITY
+                <HelpCircle className="w-3.5 h-3.5" />
+                COUNTERARGUMENT & SENSITIVITY
               </span>
               <div className="p-3.5 rounded-[3px] bg-[#0D0E14] border border-[#0066FF]/30 text-xs font-mono-tech text-[#F5F5F0] leading-relaxed">
                 "Evidence supports this hypothesis at <strong>74% confidence</strong>, but 2 confounding variables are unaccounted for that could reduce expected lift by up to 35%."

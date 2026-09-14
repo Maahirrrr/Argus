@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Layers, CheckCircle2, ArrowRight } from 'lucide-react';
 import { ArgusDrawer } from '../argus/ArgusDrawer';
 import { ArgusButton } from '../argus/ArgusButton';
 import { ArgusBadge } from '../argus/ArgusBadge';
@@ -45,7 +45,7 @@ export const CockpitDrawer: React.FC<CockpitDrawerProps> = ({
       case 'recommendation':
         return 'blue';
       case 'decision':
-        return 'purple';
+        return 'neutral';
       default:
         return 'neutral';
     }
@@ -107,7 +107,7 @@ export const CockpitDrawer: React.FC<CockpitDrawerProps> = ({
       {data.reasoningSteps && data.reasoningSteps.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#A1A1A1]">
-            <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
+            <Layers className="w-3.5 h-3.5 text-[#0066FF]" />
             <span>Analytical Reasoning Trace</span>
           </div>
           <div className="space-y-1.5">

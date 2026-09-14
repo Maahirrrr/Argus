@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
+  Bot,
   Send
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
@@ -84,7 +84,7 @@ export const ContextualCopilot: React.FC<ContextualCopilotProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#1D1D1D]">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-[2px] bg-[#0066FF]/10 border border-[#0066FF]/30 flex items-center justify-center text-[#0066FF]">
-            <Sparkles className="w-5 h-5" />
+            <Bot className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-xl font-bold font-display tracking-tight text-[#F5F5F0]">

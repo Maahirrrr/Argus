@@ -4,7 +4,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Radio,
-  Sparkles,
+  Layers,
   SlidersHorizontal,
   FileText,
   FlaskConical,
@@ -70,7 +70,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     badge: 'STAGE 03 · CAUSAL INTELLIGENCE',
     title: 'Causal Insights & Bayesian Attribution',
     tagline: 'Isolate exactly WHY a checkout failure occurred down to bank, OS, and time.',
-    icon: Sparkles,
+    icon: Layers,
     description: 'Argus decomposes multi-variable log records into clear failure distributions. It tells you whether an issue is caused by partner bank latency, an Android OS biometric bug, or an NPCI network choke.',
     howToUse: [
       'Tap any bar in the Drop-Off Funnel chart to inspect telemetry for that specific hour or step.',

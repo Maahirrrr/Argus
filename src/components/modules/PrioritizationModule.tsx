@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
+  Scale,
   ShieldAlert,
   CheckCircle2
 } from 'lucide-react';
@@ -77,19 +77,22 @@ export const PrioritizationModule: React.FC<PrioritizationModuleProps> = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-5 border-b border-[#1D1D1D] gap-3">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
-              DECISION WORKBENCH
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono-tech text-[#8A8A8A]">
+              Decide / Prioritization
             </span>
-            <span className="text-[9px] sm:text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20">
-              REAL-TIME SENSITIVITY
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20 font-semibold">
+              RICE / ICE MATRIX
+            </span>
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#141414] text-[#8A8A8A] border border-[#222]">
+              SIMULATION
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
-            WHAT SHOULD WE BUILD?
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#EDEDED] tracking-tight">
+            What Should We Build?
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            Dynamic trade-off evaluation across RICE and ICE algorithms
+            Dynamic trade-off evaluation and sensitivity modeling across RICE and ICE algorithms.
           </p>
         </div>
 
@@ -178,9 +181,9 @@ export const PrioritizationModule: React.FC<PrioritizationModuleProps> = ({
           <div className="p-4 sm:p-6 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] flex flex-col gap-4">
             <div className="flex items-center justify-between pb-3 border-b border-[#1D1D1D]">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
+                <Scale className="w-3.5 h-3.5 text-[#0066FF]" />
                 <span className="text-xs font-mono-tech font-bold uppercase text-[#0066FF]">
-                  AI DECISION RECOMMENDATION
+                  ALGORITHMIC RECOMMENDATION
                 </span>
               </div>
               <span className="text-[10px] font-mono-tech text-[#8A8A8A]">91% CONFIDENCE</span>

@@ -8,7 +8,8 @@ import {
   LayoutDashboard,
   Radar,
   Settings,
-  Sparkles,
+  Layers,
+  Terminal,
   Users,
   MessageSquare,
   GitBranch,
@@ -61,9 +62,9 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
     { category: 'Create', label: 'Record Product Decision', detail: 'Document architectural consensus', tab: 'decisions', icon: Plus },
 
     // AI Action
-    { category: 'AI Action', label: "Summarize This Week's Feedback", detail: 'Run cluster sentiment synthesis', tab: 'feedback', icon: Sparkles },
-    { category: 'AI Action', label: 'Show High-Impact Signals', detail: 'Filter anomalies > 85% conviction', tab: 'signals', icon: Sparkles },
-    { category: 'AI Action', label: 'Analyze Conversion Bottlenecks', detail: 'Deep funnel diagnostic', tab: 'analytics', icon: Sparkles },
+    { category: 'AI Action', label: "Summarize This Week's Feedback", detail: 'Run cluster sentiment synthesis', tab: 'feedback', icon: Layers },
+    { category: 'AI Action', label: 'Show High-Impact Signals', detail: 'Filter anomalies > 85% conviction', tab: 'signals', icon: Layers },
+    { category: 'AI Action', label: 'Analyze Conversion Bottlenecks', detail: 'Deep funnel diagnostic', tab: 'analytics', icon: Terminal },
 
     // Settings
     { category: 'Settings', label: 'Workspace Configuration', detail: 'Team, API keys, integrations', tab: 'settings', icon: Settings },
@@ -160,12 +161,12 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
               }`}
             >
               <div className="flex items-center gap-2.5 truncate">
-                <Sparkles className="w-4 h-4 text-[#0066FF] flex-shrink-0" />
+                <Terminal className="w-4 h-4 text-[#0066FF] flex-shrink-0" />
                 <span className="text-xs font-mono-tech text-[#EDEDED]">
-                  Ask ARGUS AI: <span className="text-[#0066FF] font-semibold">"{query}"</span>
+                  Ask ARGUS: <span className="text-[#0066FF] font-semibold">"{query}"</span>
                 </span>
               </div>
-              <span className="text-[10px] font-mono-tech text-[#0066FF] uppercase">AI SYNTHESIS</span>
+              <span className="text-[10px] font-mono-tech text-[#0066FF] uppercase">SYNTHESIS</span>
             </div>
           )}
 

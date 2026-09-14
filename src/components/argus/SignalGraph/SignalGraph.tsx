@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import {
-  Sparkles,
+  Activity,
   ArrowRight,
   ExternalLink
 } from 'lucide-react';
@@ -231,11 +231,11 @@ export const SignalGraph: React.FC<SignalGraphProps> = ({
             }}
             transition={{ duration: 0.2 }}
             onClick={() => onNavigateTab('intelligence')}
-            className="w-36 sm:w-44 p-3 bg-[#0A0A0A] border rounded-[3px] text-center cursor-pointer group transition-transform hover:scale-[1.02]"
+            className="w-36 sm:w-44 p-3 bg-[#0A0A0A] border rounded-[3px] text-center cursor-pointer group transition-colors hover:border-[#0066FF]"
             title="Argus Signal Fusion Engine — Click to open dedicated Intelligence Center"
           >
             <div className="flex items-center justify-center gap-1.5 text-[9px] font-mono-tech text-[#0066FF] font-bold">
-              <Sparkles className="w-3 h-3 text-[#0066FF]" />
+              <Activity className="w-3 h-3 text-[#0066FF]" />
               <span>ARGUS ENGINE</span>
             </div>
             <div className="text-xs sm:text-sm font-bold font-display text-[#F5F5F0] tracking-tight mt-0.5">

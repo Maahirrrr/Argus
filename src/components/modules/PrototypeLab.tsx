@@ -6,7 +6,7 @@ import {
   Monitor,
   Code2,
   Copy,
-  Sparkles,
+  FileText,
   Sliders,
   Terminal,
   Activity,
@@ -127,7 +127,7 @@ export const PreviewComponent = () => {
             onClick={() => onNavigateTab('prds')}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-tech font-medium bg-[#0066FF] hover:bg-[#0052CC] text-white rounded-[2px] transition-colors"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <FileText className="w-3.5 h-3.5" />
             <span>Link to PRD</span>
           </button>
         </div>

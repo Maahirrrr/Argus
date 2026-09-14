@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Sparkles,
+  Activity,
   CheckCircle2,
   X
 } from 'lucide-react';
@@ -27,7 +27,7 @@ export const GuidedProductLoop: React.FC<GuidedProductLoopProps> = ({
     <div className="bg-[#0A0A0A] border-b border-[#0066FF]/30 px-4 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5 text-[#0066FF] font-mono-tech font-bold">
-          <Sparkles className="w-3.5 h-3.5" />
+          <Activity className="w-3.5 h-3.5" />
           <span>GUIDED PM LOOP:</span>
         </div>
         <span className="text-[#8A8A8A] hidden md:inline">

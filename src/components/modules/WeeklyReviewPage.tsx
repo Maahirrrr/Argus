@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   CheckCircle2,
-  Sparkles,
+  FileText,
   Download
 } from 'lucide-react';
 import type { NavigationTab, WeeklyReviewData } from '../../types/argus';
@@ -70,7 +70,7 @@ export const WeeklyReviewPage: React.FC<WeeklyReviewPageProps> = ({ onNavigateTa
       {/* Executive Summary */}
       <div className="p-6 bg-[#0A0A0A] border border-[#0066FF]/30 rounded-[4px] space-y-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-[#0066FF]" />
+          <FileText className="w-4 h-4 text-[#0066FF]" />
           <span className="text-[10px] font-mono-tech font-bold uppercase tracking-wider text-[#0066FF]">
             Executive Summary
           </span>

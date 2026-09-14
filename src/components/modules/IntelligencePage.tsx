@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
+  Layers,
   Filter,
   CheckCircle2,
   ArrowRight,
@@ -266,7 +266,7 @@ export const IntelligencePage: React.FC<IntelligencePageProps> = ({
           <div className="p-4 sm:p-5 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#0066FF]" />
+                <Layers className="w-4 h-4 text-[#0066FF]" />
                 <h2 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
                   INTELLIGENCE FLOW · SIGNAL TO DECISION PIPELINE
                 </h2>
@@ -363,7 +363,7 @@ export const IntelligencePage: React.FC<IntelligencePageProps> = ({
                       onClick={() => setStatusFilter(st)}
                       className={`px-2 py-0.5 text-[10px] font-mono-tech rounded-[2px] border transition-colors ${
                         statusFilter === st
-                          ? 'bg-[#8B5CF6]/15 border-[#8B5CF6] text-[#8B5CF6] font-bold'
+                          ? 'bg-[#0066FF]/15 border-[#0066FF] text-[#0066FF] font-bold'
                           : 'bg-[#0E0E0E] border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0]'
                       }`}
                     >
@@ -438,7 +438,7 @@ export const IntelligencePage: React.FC<IntelligencePageProps> = ({
                   {/* AI Reasoning Transparency (WHY ARGUS FLAGGED THIS) */}
                   <div className="p-3 bg-[#070707] border border-[#1A1A1A] rounded-[2px] space-y-2">
                     <div className="flex items-center gap-1.5 text-[10px] font-mono-tech text-[#8A8A8A] font-bold uppercase">
-                      <Sparkles className="w-3 h-3 text-[#0066FF]" />
+                      <Layers className="w-3 h-3 text-[#0066FF]" />
                       <span>WHY ARGUS FLAGGED THIS · EVIDENCE ({sig.evidence.length} SOURCES)</span>
                     </div>
                     <ul className="space-y-1 text-xs font-mono-tech text-[#777]">

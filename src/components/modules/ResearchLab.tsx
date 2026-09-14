@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Microscope,
-  Sparkles,
+  Layers,
   ChevronRight,
   Plus
 } from 'lucide-react';
@@ -159,7 +159,7 @@ export const ResearchLab: React.FC<ResearchLabProps> = ({
             <div className="p-4 rounded-[2px] bg-[#091528] border border-[#0066FF]/40 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-xs font-mono-tech text-[#0066FF] font-bold uppercase">
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Layers className="w-3.5 h-3.5" />
                   Opportunity Discovered
                 </div>
                 <span className="text-[10px] font-mono-tech text-[#10B981] bg-[#10B981]/15 px-2 py-0.5 rounded-[2px]">
@@ -233,7 +233,7 @@ export const ResearchLab: React.FC<ResearchLabProps> = ({
               <div className="space-y-1.5">
                 {selectedInterview.aiSynthesizedInsights.map((insight, idx) => (
                   <div key={idx} className="p-2.5 rounded-[2px] bg-[#070707] border border-[#161616] flex items-start gap-2 text-xs text-[#CCCCCC]">
-                    <Sparkles className="w-3.5 h-3.5 text-[#0066FF] mt-0.5 flex-shrink-0" />
+                    <Layers className="w-3.5 h-3.5 text-[#0066FF] mt-0.5 flex-shrink-0" />
                     <span>{insight}</span>
                   </div>
                 ))}

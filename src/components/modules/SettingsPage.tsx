@@ -5,7 +5,7 @@ import {
   Database,
   Save,
   RotateCcw,
-  Sparkles
+  Cpu
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
 
@@ -88,7 +88,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#0066FF]" />
+              <Cpu className="w-4 h-4 text-[#0066FF]" />
               <span className="text-sm font-bold font-display text-[#F5F5F0]">
                 AI Product Manager Operating Mode
               </span>

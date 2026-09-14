@@ -7,7 +7,9 @@ import {
   Cpu,
   CalendarRange,
   Target,
-  Sparkles,
+  Inbox,
+  FlaskConical,
+  Rocket,
   Flame,
   HelpCircle,
   X
@@ -38,15 +40,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const actions: PaletteAction[] = [
-    { id: 'act-inbox', title: 'Triage Unified Inbox', description: 'Review raw customer complaints, anomalies, and competitive moves', tab: 'inbox', icon: Sparkles, group: 'WORK' },
+    { id: 'act-inbox', title: 'Triage Unified Inbox', description: 'Review raw customer complaints, anomalies, and competitive moves', tab: 'inbox', icon: Inbox, group: 'WORK' },
     { id: 'act-opps', title: 'Open Opportunity Tree', description: 'Teresa Torres hierarchical tree of user pain points and bets', tab: 'opportunities', icon: Target, group: 'DECIDE' },
     { id: 'act-rice', title: 'RICE & WSJF Prioritization', description: 'Calculate Reach, Impact, Confidence & Effort scores', tab: 'prioritize', icon: Target, group: 'DECIDE' },
     { id: 'act-roadmap', title: 'Strategic Roadmap & Kanban', description: 'Multi-quarter roadmap with dependency conflict detection', tab: 'roadmap', icon: CalendarRange, group: 'DECIDE' },
     { id: 'act-prds', title: 'PRD Studio & BDD Spec Writer', description: 'Autonomous PRD synthesis with executable Gherkin scenarios', tab: 'prds', icon: FileText, group: 'BUILD' },
     { id: 'act-proto', title: 'Interactive Prototype Studio', description: 'Low-code UI sandbox with live semantic POS parser', tab: 'prototypes', icon: Boxes, group: 'BUILD' },
     { id: 'act-evals', title: 'AI Product Lab & LLM Evals', description: 'Benchmark Claude vs Groq, prompt versioning & batch test runner', tab: 'ai_lab', icon: Cpu, group: 'BUILD' },
-    { id: 'act-exps', title: 'A/B Experiment Lab', description: 'Bayesian sequential analysis and automated rollback breakers', tab: 'experiments', icon: Sparkles, group: 'MEASURE' },
-    { id: 'act-launch', title: 'Release Center & Canary Sliders', description: 'Multi-team sign-offs, canary percentage allocation', tab: 'launch', icon: Sparkles, group: 'MEASURE' },
+    { id: 'act-exps', title: 'A/B Experiment Lab', description: 'Bayesian sequential analysis and automated rollback breakers', tab: 'experiments', icon: FlaskConical, group: 'MEASURE' },
+    { id: 'act-launch', title: 'Release Center & Canary Sliders', description: 'Multi-team sign-offs, canary percentage allocation', tab: 'launch', icon: Rocket, group: 'MEASURE' },
     { id: 'act-adr', title: 'Decision Log (ADR)', description: 'Architectural decision records and tradeoff documentation', tab: 'decisions', icon: FileText, group: 'WORKSPACE' },
     { id: 'cmd-chaos', title: 'Simulate Production Chaos / Outage', description: 'Trigger NPCI switch latency spike to test automated circuit breaker', tab: 'home', icon: Flame, group: 'SYSTEM SIMULATION' },
     { id: 'cmd-tutorial', title: 'Open Interactive Guided Tutorial', description: '5-minute deep walkthrough of every core workspace feature', tab: 'home', icon: HelpCircle, group: 'SYSTEM SIMULATION' },

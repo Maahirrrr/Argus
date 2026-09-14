@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Sparkles,
+  Layers,
   ExternalLink,
   CheckCircle2,
   ArrowRight
@@ -79,7 +79,7 @@ export const SignalDrawer: React.FC<SignalDrawerProps> = ({
         {/* ARGUS AI Interpretation */}
         <div className="p-4 bg-[#0E0E0E] border border-[#0066FF]/30 rounded-[2px] space-y-2">
           <div className="flex items-center gap-1.5 text-[10px] font-mono-tech text-[#0066FF] font-bold uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
+            <Layers className="w-3.5 h-3.5 text-[#0066FF]" />
             <span>ARGUS CAUSAL INTERPRETATION</span>
           </div>
           <p className="text-xs font-mono-tech text-[#F5F5F0] leading-relaxed">

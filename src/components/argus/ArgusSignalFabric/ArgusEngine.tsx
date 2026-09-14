@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Activity, ArrowRight } from 'lucide-react';
 import { GlowingEffect } from '../../ui/GlowingEffect';
 
 interface ArgusEngineProps {
@@ -71,7 +71,7 @@ export const ArgusEngine: React.FC<ArgusEngineProps> = ({
 
         <div className="relative z-10 flex flex-col items-center">
           <div className="flex items-center justify-center gap-1.5 text-[9px] font-mono-tech text-[#0066FF] font-bold uppercase tracking-wider">
-            <Sparkles className="w-2.5 h-2.5 text-[#0066FF]" />
+            <Activity className="w-2.5 h-2.5 text-[#0066FF]" />
             <span>ARGUS ENGINE</span>
           </div>
 

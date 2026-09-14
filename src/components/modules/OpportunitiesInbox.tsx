@@ -37,25 +37,28 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-5 border-b border-[#1D1D1D] gap-3">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
-              DISCOVERY PIPELINE
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono-tech text-[#8A8A8A]">
+              Decide / Opportunities
             </span>
-            <span className="text-[9px] sm:text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#0066FF]/15 text-[#0066FF] border border-[#0066FF]/30">
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#0066FF]/15 text-[#0066FF] border border-[#0066FF]/30 font-semibold">
               {opportunities.filter((o) => o.status === 'inbox').length} INBOX
             </span>
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#141414] text-[#8A8A8A] border border-[#222]">
+              SIMULATION
+            </span>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
-            OPPORTUNITIES INBOX
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#EDEDED] tracking-tight">
+            Opportunities Inbox
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            Problems worth solving. Synthesized from live ClickHouse telemetry & support queues.
+            Candidate opportunities synthesized from ClickHouse telemetry anomalies & support queues.
           </p>
         </div>
 
         <button
           onClick={() => onNavigateTab('prioritize')}
-          className="btn-magnetic w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/20 min-h-[44px]"
+          className="btn-magnetic w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-[4px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-medium cursor-pointer min-h-[38px] transition-colors"
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
           <span>Prioritize Roadmap →</span>

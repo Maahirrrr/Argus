@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Sparkles,
+  Cpu,
   Command,
   HelpCircle,
   BookOpen,
@@ -206,7 +206,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         {/* AI PM Status Pill */}
         {aiPmMode && (
           <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-[2px] bg-[#0066FF]/10 border border-[#0066FF]/30 text-[10px] font-mono-tech text-[#0066FF]">
-            <Sparkles className="w-3 h-3 animate-pulse" />
+            <Cpu className="w-3 h-3 text-[#0066FF]" />
             <span>AI PM</span>
           </div>
         )}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Search,
-  Sparkles,
+  Activity,
   Terminal,
   Inbox
 } from 'lucide-react';
@@ -46,19 +46,22 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
-              CLICKHOUSE WAREHOUSE COPILOT
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono-tech text-[#8A8A8A]">
+              Measure / Telemetry Analytics
             </span>
-            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25">
-              TELEMETRY SQL GENERATOR
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25 font-semibold">
+              SQL SYNTHESIS
+            </span>
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#141414] text-[#8A8A8A] border border-[#222]">
+              SIMULATION (4.2M EVENTS)
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
-            CLICKHOUSE ANALYTICS
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#EDEDED] tracking-tight">
+            ClickHouse Telemetry Query
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            Query 4.2M daily transactional events in natural language. Argus synthesizes ClickHouse SQL and returns structured root-cause telemetry.
+            Query simulated transactional events in natural language. Synthesizes ClickHouse SQL and returns structured root-cause telemetry.
           </p>
         </div>
 
@@ -111,10 +114,10 @@ export const AnalyticsCopilot: React.FC<AnalyticsCopilotProps> = ({
       {/* AI Answer & Root Cause Breakdown */}
       <div className="p-6 sm:p-8 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] space-y-6">
         <div className="p-4 bg-[#0D0E14] border border-[#0066FF]/30 rounded-[3px] flex items-start gap-3">
-          <Sparkles className="w-4 h-4 text-[#0066FF] flex-shrink-0 mt-0.5" />
+          <Activity className="w-4 h-4 text-[#0066FF] flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
             <span className="text-[10px] font-mono-tech font-bold uppercase tracking-wider text-[#0066FF] block">
-              AI TELEMETRY SYNTHESIS
+              TELEMETRY SYNTHESIS
             </span>
             <p className="text-xs sm:text-sm text-[#F5F5F0] font-mono-tech">
               Payment success fell from <strong className="text-[#EF4444]">94.8% → 90.1%</strong> between 8:00–10:30 PM this week across transactions exceeding ₹10,000.

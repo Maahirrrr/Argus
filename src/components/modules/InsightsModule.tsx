@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
+  Layers,
   Inbox,
   ArrowRight,
   ShieldCheck,
@@ -259,10 +259,10 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
       {/* AI Strategic Recommendation Banner */}
       <div className="p-5 sm:p-6 bg-[#0E1017] border border-[#0066FF]/35 rounded-[4px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <Sparkles className="w-5 h-5 text-[#0066FF] flex-shrink-0 mt-0.5" />
+          <Layers className="w-5 h-5 text-[#0066FF] flex-shrink-0 mt-0.5" />
           <div>
             <span className="text-[10px] font-mono-tech uppercase font-bold text-[#0066FF] block mb-0.5">
-              AI STRATEGIC RECOMMENDATION
+              CAUSAL RECOMMENDATION
             </span>
             <p className="text-xs sm:text-sm font-bold text-[#F5F5F0] leading-snug">
               Prioritize multi-bank retry & dynamic routing over frontend checkout changes.

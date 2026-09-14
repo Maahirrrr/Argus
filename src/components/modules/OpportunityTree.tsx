@@ -3,7 +3,7 @@ import {
   GitFork,
   ChevronDown,
   ChevronRight,
-  Sparkles,
+  Plus,
   FlaskConical,
   SlidersHorizontal
 } from 'lucide-react';
@@ -38,9 +38,9 @@ export const OpportunityTree: React.FC<OpportunityTreeProps> = ({
       case 'Outcome': return 'bg-[#0066FF]/10 text-[#0066FF] border-[#0066FF]/40';
       case 'Problem': return 'bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/30';
       case 'Need': return 'bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/30';
-      case 'Opportunity': return 'bg-[#3B82F6]/10 text-[#3B82F6] border-[#3B82F6]/30';
+      case 'Opportunity': return 'bg-[#0070F3]/10 text-[#0070F3] border-[#0070F3]/30';
       case 'Solution': return 'bg-[#10B981]/10 text-[#10B981] border-[#10B981]/30';
-      case 'Experiment': return 'bg-[#8B5CF6]/10 text-[#8B5CF6] border-[#8B5CF6]/30';
+      case 'Experiment': return 'bg-[#181818] text-[#D4D4D4] border-[#333333]';
       default: return 'bg-[#141414] text-[#8A8A8A] border-[#1D1D1D]';
     }
   };
@@ -124,9 +124,9 @@ export const OpportunityTree: React.FC<OpportunityTreeProps> = ({
                     onShowToast('Navigating to Experiment Lab.');
                     onNavigateTab('experiments');
                   }}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-[2px] bg-[#8B5CF6]/15 hover:bg-[#8B5CF6]/25 border border-[#8B5CF6]/40 text-[#A78BFA] text-[11px] font-mono-tech font-bold cursor-pointer transition-colors"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-[2px] bg-[#161616] hover:bg-[#202020] border border-[#2D2D2D] text-[#CCCCCC] hover:text-white text-[11px] font-mono-tech font-medium cursor-pointer transition-colors"
                 >
-                  <FlaskConical className="w-3 h-3" />
+                  <FlaskConical className="w-3 h-3 text-[#0066FF]" />
                   <span>Run Test</span>
                 </button>
               )}
@@ -172,9 +172,9 @@ export const OpportunityTree: React.FC<OpportunityTreeProps> = ({
             onClick={() => {
               onShowToast('Created new branch in Opportunity Tree.');
             }}
-            className="btn-magnetic flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-mono-tech font-bold cursor-pointer transition-colors shadow-sm shadow-[#0066FF]/30"
+            className="btn-magnetic flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-mono-tech font-medium cursor-pointer transition-colors shadow-sm shadow-[#0066FF]/30"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5" />
             <span>Add Branch</span>
           </button>
         </div>
@@ -189,11 +189,11 @@ export const OpportunityTree: React.FC<OpportunityTreeProps> = ({
         <span className="text-[#525252]">→</span>
         <span className="text-[#F59E0B]">3. User Need</span>
         <span className="text-[#525252]">→</span>
-        <span className="text-[#3B82F6]">4. Opportunity</span>
+        <span className="text-[#0070F3]">4. Opportunity</span>
         <span className="text-[#525252]">→</span>
         <span className="text-[#10B981]">5. Solution</span>
         <span className="text-[#525252]">→</span>
-        <span className="text-[#8B5CF6]">6. Experiment</span>
+        <span className="text-[#D4D4D4]">6. Experiment</span>
       </div>
 
       {/* Interactive Tree Hierarchy */}

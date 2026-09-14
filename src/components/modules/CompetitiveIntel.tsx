@@ -4,7 +4,7 @@ import {
   TrendingUp,
   CheckCircle2,
   XCircle,
-  Sparkles
+  Target
 } from 'lucide-react';
 import type { CompetitorItem, NavigationTab } from '../../types/argus';
 import { DEMO_COMPETITORS } from '../../data/demoData';
@@ -184,7 +184,7 @@ export const CompetitiveIntel: React.FC<CompetitiveIntelProps> = ({
             {/* Opportunity Gap */}
             <div className="p-4 rounded-[2px] bg-[#091528] border border-[#0066FF]/40 space-y-2">
               <div className="flex items-center gap-1.5 text-xs font-mono-tech text-[#0066FF] font-bold uppercase">
-                <Sparkles className="w-3.5 h-3.5" />
+                <Target className="w-3.5 h-3.5" />
                 Argus Opportunity Gap
               </div>
               <p className="text-xs text-[#8AB4F8] leading-relaxed">

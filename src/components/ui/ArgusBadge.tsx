@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface ArgusBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'neutral' | 'blue' | 'green' | 'amber' | 'red' | 'purple';
+  variant?: 'neutral' | 'blue' | 'green' | 'amber' | 'red';
   size?: 'sm' | 'md';
   children: React.ReactNode;
 }
@@ -19,7 +19,6 @@ export const ArgusBadge: React.FC<ArgusBadgeProps> = ({
     green: 'bg-[#10B981]/12 text-[#10B981] border-[#10B981]/25',
     amber: 'bg-[#F59E0B]/12 text-[#F59E0B] border-[#F59E0B]/25',
     red: 'bg-[#EF4444]/12 text-[#EF4444] border-[#EF4444]/25',
-    purple: 'bg-[#8B5CF6]/12 text-[#8B5CF6] border-[#8B5CF6]/25',
   };
 
   const sizeStyles = {

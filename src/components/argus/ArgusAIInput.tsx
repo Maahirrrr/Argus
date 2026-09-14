@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowUp, Paperclip, Copy, Check, RotateCcw, StopCircle } from 'lucide-react';
+import { Terminal, ArrowUp, Paperclip, Copy, Check, RotateCcw, StopCircle } from 'lucide-react';
 import { ArgusButton } from './ArgusButton';
 
 export interface ArgusAIInputProps {
@@ -73,7 +73,7 @@ export const ArgusAIInput: React.FC<ArgusAIInputProps> = ({
         className="relative rounded-[8px] border border-[rgba(255,255,255,0.12)] bg-[#080808] focus-within:border-[#0066FF] transition-all p-3 space-y-2 shadow-xl"
       >
         <div className="flex items-start gap-2">
-          <Sparkles className="w-4 h-4 text-[#0066FF] mt-1 flex-shrink-0" />
+          <Terminal className="w-4 h-4 text-[#0066FF] mt-1 flex-shrink-0" />
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -128,7 +128,7 @@ export const ArgusAIInput: React.FC<ArgusAIInputProps> = ({
         <div className="p-4 rounded-[8px] bg-[#0A0A0A] border border-[rgba(255,255,255,0.08)] space-y-3">
           <div className="flex items-center justify-between text-xs text-[#8A8A8A] font-mono-tech pb-2 border-b border-[rgba(255,255,255,0.06)]">
             <span className="flex items-center gap-1.5 text-[#F5F5F5]">
-              <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" /> ARGUS Synthesis
+              <Terminal className="w-3.5 h-3.5 text-[#0066FF]" /> ARGUS Synthesis
             </span>
             <div className="flex items-center gap-1">
               <button

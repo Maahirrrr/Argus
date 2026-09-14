@@ -19,7 +19,7 @@ import {
   Video,
   Files,
   GitBranch,
-  Sparkles,
+  Cpu,
   Settings,
   HelpCircle,
   PanelLeftClose,
@@ -110,7 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       label: 'AI',
       items: [
-        { id: 'ai_lab', label: 'AI Lab', icon: Sparkles },
+        { id: 'ai_lab', label: 'AI Lab', icon: Cpu },
       ],
     },
   ];

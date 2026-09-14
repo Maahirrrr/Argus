@@ -34,27 +34,27 @@ export const SignalsModule: React.FC<SignalsModuleProps> = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#1D1D1D] gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
-              RAW PRODUCT SIGNALS
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono-tech text-[#8A8A8A]">
+              Signals / Ingestion Pipeline
             </span>
-            <span className="text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/30">
-              {DEMO_SIGNALS.filter(s => s.severity === 'HIGH').length} CRITICAL ANOMALIES
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/30 font-semibold">
+              {DEMO_SIGNALS.filter(s => s.severity === 'HIGH').length} CRITICAL
             </span>
-            <span className="text-[10px] font-mono-tech text-[#8A8A8A]">
-              SURVEILLANCE ACTIVE
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#141414] text-[#8A8A8A] border border-[#222]">
+              SIMULATION
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
-            SIGNALS TRIAGE QUEUE
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#EDEDED] tracking-tight">
+            Signals Triage Queue
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
-            Continuous ingestion of 4.2M daily transactional events across ClickHouse, NPCI, and Zendesk.
+            Simulated ingestion of 4.2M daily transactional events across ClickHouse, NPCI, and Zendesk.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono-tech text-[#525252]">
-          <span>FEED STATUS: <strong className="text-[#10B981]">STREAMING</strong></span>
+        <div className="flex items-center gap-2 text-xs font-mono-tech text-[#666666]">
+          <span>FEED: <strong className="text-[#F59E0B]">SIMULATION STREAM</strong></span>
           <span>·</span>
           <span>LATENCY: <strong className="text-[#8A8A8A]">28ms</strong></span>
         </div>
@@ -101,18 +101,16 @@ export const SignalsModule: React.FC<SignalsModuleProps> = ({
               key={sig.id}
               className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-[#0E0E0E] transition-colors group"
             >
-              <div className="flex items-start gap-4">
-                <div className="w-9 h-9 rounded-[3px] bg-[#101010] border border-[#1D1D1D] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <ShieldAlert
-                    className={`w-4 h-4 ${
-                      sig.severity === 'HIGH'
-                        ? 'text-[#EF4444]'
-                        : sig.severity === 'MEDIUM'
-                        ? 'text-[#F59E0B]'
-                        : 'text-[#10B981]'
-                    }`}
-                  />
-                </div>
+              <div className="flex items-start gap-3">
+                <ShieldAlert
+                  className={`w-4 h-4 flex-shrink-0 mt-1 ${
+                    sig.severity === 'HIGH'
+                      ? 'text-[#EF4444]'
+                      : sig.severity === 'MEDIUM'
+                      ? 'text-[#F59E0B]'
+                      : 'text-[#10B981]'
+                  }`}
+                />
 
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">

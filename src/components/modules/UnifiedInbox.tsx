@@ -4,7 +4,8 @@ import {
   Search,
   Users,
   Clock,
-  Sparkles,
+  Layers,
+  ArrowRight,
   Archive,
   Tag
 } from 'lucide-react';
@@ -239,7 +240,7 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
               {/* AI Trust Layer Analysis */}
               <div className="p-3.5 rounded-[2px] bg-[#091528] border border-[#0066FF]/30 space-y-2">
                 <div className="flex items-center gap-1.5 text-xs font-mono-tech text-[#0066FF] font-bold uppercase">
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Layers className="w-3.5 h-3.5" />
                   Argus Causal Deduction
                 </div>
                 <p className="text-xs text-[#8AB4F8] leading-relaxed">
@@ -255,7 +256,7 @@ export const UnifiedInbox: React.FC<UnifiedInboxProps> = ({
                   onClick={() => handleConvertToOpportunity(selectedItem)}
                   className="btn-magnetic flex items-center gap-1.5 px-3.5 py-2 rounded-[2px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-bold font-mono-tech cursor-pointer transition-colors shadow-sm shadow-[#0066FF]/30"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3.5 h-3.5" />
                   <span>Convert to Opportunity →</span>
                 </button>
 

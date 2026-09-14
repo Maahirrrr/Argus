@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import {
   Copy,
   Check,
-  Sparkles,
+  ShieldAlert,
   FlaskConical,
   GitCompare,
-      Plus,
+  Plus,
   Minus,
-  } from 'lucide-react';
+} from 'lucide-react';
 import type { NavigationTab, PRDDocument } from '../../types/argus';
 import { DEMO_PRD } from '../../data/demoData';
 
@@ -52,18 +52,18 @@ Goals: ${prd.goals.join(', ')}
       {/* PRD Workspace Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-5 border-b border-[#1D1D1D] gap-3">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono-tech uppercase tracking-[0.2em] text-[#0066FF] font-bold">
-              PRD WORKSPACE · SPEC & DIFF EDITOR
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono-tech text-[#8A8A8A]">
+              Build / PRD Workspace
             </span>
-            <span className="text-[9px] sm:text-[10px] font-mono-tech px-2 py-0.2 rounded-[2px] bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25">
+            <span className="text-[10px] font-mono-tech px-2 py-0.5 rounded-[3px] bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25 font-semibold">
               {prd.status.toUpperCase()}
             </span>
-            <span className="text-[9px] sm:text-[10px] font-mono-tech text-[#8A8A8A]">
+            <span className="text-[10px] font-mono-tech text-[#8A8A8A]">
               {prd.version}
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F5F5F0] tracking-tight font-display">
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#EDEDED] tracking-tight">
             {prd.title}
           </h1>
           <p className="text-xs text-[#8A8A8A] font-mono-tech mt-1">
@@ -340,9 +340,9 @@ Goals: ${prd.goals.join(', ')}
         {/* Right Column: Embedded AI PM Critic */}
         <div className="lg:col-span-4 flex flex-col gap-4 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] p-4 sm:p-5">
           <div className="flex items-center gap-2 pb-3 border-b border-[#1D1D1D]">
-            <Sparkles className="w-4 h-4 text-[#0066FF]" />
-            <span className="text-xs font-bold text-[#F5F5F0] font-display uppercase tracking-wider">
-              AI ADVERSARIAL CRITIC
+            <ShieldAlert className="w-4 h-4 text-[#0066FF]" />
+            <span className="text-xs font-mono-tech font-bold text-[#EDEDED] uppercase tracking-wider">
+              ADVERSARIAL SPEC CRITIC
             </span>
           </div>
 
