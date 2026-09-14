@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Calendar, RefreshCw, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { Calendar, RefreshCw, SlidersHorizontal, ChevronDown, Zap } from 'lucide-react';
 
 interface CockpitHeaderProps {
   onRefresh?: () => void;
   onToggleCustomize?: () => void;
   isCustomizing?: boolean;
+  onOpenChaosSimulator?: () => void;
 }
 
 export const CockpitHeader: React.FC<CockpitHeaderProps> = ({
   onRefresh,
   onToggleCustomize,
   isCustomizing = false,
+  onOpenChaosSimulator,
 }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [dateRange, setDateRange] = useState('Last 30 days');
@@ -97,6 +99,18 @@ export const CockpitHeader: React.FC<CockpitHeaderProps> = ({
           <SlidersHorizontal className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Customize</span>
         </button>
+
+        {/* Chaos Simulator Trigger */}
+        {onOpenChaosSimulator && (
+          <button
+            onClick={onOpenChaosSimulator}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] bg-[#0A0A0A] hover:bg-[#141414] border border-[rgba(255,255,255,0.08)] hover:border-[#F5A524]/40 text-xs text-[#A1A1A1] hover:text-[#F5A524] font-mono-tech transition-colors cursor-pointer"
+            title="Simulate sudden telemetry spike"
+          >
+            <Zap className="w-3.5 h-3.5 text-[#F5A524]" />
+            <span className="hidden sm:inline">Simulate Spike</span>
+          </button>
+        )}
       </div>
     </div>
   );

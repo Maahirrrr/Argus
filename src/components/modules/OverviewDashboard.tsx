@@ -10,10 +10,16 @@ interface OverviewDashboardProps {
 
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   onNavigateTab,
+  onInvestigateSignal,
+  onOpenChaosSimulator,
 }) => {
   return (
     <div className="w-full select-none">
-      <CockpitGrid onNavigateTab={onNavigateTab} />
+      <CockpitGrid
+        onNavigateTab={onNavigateTab}
+        onInvestigateSignal={onInvestigateSignal}
+        onOpenChaosSimulator={onOpenChaosSimulator}
+      />
     </div>
   );
 };

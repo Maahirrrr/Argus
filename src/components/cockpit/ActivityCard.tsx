@@ -1,13 +1,18 @@
 import React from 'react';
 import { Activity, GitBranch, FileText, FlaskConical, Lightbulb } from 'lucide-react';
+import type { NavigationTab } from '../../types/argus';
 
-export const ActivityCard: React.FC = () => {
-  const activities = [
-    { time: '08:42', title: 'Payment anomaly signal flagged', author: 'ARGUS Sentry', icon: Activity },
-    { time: '08:37', title: 'Opportunity #014 prioritized to High', author: 'Mahir K.', icon: Lightbulb },
-    { time: '08:32', title: 'PRD Studio generated spec v2.1', author: 'AI Copilot', icon: FileText },
-    { time: '08:18', title: 'Circuit breaker experiment deployed', author: 'Arjun S.', icon: FlaskConical },
-    { time: '07:55', title: 'ClickHouse migration ADR-041 signed off', author: 'Team', icon: GitBranch },
+interface ActivityCardProps {
+  onNavigateTab?: (tab: NavigationTab) => void;
+}
+
+export const ActivityCard: React.FC<ActivityCardProps> = ({ onNavigateTab }) => {
+  const activities: { time: string; title: string; author: string; icon: React.FC<{ className?: string }>; tab: NavigationTab }[] = [
+    { time: '08:42', title: 'Payment anomaly signal flagged', author: 'ARGUS Sentry', icon: Activity, tab: 'signals' },
+    { time: '08:37', title: 'Opportunity #014 prioritized to High', author: 'Mahir K.', icon: Lightbulb, tab: 'opportunities' },
+    { time: '08:32', title: 'PRD Studio generated spec v2.1', author: 'AI Copilot', icon: FileText, tab: 'prds' },
+    { time: '08:18', title: 'Circuit breaker experiment deployed', author: 'Arjun S.', icon: FlaskConical, tab: 'experiments' },
+    { time: '07:55', title: 'ClickHouse migration ADR-041 signed off', author: 'Team', icon: GitBranch, tab: 'decisions' },
   ];
 
   return (
@@ -24,7 +29,8 @@ export const ActivityCard: React.FC = () => {
             return (
               <div
                 key={act.time + act.title}
-                className="flex items-center justify-between p-1.5 rounded-[4px] hover:bg-[#121212] transition-colors"
+                onClick={() => onNavigateTab && onNavigateTab(act.tab)}
+                className="flex items-center justify-between p-1.5 rounded-[4px] hover:bg-[#121212] transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2 truncate">
                   <span className="text-[10px] font-mono-tech text-[#666666]">{act.time}</span>

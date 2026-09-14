@@ -13,9 +13,15 @@ import type { NavigationTab } from '../../types/argus';
 
 interface CockpitGridProps {
   onNavigateTab: (tab: NavigationTab) => void;
+  onInvestigateSignal?: (signalId: string) => void;
+  onOpenChaosSimulator?: () => void;
 }
 
-export const CockpitGrid: React.FC<CockpitGridProps> = ({ onNavigateTab }) => {
+export const CockpitGrid: React.FC<CockpitGridProps> = ({
+  onNavigateTab,
+  onInvestigateSignal,
+  onOpenChaosSimulator,
+}) => {
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [drawerData, setDrawerData] = useState<{
     isOpen: boolean;
@@ -43,6 +49,7 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({ onNavigateTab }) => {
         onRefresh={() => {}}
         onToggleCustomize={() => setIsCustomizing(!isCustomizing)}
         isCustomizing={isCustomizing}
+        onOpenChaosSimulator={onOpenChaosSimulator}
       />
 
       {/* 2. Row 1: High-Density Metric Cards */}
@@ -82,7 +89,13 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({ onNavigateTab }) => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         <div className="lg:col-span-4">
           <SignalCard
-            onOpenSignal={(id) => handleOpenDrawer(`Signal ${id} Telemetry`, 'Surge in transaction failover during evening peak.', 'signals')}
+            onOpenSignal={(id) => {
+              if (onInvestigateSignal) {
+                onInvestigateSignal(id);
+              } else {
+                handleOpenDrawer(`Signal ${id} Telemetry`, 'Surge in transaction failover during evening peak.', 'signals');
+              }
+            }}
             onNavigateTab={() => onNavigateTab('signals')}
           />
         </div>
@@ -109,12 +122,15 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({ onNavigateTab }) => {
         </div>
 
         <div className="lg:col-span-6">
-          <ActivityCard />
+          <ActivityCard onNavigateTab={onNavigateTab} />
         </div>
       </div>
 
       {/* 6. Row 5: Product Health Breakdown */}
-      <div className="w-full">
+      <div
+        className="w-full cursor-pointer"
+        onClick={() => handleOpenDrawer('Product Health Deep-Dive', 'Comprehensive telemetry analysis across 4 critical pillars.', 'analytics')}
+      >
         <ProductHealthCard />
       </div>
 

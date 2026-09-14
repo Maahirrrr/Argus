@@ -39,7 +39,8 @@ import { SignalsModule } from './components/modules/SignalsModule';
 import { InsightsModule } from './components/modules/InsightsModule';
 
 export default function App() {
-  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
+  const [isBootingCockpit, setIsBootingCockpit] = useState<boolean>(false);
+  const [pendingCockpitTab, setPendingCockpitTab] = useState<NavigationTab>('home');
 
   // Helper to detect browser reload / refresh
   const isPageReload = (): boolean => {
@@ -177,12 +178,20 @@ export default function App() {
   // 2. Centralized Navigation Handler with Clean URL Hash
   const navigateTo = (tab: NavigationTab, replace: boolean = false) => {
     if (tab === 'landing') {
+      setIsBootingCockpit(false);
       setIsLandingMode(true);
       setActiveTab('landing');
       if (window.location.hash !== '#' && window.location.hash !== '') {
         window.history.pushState({ tab: 'landing' }, '', window.location.pathname + '#');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // When toggling or navigating from the main webpage (landing mode) to the cockpit:
+    if (isLandingMode) {
+      setPendingCockpitTab(tab);
+      setIsBootingCockpit(true);
       return;
     }
 
@@ -202,6 +211,20 @@ export default function App() {
       });
       setHistoryIndex((prev) => prev + 1);
     }
+  };
+
+  const handleBootComplete = () => {
+    setIsBootingCockpit(false);
+    setIsLandingMode(false);
+    setActiveTab(pendingCockpitTab);
+
+    const hashUrl = tabToHash(pendingCockpitTab);
+    window.history.pushState({ tab: pendingCockpitTab }, '', hashUrl);
+    setHistoryStack((prev) => {
+      const next = [...prev.slice(0, historyIndex + 1), pendingCockpitTab];
+      return next;
+    });
+    setHistoryIndex((prev) => prev + 1);
   };
 
   // 3. Browser Back / Forward (popstate & hashchange) Listener
@@ -378,14 +401,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-[#F5F5F0] flex flex-col font-sans selection:bg-[#0066FF] selection:text-white pb-20 md:pb-0">
-      {/* 1. Cinematic Loading Sequence */}
-      {!hasLoaded && <LoadingSequence onComplete={() => setHasLoaded(true)} />}
+      {/* 1. Cinematic Loading Sequence when toggling from main webpage to cockpit */}
+      {isBootingCockpit && <LoadingSequence onComplete={handleBootComplete} />}
 
       {/* 2. Global Texture Noise */}
       <div className="argus-noise" aria-hidden="true" />
 
       {/* 3. First Decision Flywheel Guided Checklist */}
-      {showGuidedLoop && !isLandingMode && hasLoaded && (
+      {showGuidedLoop && !isLandingMode && !isBootingCockpit && (
         <GuidedProductLoop
           onNavigateTab={(t) => navigateTo(t)}
           onDismiss={() => {

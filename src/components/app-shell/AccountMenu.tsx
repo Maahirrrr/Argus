@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { User, Settings, Keyboard, HelpCircle, LogOut } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
+import { useAuth } from '../../context/AuthContext';
 
 interface AccountMenuProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -12,9 +13,12 @@ interface AccountMenuProps {
 export const AccountMenu: React.FC<AccountMenuProps> = ({
   onNavigateTab,
   onOpenShortcuts,
-  userName = 'Mahir Kadia',
-  userEmail = 'maahir@argus.ai',
+  userName: propUserName,
+  userEmail: propUserEmail,
 }) => {
+  const { profile, signOut } = useAuth();
+  const userName = propUserName || profile?.display_name || 'Mahir Kadia';
+  const userEmail = propUserEmail || profile?.email || 'maahir@argus.ai';
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -96,8 +100,9 @@ export const AccountMenu: React.FC<AccountMenuProps> = ({
 
           <div className="mt-1 pt-1 border-t border-[rgba(255,255,255,0.08)]">
             <button
-              onClick={() => {
+              onClick={async () => {
                 setIsOpen(false);
+                await signOut();
                 onNavigateTab('landing');
               }}
               className="w-full flex items-center gap-2 px-2 py-1.5 text-xs text-[#E5484D] hover:bg-[#EF4444]/10 rounded-[4px] transition-colors text-left cursor-pointer"
