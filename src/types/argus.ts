@@ -13,6 +13,7 @@ export type NavigationTab =
   | 'opportunities'
   | 'prioritize'
   | 'roadmap'
+  | 'sprints'
   | 'prds'
   | 'prototypes'
   | 'ai_lab'
@@ -390,10 +391,57 @@ export interface DecisionRecord {
   signoffs?: string[];
 }
 
+export interface SprintIssue {
+  id: string; // e.g. ARG-101
+  title: string;
+  description: string;
+  type: 'story' | 'bug' | 'task' | 'epic';
+  status: 'backlog' | 'todo' | 'in_progress' | 'in_review' | 'done';
+  priority: 'P0' | 'P1' | 'P2' | 'P3';
+  points: number; // 1, 2, 3, 5, 8, 13
+  assignee: {
+    name: string;
+    avatar: string;
+    role: string;
+  };
+  epicId?: string;
+  epicTitle?: string;
+  sprint: string; // e.g. "Sprint 42 (Active)", "Sprint 43 (Planning)", "Backlog"
+  acceptanceCriteria: {
+    id: string;
+    text: string;
+    completed: boolean;
+  }[];
+  prUrl?: string;
+  linkedPrdId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Sprint {
+  id: string;
+  name: string;
+  goal: string;
+  startDate: string;
+  endDate: string;
+  status: 'active' | 'planning' | 'completed';
+  totalPoints: number;
+  completedPoints: number;
+}
+
+export interface DocumentSection {
+  id: string;
+  title: string;
+  type?: 'prose' | 'callout' | 'table' | 'checklist' | 'code' | 'quote';
+  content: string;
+  items?: { id: string; text: string; done?: boolean }[];
+  codeLanguage?: string;
+}
+
 export interface DocumentItem {
   id: string;
   title: string;
-  category?: 'PRD' | 'Strategy' | 'User Research' | 'Meeting' | 'Launch Playbook' | string;
+  category?: 'PRD' | 'Strategy' | 'User Research' | 'Meeting' | 'Launch Playbook' | 'Post-Mortem' | 'PM Framework' | string;
   type?: string;
   author: string;
   lastEdited?: string;
@@ -403,6 +451,11 @@ export interface DocumentItem {
   readTime?: string;
   excerpt?: string;
   content?: string;
+  status?: 'Draft' | 'In Review' | 'Approved' | 'Archived';
+  targetSprint?: string;
+  templateType?: 'amazon_prfaq' | 'stripe_prd' | 'strategy_1pager' | 'customer_discovery' | 'incident_postmortem' | 'pm_framework' | 'custom';
+  tableOfContents?: { id: string; title: string; level: number }[];
+  sections?: DocumentSection[];
 }
 
 export interface WorkspaceConfig {

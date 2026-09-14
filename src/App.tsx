@@ -38,6 +38,7 @@ import { DocumentHub } from './components/modules/DocumentHub';
 import { SettingsPage } from './components/modules/SettingsPage';
 import { SignalsModule } from './components/modules/SignalsModule';
 import { InsightsModule } from './components/modules/InsightsModule';
+import { SprintBacklogModule } from './components/modules/SprintBacklogModule';
 
 export default function App() {
   const [isBootingCockpit, setIsBootingCockpit] = useState<boolean>(false);
@@ -77,7 +78,7 @@ export default function App() {
     if (clean === 'radar') return 'intelligence';
     const validTabs: NavigationTab[] = [
       'home', 'inbox', 'customers', 'research', 'intelligence', 'signals', 'chaos', 'insights',
-      'opportunities', 'prioritize', 'roadmap', 'prds', 'prototypes', 'ai_lab',
+      'opportunities', 'prioritize', 'roadmap', 'sprints', 'prds', 'prototypes', 'ai_lab',
       'experiments', 'analytics', 'ai_copilot', 'launch', 'decisions', 'documents', 'settings'
     ];
     return validTabs.includes(clean as NavigationTab) ? (clean as NavigationTab) : 'landing';
@@ -147,7 +148,7 @@ export default function App() {
 
   const [enabledModules, setEnabledModules] = useState<NavigationTab[]>([
     'home', 'inbox', 'customers', 'research', 'intelligence',
-    'opportunities', 'prioritize', 'roadmap', 'prds', 'prototypes',
+    'opportunities', 'prioritize', 'roadmap', 'sprints', 'prds', 'prototypes',
     'ai_lab', 'experiments', 'analytics', 'launch', 'decisions', 'documents', 'settings'
   ]);
 
@@ -550,6 +551,13 @@ export default function App() {
             )}
 
             {/* BUILD GROUP */}
+            {activeTab === 'sprints' && (
+              <SprintBacklogModule
+                onNavigateTab={(t) => navigateTo(t)}
+                onShowToast={showToast}
+              />
+            )}
+
             {activeTab === 'prds' && (
               <PrdWorkspace
                 onNavigateTab={(t) => navigateTo(t)}

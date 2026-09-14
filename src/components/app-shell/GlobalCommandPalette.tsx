@@ -50,11 +50,15 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
     { category: 'Navigate', label: 'Telemetry Copilot', detail: 'ClickHouse SQL studio & horizontal conversion funnel', tab: 'analytics', icon: BarChart3 },
 
     // Secondary Views
+    { category: 'Navigate', label: 'Sprint Execution & Backlog', detail: 'Jira & Linear Kanban board, points estimation, and backlog', tab: 'sprints', icon: LayoutDashboard },
+    { category: 'Navigate', label: 'Product Knowledge & Spec Studio', detail: 'Notion & Coda workspace: PRDs, strategy memos & PM frameworks', tab: 'documents', icon: FileText },
     { category: 'Navigate', label: 'Opportunities Tree', detail: 'Strategic bets and discovery backlog', tab: 'opportunities', icon: Lightbulb },
     { category: 'Navigate', label: 'Customer Feedback Clusters', detail: 'Voice of customer and sentiment clusters', tab: 'feedback', icon: MessageSquare },
     { category: 'Navigate', label: 'Decisions Log', detail: 'Architectural and product consensus records', tab: 'decisions', icon: GitBranch },
 
     // Actions
+    { category: 'Create', label: 'New Sprint Issue', detail: 'Create engineering ticket in active sprint', tab: 'sprints', icon: Plus },
+    { category: 'Create', label: 'New Document from Template', detail: 'Amazon PR/FAQ, Stripe PRD, or Strategy memo', tab: 'documents', icon: Plus },
     { category: 'Create', label: 'New RICE Initiative', detail: 'Create product candidate for prioritization', tab: 'prioritize', icon: Plus },
     { category: 'Create', label: 'Draft PRD Spec', detail: 'Initialize AI-assisted specification', tab: 'prds', icon: Plus },
     { category: 'Create', label: 'Inject Chaos Simulation', detail: 'Test switch failure and failover resilience', tab: 'chaos', icon: Plus },

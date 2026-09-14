@@ -16,6 +16,8 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
+  Columns,
+  BookOpen,
 } from 'lucide-react';
 import { WorkspaceSelector } from './WorkspaceSelector';
 import { SidebarItem } from './SidebarItem';
@@ -74,7 +76,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       label: 'Build',
       items: [
+        { id: 'sprints', label: 'Sprints', icon: Columns, badge: 6 },
         { id: 'prds', label: 'PRD Studio', icon: FileText },
+        { id: 'documents', label: 'Specs & Docs', icon: BookOpen },
         { id: 'decisions', label: 'Decisions', icon: CheckSquare },
       ],
     },

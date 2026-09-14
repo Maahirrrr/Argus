@@ -3,7 +3,8 @@ import {
   FlaskConical,
   GitCompare,
   MessageSquare,
-  AlertCircle
+  AlertCircle,
+  Columns,
 } from 'lucide-react';
 import type { NavigationTab, PRDDocument } from '../../types/argus';
 import { DEMO_PRD } from '../../data/demoData';
@@ -132,7 +133,17 @@ Criteria: ${us.acceptanceCriteria.join(', ')}`).join('\n\n')}
               {copied ? 'Copied' : 'Copy MD'}
             </button>
 
-            {/* 3. Deploy Experiment (primary blue) */}
+            {/* 3. Export to Sprints (Jira/Linear) */}
+            <button
+              onClick={() => onNavigateTab('sprints')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] border border-[#2A2A2A] text-xs font-sans text-[#8A8A8A] hover:text-[#FFFFFF] hover:border-[#3A3A3A] bg-transparent transition-colors cursor-pointer"
+              title="Convert PRD requirements into Jira/Linear sprint tickets"
+            >
+              <Columns className="w-3.5 h-3.5 text-[#0066FF]" />
+              <span>Export to Sprints</span>
+            </button>
+
+            {/* 4. Deploy Experiment (primary blue) */}
             <button
               onClick={() => {
                 if (onDeployExperiment) onDeployExperiment();
