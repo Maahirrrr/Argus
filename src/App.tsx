@@ -11,6 +11,7 @@ import { KeyboardShortcutsModal } from './components/layout/KeyboardShortcutsMod
 import { CaseStudyModal } from './components/layout/CaseStudyModal';
 import { TutorialModal } from './components/layout/TutorialModal';
 import { ChaosSimulatorModal } from './components/modules/ChaosSimulatorModal';
+import { ChaosLab } from './components/modules/ChaosLab';
 import { OnboardingModal } from './components/layout/OnboardingModal';
 import { GuidedProductLoop } from './components/layout/GuidedProductLoop';
 import { HelpCenterModal } from './components/layout/HelpCenterModal';
@@ -59,6 +60,7 @@ export default function App() {
   const tabToHash = (tab: NavigationTab): string => {
     if (tab === 'landing') return '#';
     if (tab === 'home' || tab === 'overview') return '#/cockpit';
+    if (tab === 'chaos') return '#/chaos';
     if (tab === 'ai_lab') return '#/ai-lab';
     if (tab === 'ai_copilot') return '#/copilot';
     return `#/${tab}`;
@@ -70,10 +72,11 @@ export default function App() {
     if (clean === 'ai-lab' || clean === 'ai_lab') return 'ai_lab';
     if (clean === 'copilot' || clean === 'ai_copilot') return 'ai_copilot';
     if (clean === 'cockpit' || clean === 'home' || clean === 'overview') return 'home';
+    if (clean === 'chaos') return 'chaos';
     if (clean === 'feedback' || clean === 'customers') return 'customers';
     if (clean === 'radar') return 'intelligence';
     const validTabs: NavigationTab[] = [
-      'home', 'inbox', 'customers', 'research', 'intelligence', 'signals', 'insights',
+      'home', 'inbox', 'customers', 'research', 'intelligence', 'signals', 'chaos', 'insights',
       'opportunities', 'prioritize', 'roadmap', 'prds', 'prototypes', 'ai_lab',
       'experiments', 'analytics', 'ai_copilot', 'launch', 'decisions', 'documents', 'settings'
     ];
@@ -500,6 +503,13 @@ export default function App() {
                   onShowToast={showToast}
                 />
               </PageTransition>
+            )}
+
+            {activeTab === 'chaos' && (
+              <ChaosLab
+                onNavigateTab={(t) => navigateTo(t)}
+                onShowToast={showToast}
+              />
             )}
 
             {activeTab === 'signals' && (

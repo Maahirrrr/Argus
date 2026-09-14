@@ -1,99 +1,220 @@
-/* ───── ARGUS VERCEL-INSPIRED DESIGN TOKENS ───── */
+/* ───── ARGUS FINTECH PM OPERATING SYSTEM TOKENS ───── */
 :root {
-  --argus-bg: #000000;
-  --argus-shell: #050505;
-  --argus-sidebar: #050505;
-  --argus-surface: #080808;
-  --argus-surface-elevated: #0A0A0A;
-  --argus-surface-hover: #0F0F0F;
-  --argus-surface-active: #141414;
+  /* Surface & Base Tokens */
+  --argus-bg-base: #050505;
+  --argus-surface: #0A0A0A;
+  --argus-surface-elevated: #111111;
+  --argus-border: #1A1A1A;
+  --argus-border-subtle: #1A1A1A;
+  --argus-border-hover: rgba(255, 255, 255, 0.16);
 
-  --argus-border: rgba(255, 255, 255, 0.08);
-  --argus-border-strong: rgba(255, 255, 255, 0.13);
-  --argus-border-hover: rgba(255, 255, 255, 0.14);
-  --argus-border-active: rgba(0, 112, 243, 0.45);
+  /* Primary Brand & Actions */
+  --argus-primary: #0066FF;
+  --argus-primary-hover: #003DBF;
+  --argus-primary-subtle: rgba(0, 102, 255, 0.12);
 
-  --argus-text: #EDEDED;
-  --argus-text-secondary: #A1A1A1;
-  --argus-text-muted: #666666;
-  --argus-text-dim: #404040;
+  /* Operational Signals */
+  --argus-signal-positive: #00FF88;
+  --argus-signal-negative: #FF3B30;
+  --argus-signal-warning: #F59E0B;
 
-  --argus-blue: #0070F3;
-  --argus-blue-hover: #0060DF;
-  --argus-blue-subtle: rgba(0, 112, 243, 0.1);
+  /* Typography Colors */
+  --argus-text-primary: #FFFFFF;
+  --argus-text-secondary: #6B7280;
+  --argus-text-muted: #9CA3AF;
+  --argus-text-body: #D1D5DB;
 
-  --argus-success: #46A758;
-  --argus-warning: #F5A524;
-  --argus-error: #E5484D;
-  --argus-info: #0091FF;
+  /* Terminal & Code */
+  --argus-bg-terminal: #0D1117;
 
-  --argus-radius-xs: 4px;
-  --argus-radius-sm: 6px;
-  --argus-radius-md: 8px;
-  --argus-radius-lg: 10px;
-
-  --argus-duration-fast: 120ms;
-  --argus-duration-normal: 180ms;
-  --argus-duration-slow: 260ms;
-  --argus-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Strict Dimensions */
+  --argus-sidebar-width: 240px;
+  --argus-sidebar-collapsed-width: 48px;
+  --argus-topbar-height: 48px;
 }
 
-/* Card Surface Utilities */
+/* ───── Typography Hierarchy Utilities ───── */
+.argus-module-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #FFFFFF;
+}
+
+.argus-section-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6B7280;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.argus-data-lg {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 700;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+}
+
+@media (min-width: 768px) {
+  .argus-data-lg {
+    font-size: 32px;
+  }
+}
+
+.argus-data-sm {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  color: #9CA3AF;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+}
+
+.argus-prose {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #D1D5DB;
+  max-width: 68ch;
+}
+
+.argus-code-box {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  background-color: #0D1117;
+  border: 1px solid #1A1A1A;
+  color: #E6EDF3;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+}
+
+/* ───── Surface & Card Utilities (Zero Hover Scale) ───── */
 .argus-card {
-  background-color: #080808;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-  transition: border-color var(--argus-duration-normal) var(--argus-ease),
-              background-color var(--argus-duration-normal) var(--argus-ease);
+  background-color: #0A0A0A;
+  border: 1px solid #1A1A1A;
+  border-radius: 6px;
+  transition: border-color 150ms ease-out, background-color 150ms ease-out;
 }
 
 .argus-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
-  background-color: #0A0A0A;
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
-.argus-card-active {
-  border-color: rgba(0, 112, 243, 0.45);
+.argus-card-compact {
+  padding: 16px;
 }
 
-/* Button Utilities */
+.argus-card-interactive {
+  padding: 20px;
+}
+
+/* ───── Button Utilities ───── */
 .argus-btn-primary {
-  background-color: #EDEDED;
-  color: #000000;
+  background-color: #0066FF;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
   font-weight: 500;
-  border-radius: 6px;
-  padding: 6px 12px;
   font-size: 13px;
-  transition: background-color var(--argus-duration-fast) var(--argus-ease),
-              transform var(--argus-duration-fast) var(--argus-ease);
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: background-color 120ms ease-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
 }
-.argus-btn-primary:hover {
-  background-color: #FFFFFF;
+
+.argus-btn-primary:hover:not(:disabled) {
+  background-color: #003DBF;
 }
-.argus-btn-primary:active {
-  transform: translateY(1px);
+
+.argus-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .argus-btn-secondary {
   background-color: transparent;
-  color: #EDEDED;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
-  padding: 6px 12px;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
   font-size: 13px;
-  transition: border-color var(--argus-duration-fast) var(--argus-ease),
-              background-color var(--argus-duration-fast) var(--argus-ease);
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid #1A1A1A;
+  transition: border-color 120ms ease-out, background-color 120ms ease-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
 }
-.argus-btn-secondary:hover {
+
+.argus-btn-secondary:hover:not(:disabled) {
   border-color: rgba(255, 255, 255, 0.22);
   background-color: rgba(255, 255, 255, 0.04);
 }
 
-/* Status Indicator Dot */
+.argus-btn-secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ───── Operational Status Indicator Dot ───── */
 .argus-status-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   display: inline-block;
+  flex-shrink: 0;
+}
+
+.argus-status-dot-pulse {
+  animation: argus-dot-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes argus-dot-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(0, 255, 136, 0);
+  }
+}
+
+.argus-status-dot-pulse-warning {
+  animation: argus-dot-pulse-warn 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes argus-dot-pulse-warn {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0);
+  }
+}
+
+.argus-status-dot-pulse-danger {
+  animation: argus-dot-pulse-danger 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes argus-dot-pulse-danger {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(255, 59, 48, 0);
+  }
+}
+
+/* ───── Positional Layout Transition for RICE items ───── */
+.argus-rank-item {
+  transition: transform 150ms ease-out, background-color 150ms ease-out;
 }

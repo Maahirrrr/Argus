@@ -1,32 +1,18 @@
 import React from 'react';
 import {
   LayoutDashboard,
-  CalendarDays,
-  Inbox,
-  Users,
-  MessageSquare,
-  Search as SearchIcon,
-  Radar,
-  Lightbulb,
-  Target,
-  Map,
+  Activity,
+  Zap,
+  Scale,
   FileText,
-  PanelsTopLeft,
   FlaskConical,
-  BarChart3,
-  Rocket,
-  TrendingUp,
-  Video,
-  Files,
-  GitBranch,
-  Cpu,
+  Terminal,
   Settings,
-  HelpCircle,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Command
 } from 'lucide-react';
 import { ArgusLogo } from '../ui/ArgusLogo';
-import { WorkspaceSelector } from './WorkspaceSelector';
 import { SidebarItem } from './SidebarItem';
 import type { NavigationTab } from '../../types/argus';
 
@@ -38,17 +24,6 @@ interface SidebarProps {
   onOpenCommandPalette: () => void;
 }
 
-interface NavGroup {
-  label: string;
-  items: {
-    id: NavigationTab;
-    label: string;
-    icon: React.FC<{ className?: string }>;
-    badge?: number | string;
-    badgeColor?: string;
-  }[];
-}
-
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onNavigateTab,
@@ -56,74 +31,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse,
   onOpenCommandPalette,
 }) => {
-  const groups: NavGroup[] = [
-    {
-      label: 'COCKPIT',
-      items: [
-        { id: 'home', label: 'Home', icon: LayoutDashboard },
-        { id: 'signals', label: 'Today', icon: CalendarDays, badge: 'NEW', badgeColor: 'bg-[#0066FF]' },
-      ],
-    },
-    {
-      label: 'DISCOVER',
-      items: [
-        { id: 'inbox', label: 'Inbox', icon: Inbox, badge: 4, badgeColor: 'bg-[#1D1D1D]' },
-        { id: 'customers', label: 'Customers', icon: Users },
-        { id: 'feedback', label: 'Feedback', icon: MessageSquare },
-        { id: 'research', label: 'Research', icon: SearchIcon },
-        { id: 'intelligence', label: 'Intelligence', icon: Radar },
-      ],
-    },
-    {
-      label: 'DECIDE',
-      items: [
-        { id: 'opportunities', label: 'Opportunities', icon: Lightbulb, badge: 19, badgeColor: 'bg-[#10B981]' },
-        { id: 'prioritize', label: 'Prioritization', icon: Target },
-        { id: 'roadmap', label: 'Roadmap', icon: Map },
-      ],
-    },
-    {
-      label: 'BUILD',
-      items: [
-        { id: 'prds', label: 'PRDs', icon: FileText },
-        { id: 'prototypes', label: 'Specs', icon: PanelsTopLeft },
-        { id: 'experiments', label: 'Experiments', icon: FlaskConical },
-      ],
-    },
-    {
-      label: 'MEASURE',
-      items: [
-        { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-        { id: 'launch', label: 'Launch', icon: Rocket },
-        { id: 'ai_copilot', label: 'Outcomes', icon: TrendingUp },
-      ],
-    },
-    {
-      label: 'WORKSPACE',
-      items: [
-        { id: 'data_sources', label: 'Meetings', icon: Video },
-        { id: 'documents', label: 'Documents', icon: Files },
-        { id: 'decisions', label: 'Decisions', icon: GitBranch },
-        { id: 'settings', label: 'Team', icon: Settings },
-      ],
-    },
-    {
-      label: 'AI',
-      items: [
-        { id: 'ai_lab', label: 'AI Lab', icon: Cpu },
-      ],
-    },
+  // The 7 Core Operational Modules specified for Fintech Product Management
+  const coreModules = [
+    { id: 'home' as NavigationTab, label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'signals' as NavigationTab, label: 'Anomaly Sentry', icon: Activity, badge: 'LIVE', badgeColor: 'bg-[#FF3B30]/20 text-[#FF3B30] border border-[#FF3B30]/30' },
+    { id: 'chaos' as NavigationTab, label: 'Chaos Lab', icon: Zap },
+    { id: 'prioritize' as NavigationTab, label: 'RICE Workbench', icon: Scale },
+    { id: 'prds' as NavigationTab, label: 'PRD Studio', icon: FileText },
+    { id: 'experiments' as NavigationTab, label: 'Experiment Lab', icon: FlaskConical },
+    { id: 'analytics' as NavigationTab, label: 'Telemetry Copilot', icon: Terminal },
   ];
 
   return (
     <aside
-      className={`h-screen hidden md:flex flex-col flex-shrink-0 justify-between bg-[#050505] border-r border-[rgba(255,255,255,0.08)] transition-all duration-200 select-none z-30 ${
-        isCollapsed ? 'w-16' : 'w-[248px]'
+      className={`h-screen hidden md:flex flex-col flex-shrink-0 justify-between bg-[#0A0A0A] border-r border-[#1A1A1A] transition-[width] duration-200 ease-out select-none z-30 ${
+        isCollapsed ? 'w-[48px]' : 'w-[240px]'
       }`}
     >
-      {/* 1. Header: Monogram Logo & Workspace Selector */}
-      <div className="p-3 border-b border-[rgba(255,255,255,0.08)] space-y-2.5">
-        <div className="flex items-center justify-between">
+      {/* 1. Brand Header */}
+      <div>
+        <div className="h-[48px] px-3 border-b border-[#1A1A1A] flex items-center justify-between">
           <div
             onClick={() => onNavigateTab('home')}
             className="flex items-center gap-2 cursor-pointer no-underline text-inherit group"
@@ -133,8 +60,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <button
             onClick={onToggleCollapse}
-            className="p-1 text-[#666666] hover:text-[#EDEDED] rounded-[4px] hover:bg-[#121212] transition-colors cursor-pointer"
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className="p-1 text-[#6B7280] hover:text-[#FFFFFF] rounded hover:bg-[#111111] transition-colors cursor-pointer"
+            title={isCollapsed ? 'Expand sidebar (240px)' : 'Collapse sidebar (48px)'}
           >
             {isCollapsed ? (
               <PanelLeftOpen className="w-3.5 h-3.5" />
@@ -144,70 +71,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* Workspace Selector */}
-        <WorkspaceSelector isCollapsed={isCollapsed} />
+        {/* 2. Primary Navigation - 7 Core Modules */}
+        <nav className="py-3 space-y-0.5">
+          {!isCollapsed && (
+            <div className="px-3 pb-2 text-[11px] font-medium text-[#6B7280] font-sans">
+              Operational Modules
+            </div>
+          )}
+          {coreModules.map((item) => {
+            const isActive =
+              activeTab === item.id ||
+              (item.id === 'home' && activeTab === 'overview');
+            return (
+              <SidebarItem
+                key={item.id}
+                id={item.id}
+                label={item.label}
+                icon={item.icon}
+                isActive={isActive}
+                isCollapsed={isCollapsed}
+                badge={item.badge}
+                badgeColor={item.badgeColor}
+                onClick={() => onNavigateTab(item.id)}
+              />
+            );
+          })}
+        </nav>
+      </div>
 
-        {/* Compact Search Trigger (⌘K) */}
+      {/* 3. Footer: Command Palette Trigger & Settings */}
+      <div className="p-2 border-t border-[#1A1A1A] space-y-1">
         {!isCollapsed ? (
           <button
             onClick={onOpenCommandPalette}
-            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[6px] bg-[#0A0A0A] hover:bg-[#121212] border border-[rgba(255,255,255,0.08)] text-xs text-[#666666] hover:text-[#EDEDED] transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded bg-[#111111] hover:bg-[#161616] border border-[#1A1A1A] text-xs text-[#6B7280] hover:text-[#FFFFFF] transition-colors cursor-pointer"
           >
-            <div className="flex items-center gap-2">
-              <SearchIcon className="w-3.5 h-3.5" />
-              <span className="text-[12px]">Search</span>
-            </div>
-            <kbd className="px-1.5 py-0.5 rounded-[3px] bg-[#141414] border border-[#222222] text-[10px] font-mono-tech text-[#8A8A8A]">
+            <span className="text-[12px] font-sans">Quick search</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-[#0A0A0A] border border-[#1A1A1A] text-[10px] font-mono text-[#9CA3AF]">
               ⌘K
             </kbd>
           </button>
         ) : (
-          <div className="flex justify-center">
-            <button
-              onClick={onOpenCommandPalette}
-              className="p-1.5 text-[#666666] hover:text-[#EDEDED] hover:bg-[#121212] rounded-[4px] transition-colors cursor-pointer"
-              title="Search (⌘K)"
-            >
-              <SearchIcon className="w-4 h-4" />
-            </button>
-          </div>
+          <button
+            onClick={onOpenCommandPalette}
+            className="w-full flex justify-center p-2 text-[#6B7280] hover:text-[#FFFFFF] rounded hover:bg-[#111111] transition-colors cursor-pointer"
+            title="Search (⌘K)"
+          >
+            <Command className="w-4 h-4" />
+          </button>
         )}
-      </div>
 
-      {/* 2. Navigation List */}
-      <div className="flex-1 overflow-y-auto px-2 py-2 space-y-4 scrollbar-none">
-        {groups.map((g) => (
-          <div key={g.label} className="space-y-0.5">
-            {!isCollapsed && (
-              <div className="px-2.5 py-1 text-[10px] font-mono-tech uppercase tracking-wider text-[#666666] font-semibold">
-                {g.label}
-              </div>
-            )}
-            {g.items.map((item) => {
-              const isActive =
-                activeTab === item.id ||
-                (item.id === 'home' && activeTab === 'overview') ||
-                (item.id === 'customers' && activeTab === 'feedback');
-              return (
-                <SidebarItem
-                  key={item.id}
-                  id={item.id}
-                  label={item.label}
-                  icon={item.icon}
-                  isActive={isActive}
-                  isCollapsed={isCollapsed}
-                  badge={item.badge}
-                  badgeColor={item.badgeColor}
-                  onClick={() => onNavigateTab(item.id)}
-                />
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* 3. Footer: Help, Settings, & Account */}
-      <div className="p-2 border-t border-[rgba(255,255,255,0.08)] bg-[#050505] space-y-0.5">
         <SidebarItem
           id={'settings' as NavigationTab}
           label="Settings"
@@ -215,14 +128,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isActive={activeTab === 'settings'}
           isCollapsed={isCollapsed}
           onClick={() => onNavigateTab('settings')}
-        />
-        <SidebarItem
-          id={'data_sources' as NavigationTab}
-          label="Help & Docs"
-          icon={HelpCircle}
-          isActive={false}
-          isCollapsed={isCollapsed}
-          onClick={() => window.open('https://github.com/Maahirrrr/Argus', '_blank')}
         />
       </div>
     </aside>

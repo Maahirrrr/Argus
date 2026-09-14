@@ -4,6 +4,7 @@ export type NavigationTab =
   | 'home'
   | 'inbox'
   | 'signals'
+  | 'chaos'
   | 'insights'
   | 'customers'
   | 'feedback'

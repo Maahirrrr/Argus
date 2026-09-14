@@ -43,8 +43,8 @@ export const AppShell: React.FC<AppShellProps> = ({
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#000000] text-[#EDEDED] overflow-hidden select-none">
-      {/* 1. Left Sidebar */}
+    <div className="flex h-screen w-full bg-[#050505] text-[#FFFFFF] overflow-hidden select-none">
+      {/* 1. Persistent Left Sidebar (240px / 48px rail) */}
       <Sidebar
         activeTab={activeTab}
         onNavigateTab={onNavigateTab}
@@ -54,8 +54,8 @@ export const AppShell: React.FC<AppShellProps> = ({
       />
 
       {/* 2. Main Content Column */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        {/* TopBar */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-[#050505]">
+        {/* TopBar (strictly 48px) */}
         <TopBar
           activeTab={activeTab}
           onNavigateTab={onNavigateTab}
@@ -63,13 +63,15 @@ export const AppShell: React.FC<AppShellProps> = ({
           onOpenShortcuts={onOpenShortcuts}
         />
 
-        {/* Dynamic Page Workspace */}
-        <main className="flex-1 overflow-y-auto bg-[#000000] p-4 sm:p-6 lg:p-8 scrollbar-none pb-20 md:pb-8">
-          {children}
+        {/* Dynamic Tool Workspace: Left-aligned, max-width 1200px, 24px top / 32px side padding */}
+        <main className="flex-1 overflow-y-auto bg-[#050505] pt-6 px-4 sm:px-8 pb-20 md:pb-8">
+          <div className="max-w-[1200px] w-full mr-auto">
+            {children}
+          </div>
         </main>
       </div>
 
-      {/* 3. Global Command Palette */}
+      {/* 3. Global Command Palette (⌘K) */}
       <GlobalCommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}

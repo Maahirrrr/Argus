@@ -6,11 +6,8 @@ import {
   FileText,
   FlaskConical,
   LayoutDashboard,
-  Radar,
   Settings,
-  Layers,
   Terminal,
-  Users,
   MessageSquare,
   GitBranch,
   BarChart3,
@@ -42,32 +39,28 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const baseCommands: CommandItem[] = [
-    // Navigate
-    { category: 'Navigate', label: 'Cockpit Home', detail: 'Central command telemetry', tab: 'home', icon: LayoutDashboard },
-    { category: 'Navigate', label: "Today's Priorities", detail: 'Critical items and daily standup', tab: 'signals', icon: CalendarDays },
-    { category: 'Navigate', label: 'Opportunities Tree', detail: 'Backlog and conviction scoring', tab: 'opportunities', icon: Lightbulb },
-    { category: 'Navigate', label: 'PRDs & Specifications', detail: 'Product requirements documents', tab: 'prds', icon: FileText },
-    { category: 'Navigate', label: 'Intelligence Radar', detail: 'Cross-channel signal correlation', tab: 'intelligence', icon: Radar },
-    { category: 'Navigate', label: 'Customer Feedback', detail: 'Raw feedback and sentiment', tab: 'feedback', icon: MessageSquare },
-    { category: 'Navigate', label: 'Customer Personas', detail: 'Profiles and account cohorts', tab: 'customers', icon: Users },
-    { category: 'Navigate', label: 'Experiments Lab', detail: 'A/B hypothesis validation', tab: 'experiments', icon: FlaskConical },
-    { category: 'Navigate', label: 'Decisions Log', detail: 'Architectural and product choices', tab: 'decisions', icon: GitBranch },
-    { category: 'Navigate', label: 'Analytics Telemetry', detail: 'Pillar metrics & funnel health', tab: 'analytics', icon: BarChart3 },
+    const baseCommands: CommandItem[] = [
+    // 7 Core Operational Modules
+    { category: 'Navigate', label: 'Dashboard Overview', detail: 'Real-time KPIs, active incidents & pending decisions', tab: 'home', icon: LayoutDashboard },
+    { category: 'Navigate', label: 'Telemetry Anomaly Sentry', detail: '24h UPI SR sparkline & root cause attribution', tab: 'signals', icon: CalendarDays },
+    { category: 'Navigate', label: 'Chaos Failover Lab', detail: 'Scenario simulation, ticking GMV loss & dynamic routing', tab: 'chaos', icon: Terminal },
+    { category: 'Navigate', label: 'RICE Prioritization Workbench', detail: 'Live slider sensitivity & rank re-ordering', tab: 'prioritize', icon: Lightbulb },
+    { category: 'Navigate', label: 'PRD Studio', detail: 'Spec generator, adversarial critic & BDD test cases', tab: 'prds', icon: FileText },
+    { category: 'Navigate', label: 'Experiment Lab', detail: 'Causal inference, traffic split & health guardrails', tab: 'experiments', icon: FlaskConical },
+    { category: 'Navigate', label: 'Telemetry Copilot', detail: 'ClickHouse SQL studio & horizontal conversion funnel', tab: 'analytics', icon: BarChart3 },
 
-    // Create
-    { category: 'Create', label: 'New Opportunity', detail: 'Turn signals into product bets', tab: 'opportunities', icon: Plus },
+    // Secondary Views
+    { category: 'Navigate', label: 'Opportunities Tree', detail: 'Strategic bets and discovery backlog', tab: 'opportunities', icon: Lightbulb },
+    { category: 'Navigate', label: 'Customer Feedback Clusters', detail: 'Voice of customer and sentiment clusters', tab: 'feedback', icon: MessageSquare },
+    { category: 'Navigate', label: 'Decisions Log', detail: 'Architectural and product consensus records', tab: 'decisions', icon: GitBranch },
+
+    // Actions
+    { category: 'Create', label: 'New RICE Initiative', detail: 'Create product candidate for prioritization', tab: 'prioritize', icon: Plus },
     { category: 'Create', label: 'Draft PRD Spec', detail: 'Initialize AI-assisted specification', tab: 'prds', icon: Plus },
-    { category: 'Create', label: 'Log Incident Signal', detail: 'Inject manual anomaly into pipeline', tab: 'signals', icon: Plus },
-    { category: 'Create', label: 'Record Product Decision', detail: 'Document architectural consensus', tab: 'decisions', icon: Plus },
-
-    // AI Action
-    { category: 'AI Action', label: "Summarize This Week's Feedback", detail: 'Run cluster sentiment synthesis', tab: 'feedback', icon: Layers },
-    { category: 'AI Action', label: 'Show High-Impact Signals', detail: 'Filter anomalies > 85% conviction', tab: 'signals', icon: Layers },
-    { category: 'AI Action', label: 'Analyze Conversion Bottlenecks', detail: 'Deep funnel diagnostic', tab: 'analytics', icon: Terminal },
+    { category: 'Create', label: 'Inject Chaos Simulation', detail: 'Test switch failure and failover resilience', tab: 'chaos', icon: Plus },
 
     // Settings
-    { category: 'Settings', label: 'Workspace Configuration', detail: 'Team, API keys, integrations', tab: 'settings', icon: Settings },
+    { category: 'Settings', label: 'Workspace Settings', detail: 'Team, API keys, integrations', tab: 'settings', icon: Settings },
   ];
 
   const filtered = baseCommands.filter((a) =>
