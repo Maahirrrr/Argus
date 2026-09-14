@@ -1,5 +1,6 @@
 import React from 'react';
 import type { NavigationTab } from '../../types/argus';
+import { ArgusTooltip } from '../argus/ArgusTooltip';
 
 interface SidebarItemProps {
   id: NavigationTab;
@@ -21,21 +22,20 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   badgeColor,
   onClick,
 }) => {
-  return (
+  const buttonElement = (
     <button
       onClick={onClick}
-      title={isCollapsed ? label : undefined}
       className={`w-full flex items-center ${
         isCollapsed ? 'justify-center p-2' : 'justify-between px-2.5 py-1.5'
-      } rounded-[6px] text-xs font-mono-tech transition-all duration-150 cursor-pointer select-none relative group ${
+      } rounded-[6px] text-xs font-mono-tech transition-all duration-150 cursor-pointer select-none relative group border ${
         isActive
-          ? 'bg-[rgba(255,255,255,0.07)] text-[#FFFFFF] font-medium'
-          : 'text-[#8A8A8A] hover:text-[#EDEDED] hover:bg-[rgba(255,255,255,0.04)]'
+          ? 'bg-[rgba(255,255,255,0.07)] border-[rgba(255,255,255,0.10)] text-[#FFFFFF] font-medium shadow-sm'
+          : 'border-transparent text-[#8A8A8A] hover:text-[#EDEDED] hover:bg-[rgba(255,255,255,0.04)] hover:border-[rgba(255,255,255,0.06)]'
       }`}
     >
-      {/* Subtle blue active indicator bar on left */}
+      {/* ARGUS blue active indicator bar on left */}
       {isActive && !isCollapsed && (
-        <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[#0070F3] rounded-r" />
+        <span className="absolute left-0 top-1 bottom-1 w-[2px] bg-[#0066FF] rounded-r" />
       )}
 
       <div className="flex items-center gap-2.5 truncate">
@@ -58,4 +58,14 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
       )}
     </button>
   );
+
+  if (isCollapsed) {
+    return (
+      <ArgusTooltip content={label} position="right" delayMs={100}>
+        {buttonElement}
+      </ArgusTooltip>
+    );
+  }
+
+  return buttonElement;
 };

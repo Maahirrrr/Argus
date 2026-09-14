@@ -64,6 +64,12 @@ export const TopBar: React.FC<TopBarProps> = ({
             </div>
           )}
         </div>
+
+        {/* Honest Simulation State Pill */}
+        <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] bg-[#121212] border border-[rgba(255,255,255,0.08)] text-[9px] font-mono-tech text-[#F59E0B]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse" />
+          <span>SIMULATION MODE</span>
+        </div>
       </div>
 
       {/* Right: Quick Action, Search, Notifications, Account */}

@@ -16,7 +16,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ onNavigateTab }) => 
   ];
 
   return (
-    <div className="p-4 rounded-[8px] bg-[#080808] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.14)] hover:bg-[#0A0A0A] transition-all select-none flex flex-col justify-between">
+    <div className="p-4 rounded-[6px] bg-[#080808] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)] hover:bg-[#0C0C0C] transition-all duration-200 select-none flex flex-col justify-between group">
       <div>
         <div className="flex items-center justify-between pb-2 border-b border-[rgba(255,255,255,0.06)]">
           <span className="text-[13px] font-medium text-[#EDEDED]">Recent Activity</span>

@@ -7,13 +7,13 @@ interface RoadmapCardProps {
 
 export const RoadmapCard: React.FC<RoadmapCardProps> = ({ onNavigateTab }) => {
   const roadmapStages = [
-    { label: 'NOW', count: 3, title: 'Smart Failover Engine', color: 'bg-[#46A758]' },
-    { label: 'NEXT', count: 4, title: 'Aadhaar Face-RD Compliant Flow', color: 'bg-[#0070F3]' },
+    { label: 'NOW', count: 3, title: 'Smart Failover Engine', color: 'bg-[#10B981]' },
+    { label: 'NEXT', count: 4, title: 'Aadhaar Face-RD Compliant Flow', color: 'bg-[#0066FF]' },
     { label: 'LATER', count: 6, title: 'Autonomous PRD Synthesizer', color: 'bg-[#666666]' },
   ];
 
   return (
-    <div className="p-4 rounded-[8px] bg-[#080808] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.14)] hover:bg-[#0A0A0A] transition-all select-none flex flex-col justify-between">
+    <div className="p-4 rounded-[6px] bg-[#080808] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)] hover:bg-[#0C0C0C] transition-all duration-200 select-none flex flex-col justify-between group">
       <div>
         <div className="flex items-center justify-between pb-2 border-b border-[rgba(255,255,255,0.06)]">
           <div className="flex items-center gap-2">
@@ -43,10 +43,10 @@ export const RoadmapCard: React.FC<RoadmapCardProps> = ({ onNavigateTab }) => {
 
       <button
         onClick={onNavigateTab}
-        className="mt-3 pt-2 border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between text-xs text-[#A1A1A1] hover:text-[#EDEDED] transition-colors cursor-pointer"
+        className="mt-3 pt-2 border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between text-xs text-[#A1A1A1] hover:text-[#EDEDED] transition-colors cursor-pointer group/link"
       >
         <span>Open roadmap studio</span>
-        <ArrowRight className="w-3.5 h-3.5 text-[#0070F3]" />
+        <ArrowRight className="w-3.5 h-3.5 text-[#0066FF] group-hover/link:translate-x-0.5 transition-transform duration-150" />
       </button>
     </div>
   );

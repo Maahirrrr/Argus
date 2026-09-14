@@ -1,111 +1,161 @@
 import React from 'react';
-import { X, ExternalLink, ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArgusDrawer } from '../argus/ArgusDrawer';
+import { ArgusButton } from '../argus/ArgusButton';
+import { ArgusBadge } from '../argus/ArgusBadge';
 import type { NavigationTab } from '../../types/argus';
+
+export type CockpitDrawerType = 'opportunity' | 'signal' | 'decision' | 'recommendation' | 'feedback' | 'health' | 'generic';
+
+export interface CockpitDrawerData {
+  type: CockpitDrawerType;
+  title: string;
+  subtitle?: string;
+  category?: string;
+  conviction?: number | string;
+  impact?: string;
+  evidence?: string[];
+  metrics?: { label: string; value: string }[];
+  payload?: Record<string, any>;
+  reasoningSteps?: string[];
+  targetTab?: NavigationTab;
+}
 
 interface CockpitDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
-  subtitle?: string;
-  category?: string;
-  evidence?: string[];
-  metrics?: { label: string; value: string }[];
-  targetTab?: NavigationTab;
+  data: CockpitDrawerData | null;
   onNavigateTab?: (tab: NavigationTab) => void;
 }
 
 export const CockpitDrawer: React.FC<CockpitDrawerProps> = ({
   isOpen,
   onClose,
-  title,
-  subtitle,
-  category = 'Telemetry Evidence',
-  evidence = [
-    'Debit failover latency on secondary switch exceeded 1,800ms P99 cap',
-    '342 users impacted during 8–10 PM peak transaction window',
-    'Correlated with Zendesk ticket cluster #8420',
-  ],
-  metrics = [
-    { label: 'Confidence', value: '94%' },
-    { label: 'Severity', value: 'Critical' },
-    { label: 'Impact GMV', value: '₹4.2Cr' },
-    { label: 'Status', value: 'Investigating' },
-  ],
-  targetTab,
+  data,
   onNavigateTab,
 }) => {
-  if (!isOpen) return null;
+  if (!data) return null;
+
+  const getCategoryBadgeVariant = (type: CockpitDrawerType) => {
+    switch (type) {
+      case 'opportunity':
+        return 'green';
+      case 'signal':
+        return 'amber';
+      case 'recommendation':
+        return 'blue';
+      case 'decision':
+        return 'purple';
+      default:
+        return 'neutral';
+    }
+  };
+
+  const handleAction = () => {
+    onClose();
+    if (data.targetTab && onNavigateTab) {
+      onNavigateTab(data.targetTab);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs select-none animate-fade-in-scale">
-      <div className="w-full max-w-md h-full bg-[#050505] border-l border-[rgba(255,255,255,0.10)] shadow-2xl flex flex-col justify-between p-5">
-        {/* Header */}
-        <div>
-          <div className="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.08)]">
-            <span className="text-[10px] font-mono-tech uppercase tracking-wider text-[#0070F3] font-bold">
-              {category}
-            </span>
-            <button
-              onClick={onClose}
-              className="p-1 rounded-[4px] text-[#666666] hover:text-[#EDEDED] hover:bg-[#121212] transition-colors cursor-pointer"
+    <ArgusDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title={
+        <div className="flex items-center gap-2">
+          <ArgusBadge variant={getCategoryBadgeVariant(data.type)} size="sm" dot>
+            {data.category || data.type}
+          </ArgusBadge>
+          <span className="truncate max-w-[280px]">{data.title}</span>
+        </div>
+      }
+      subtitle={data.subtitle}
+      footer={
+        <div className="w-full flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[10px] font-mono-tech text-[#666666]">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
+            <span>Workspace Isolated · PostgreSQL RLS</span>
+          </div>
+
+          {data.targetTab && (
+            <ArgusButton
+              variant="primary"
+              size="xs"
+              onClick={handleAction}
+              rightIcon={<ArrowRight className="w-3 h-3" />}
             >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+              Open in {data.targetTab.toUpperCase()}
+            </ArgusButton>
+          )}
+        </div>
+      }
+    >
+      {/* 1. Metrics Grid */}
+      {data.metrics && data.metrics.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 rounded-[6px] bg-[#0A0A0A] border border-[rgba(255,255,255,0.06)]">
+          {data.metrics.map((m) => (
+            <div key={m.label} className="text-xs font-mono-tech">
+              <span className="text-[#666666] block text-[9.5px] uppercase">{m.label}</span>
+              <span className="text-[#EDEDED] font-semibold tracking-tight">{m.value}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
-          <div className="mt-4 space-y-1">
-            <h2 className="text-base font-semibold text-[#EDEDED] leading-snug">{title}</h2>
-            {subtitle && <p className="text-xs text-[#A1A1A1] leading-relaxed">{subtitle}</p>}
+      {/* 2. Analytical Reasoning Steps (For AI Recommendations) */}
+      {data.reasoningSteps && data.reasoningSteps.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-1.5 text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#A1A1A1]">
+            <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
+            <span>Analytical Reasoning Trace</span>
           </div>
-
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-2 gap-2 my-4 p-3 rounded-[6px] bg-[#080808] border border-[rgba(255,255,255,0.06)]">
-            {metrics.map((m) => (
-              <div key={m.label} className="text-xs font-mono-tech">
-                <span className="text-[#666666] block text-[10px] uppercase">{m.label}</span>
-                <span className="text-[#EDEDED] font-semibold">{m.value}</span>
+          <div className="space-y-1.5">
+            {data.reasoningSteps.map((step, idx) => (
+              <div
+                key={idx}
+                className="p-2.5 rounded-[4px] bg-[#0A0A0A] border border-[rgba(255,255,255,0.04)] text-xs text-[#CCCCCC] font-mono-tech leading-relaxed flex items-start gap-2"
+              >
+                <span className="text-[#0066FF] text-[10px] font-bold mt-0.5">0{idx + 1}</span>
+                <span>{step}</span>
               </div>
             ))}
           </div>
+        </div>
+      )}
 
-          {/* Evidence List */}
-          <div className="space-y-2 mt-4">
-            <div className="text-[11px] font-mono-tech uppercase text-[#666666]">
-              Verified Evidence Clusters
-            </div>
-            <div className="space-y-1.5">
-              {evidence.map((ev, idx) => (
-                <div
-                  key={idx}
-                  className="p-2.5 rounded-[4px] bg-[#0A0A0A] border border-[rgba(255,255,255,0.04)] text-xs text-[#A1A1A1] leading-relaxed flex items-start gap-2"
-                >
-                  <span className="text-[#0070F3] font-mono-tech text-[10px] mt-0.5">0{idx + 1}</span>
-                  <span>{ev}</span>
-                </div>
-              ))}
-            </div>
+      {/* 3. Verified Evidence Clusters */}
+      {data.evidence && data.evidence.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-1.5 text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#A1A1A1]">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
+            <span>Verified Causal Evidence</span>
+          </div>
+          <div className="space-y-1.5">
+            {data.evidence.map((ev, idx) => (
+              <div
+                key={idx}
+                className="p-2.5 rounded-[4px] bg-[#0A0A0A] border border-[rgba(255,255,255,0.04)] text-xs text-[#CCCCCC] font-mono-tech leading-relaxed flex items-start gap-2"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] mt-1.5 flex-shrink-0" />
+                <span>{ev}</span>
+              </div>
+            ))}
           </div>
         </div>
+      )}
 
-        {/* Footer Actions */}
-        <div className="pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-[10px] font-mono-tech text-[#666666]">
-            <ShieldCheck className="w-3 h-3 text-[#46A758]" />
-            <span>Workspace Isolated</span>
+      {/* 4. Raw Telemetry Payload (For Signals) */}
+      {data.payload && (
+        <div className="space-y-2">
+          <div className="text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#A1A1A1]">
+            Raw Event Payload
           </div>
-
-          <button
-            onClick={() => {
-              onClose();
-              if (targetTab && onNavigateTab) onNavigateTab(targetTab);
-            }}
-            className="argus-btn-primary text-xs flex items-center gap-1.5 cursor-pointer"
-          >
-            <span>Open in Workspace</span>
-            <ExternalLink className="w-3 h-3" />
-          </button>
+          <pre className="p-3 rounded-[6px] bg-[#050505] border border-[rgba(255,255,255,0.06)] text-[11px] text-[#A1A1A1] font-mono-tech overflow-x-auto">
+            {JSON.stringify(data.payload, null, 2)}
+          </pre>
         </div>
-      </div>
-    </div>
+      )}
+    </ArgusDrawer>
   );
 };

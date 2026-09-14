@@ -10,14 +10,14 @@ export const ProductHealthCard: React.FC = () => {
   ];
 
   return (
-    <div className="p-4 rounded-[8px] bg-[#080808] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.14)] hover:bg-[#0A0A0A] transition-all select-none flex flex-col justify-between">
+    <div className="p-4 rounded-[6px] bg-[#080808] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)] hover:bg-[#0C0C0C] transition-all duration-200 select-none flex flex-col justify-between group">
       <div>
         <div className="flex items-center justify-between pb-2 border-b border-[rgba(255,255,255,0.06)]">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#46A758]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
             <span className="text-[13px] font-medium text-[#EDEDED]">Product Health</span>
           </div>
-          <span className="text-[10px] font-mono-tech px-1.5 py-0.5 rounded-[2px] bg-[#141414] text-[#46A758] font-bold">
+          <span className="text-[10px] font-mono-tech px-1.5 py-0.5 rounded-[3px] bg-[#10B981]/10 text-[#10B981] font-bold border border-[#10B981]/20">
             82 / 100
           </span>
         </div>
@@ -31,8 +31,8 @@ export const ProductHealthCard: React.FC = () => {
               </div>
               <div className="w-full h-1.5 rounded-full bg-[#141414] overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${
-                    p.score > 85 ? 'bg-[#46A758]' : p.score > 75 ? 'bg-[#0070F3]' : 'bg-[#F5A524]'
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    p.score > 85 ? 'bg-[#10B981]' : p.score > 75 ? 'bg-[#0066FF]' : 'bg-[#F59E0B]'
                   }`}
                   style={{ width: `${p.score}%` }}
                 />

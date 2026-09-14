@@ -58,10 +58,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const groups: NavGroup[] = [
     {
-      label: 'OVERVIEW',
+      label: 'COCKPIT',
       items: [
-        { id: 'home', label: 'Cockpit', icon: LayoutDashboard },
-        { id: 'signals', label: 'Today', icon: CalendarDays, badge: 'NEW', badgeColor: 'bg-[#0070F3]' },
+        { id: 'home', label: 'Home', icon: LayoutDashboard },
+        { id: 'signals', label: 'Today', icon: CalendarDays, badge: 'NEW', badgeColor: 'bg-[#0066FF]' },
       ],
     },
     {
@@ -86,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'BUILD',
       items: [
         { id: 'prds', label: 'PRDs', icon: FileText },
-        { id: 'prototypes', label: 'Prototypes', icon: PanelsTopLeft },
+        { id: 'prototypes', label: 'Specs', icon: PanelsTopLeft },
         { id: 'experiments', label: 'Experiments', icon: FlaskConical },
       ],
     },
@@ -101,9 +101,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       label: 'WORKSPACE',
       items: [
+        { id: 'data_sources', label: 'Meetings', icon: Video },
         { id: 'documents', label: 'Documents', icon: Files },
         { id: 'decisions', label: 'Decisions', icon: GitBranch },
-        { id: 'data_sources', label: 'Meetings', icon: Video },
+        { id: 'settings', label: 'Team', icon: Settings },
       ],
     },
     {
