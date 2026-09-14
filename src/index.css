@@ -243,3 +243,88 @@ input[type="range"]::-moz-range-thumb {
   z-index: 9999;
   opacity: 0.35;
 }
+
+
+/* ───── ARGUS MOTION & SURFACE TOKENS ───── */
+:root {
+  --motion-fast: 150ms;
+  --motion-normal: 220ms;
+  --motion-slow: 320ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  --bg-primary: #050505;
+  --bg-surface: #0A0A0A;
+  --bg-elevated: #101010;
+  --border-subtle: #1D1D1D;
+  --border-hover: #2E2E2E;
+  --border-active: #3A3A3A;
+  --border-accent: rgba(0, 102, 255, 0.4);
+
+  --text-primary: #F5F5F0;
+  --text-secondary: #8A8A8A;
+  --text-muted: #525252;
+}
+
+/* Density Engine */
+body.density-compact {
+  --space-card: 0.75rem;
+  --space-gap: 0.5rem;
+  --font-base: 0.8125rem;
+}
+
+body.density-balanced {
+  --space-card: 1rem;
+  --space-gap: 0.875rem;
+  --font-base: 0.875rem;
+}
+
+body.density-comfortable {
+  --space-card: 1.35rem;
+  --space-gap: 1.15rem;
+  --font-base: 0.9375rem;
+}
+
+/* Card Interaction Physics */
+.argus-card-interactive {
+  transition: transform var(--motion-fast) var(--ease-standard),
+              background-color var(--motion-fast) var(--ease-standard),
+              border-color var(--motion-fast) var(--ease-standard),
+              box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.argus-card-interactive:hover {
+  transform: translateY(-2px);
+  background-color: #0E0E0E;
+  border-color: #2D2D2D;
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.6);
+}
+
+.argus-card-interactive:active {
+  transform: translateY(0);
+  background-color: #121212;
+}
+
+/* Monochromatic Logo Interactions */
+.argus-logo-hover {
+  transition: filter var(--motion-fast) var(--ease-standard),
+              opacity var(--motion-fast) var(--ease-standard);
+}
+
+.argus-logo-hover:hover {
+  filter: brightness(1.04);
+}
+
+.argus-logo-hover:active {
+  filter: brightness(1.08) drop-shadow(0 0 8px rgba(0, 102, 255, 0.3));
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

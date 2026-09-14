@@ -1,3 +1,4 @@
+import { ArgusLogo } from '../ui/ArgusLogo';
 import React, { useState } from 'react';
 import {
   CheckCircle2,
@@ -56,9 +57,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         {/* Step Indicator */}
         <div className="flex items-center justify-between border-b border-[#1D1D1D] pb-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs">
-              A
-            </div>
+            <ArgusLogo size="sm" variant="default" />
             <span className="font-display font-extrabold text-sm tracking-wider text-[#F5F5F0]">
               WELCOME TO ARGUS
             </span>

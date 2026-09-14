@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Activity,
-  TrendingUp,
-  AlertTriangle,
   Sparkles,
-  Zap,
   Target,
-  Clock,
   ChevronRight,
-  Flame
+  Flame,
+  GitFork,
+  Cpu,
+  TestTube2,
+  Rocket,
+  History,
+  FlaskConical,
+  SlidersHorizontal,
+  Info,
+  ExternalLink,
+  Layers,
+  ArrowUpRight,
+  CheckCircle2
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
+import { ArgusDrawer } from '../ui/ArgusDrawer';
+import { ArgusBadge } from '../ui/ArgusBadge';
+import { ArgusButton } from '../ui/ArgusButton';
 
 interface OverviewDashboardProps {
   onNavigateTab: (tab: NavigationTab) => void;
@@ -18,289 +29,864 @@ interface OverviewDashboardProps {
   onOpenChaosSimulator: () => void;
 }
 
+type CockpitPreset = 'default' | 'ai_pm' | 'research' | 'founder';
+
+interface DrawerContentData {
+  title: string;
+  subtitle: string;
+  badge: string;
+  targetTab: NavigationTab;
+  what: string;
+  state: string;
+  whyThisMatters: string;
+  evidence: string[];
+  recommendation: string;
+}
+
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   onNavigateTab,
-  onInvestigateSignal,
+  onInvestigateSignal: _onInvestigateSignal,
   onOpenChaosSimulator,
 }) => {
+  const [preset, setPreset] = useState<CockpitPreset>('default');
+  const [showCustomizer, setShowCustomizer] = useState(false);
+  const [activeDrawer, setActiveDrawer] = useState<DrawerContentData | null>(null);
+
+  // Handle Box Click: normal click navigates, Cmd/Ctrl click opens Drawer
+  const handleBoxInteraction = (
+    e: React.MouseEvent,
+    tab: NavigationTab,
+    drawerData: DrawerContentData
+  ) => {
+    if (e.metaKey || e.ctrlKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      setActiveDrawer(drawerData);
+    } else {
+      onNavigateTab(tab);
+    }
+  };
+
+  const handleOpenDrawerDirect = (e: React.MouseEvent, drawerData: DrawerContentData) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setActiveDrawer(drawerData);
+  };
+
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6 animate-fade-in text-[#F5F5F0]">
-      {/* Top Banner / Hero PM Cockpit */}
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6 select-none text-[#F5F5F0]">
+      {/* ─── Top Header: Cockpit Status & Controls ─── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#1D1D1D]">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00CC66] animate-pulse-dot" />
-            <span className="text-[11px] font-mono-tech text-[#0066FF] tracking-wider uppercase">
-              OPERATING COCKPIT · Q3 2026 CYCLE
+            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse-dot" />
+            <span className="text-[10px] font-mono-tech text-[#8A8A8A] tracking-wider uppercase">
+              OPERATING COCKPIT · <span className="text-[#F5F5F0]">PROD-CYCLE-09</span>
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-[#F5F5F0]">
-            Good morning, Lead PM.
+          <h1 className="text-xl sm:text-2xl font-bold font-display tracking-tight text-[#F5F5F0]">
+            AI Product Manager Cockpit
           </h1>
-          <p className="text-xs sm:text-sm font-mono-tech text-[#8A8A8A]">
-            Argus telemetry active across 14 modules. 2 causal anomalies detected in production.
+          <p className="text-xs font-mono-tech text-[#8A8A8A]">
+            Telemetry active across 14 modules. Tip: Click any box to open workspace, or <kbd className="px-1.5 py-0.5 rounded bg-[#141414] border border-[#262626] text-[10px] text-zinc-300">⌘+Click</kbd> for instant drawer inspection.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Preset Selector */}
+          <div className="inline-flex items-center bg-[#0E0E0E] border border-[#1D1D1D] rounded-[2px] p-0.5 text-xs font-mono-tech">
+            {(['default', 'ai_pm', 'research', 'founder'] as CockpitPreset[]).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPreset(p)}
+                className={`px-2.5 py-1 rounded-[2px] transition-colors uppercase text-[10px] font-bold ${
+                  preset === p
+                    ? 'bg-[#1D1D1D] text-[#F5F5F0]'
+                    : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
+                }`}
+              >
+                {p === 'ai_pm' ? 'AI PM' : p}
+              </button>
+            ))}
+          </div>
+
           <button
-            onClick={() => onNavigateTab('inbox')}
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-mono-tech font-medium rounded-[2px] transition-colors shadow-lg shadow-[#0066FF]/10"
+            onClick={() => setShowCustomizer(!showCustomizer)}
+            className={`p-1.5 border rounded-[2px] text-xs font-mono-tech transition-colors ${
+              showCustomizer
+                ? 'bg-[#141414] border-[#0066FF] text-[#0066FF]'
+                : 'bg-[#0E0E0E] border-[#1D1D1D] text-[#8A8A8A] hover:text-[#F5F5F0]'
+            }`}
+            title="Customize Cockpit Layout"
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Triage Inbox (4 New)</span>
+            <SlidersHorizontal className="w-3.5 h-3.5" />
           </button>
 
           <button
             onClick={onOpenChaosSimulator}
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#FF3333]/15 hover:bg-[#FF3333]/25 border border-[#FF3333]/30 text-[#FF3333] text-xs font-mono-tech rounded-[2px] transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#EF4444]/10 hover:bg-[#EF4444]/20 border border-[#EF4444]/25 text-[#EF4444] text-xs font-mono-tech rounded-[2px] transition-colors"
           >
             <Flame className="w-3.5 h-3.5" />
-            <span>Simulate Outage</span>
+            <span className="hidden sm:inline">Simulate Outage</span>
           </button>
         </div>
       </div>
 
-      {/* 1. North Star Metrics HUD */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <div className="bg-[#0A0A0A] border border-[#1D1D1D] p-4 rounded-[2px] space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase">DECISION-TO-SHIP VELOCITY</span>
-            <Target className="w-3.5 h-3.5 text-[#0066FF]" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">4.2 Days</span>
-            <span className="text-xs font-mono-tech text-[#00CC66] flex items-center">
-              <TrendingUp className="w-3 h-3 mr-0.5" /> -38% vs target
-            </span>
-          </div>
-          <div className="text-[11px] text-[#8A8A8A]">
-            PRD spec to canary deployment elapsed cycle
-          </div>
-        </div>
-
-        <div className="bg-[#0A0A0A] border border-[#1D1D1D] p-4 rounded-[2px] space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase">LLM EVAL PASS RATE</span>
-            <Zap className="w-3.5 h-3.5 text-[#00CC66]" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">98.8%</span>
-            <span className="text-xs font-mono-tech text-[#00CC66] flex items-center">
-              +1.4%
-            </span>
-          </div>
-          <div className="text-[11px] text-[#8A8A8A]">
-            Across 1,240 automated test assertions
-          </div>
-        </div>
-
-        <div className="bg-[#0A0A0A] border border-[#1D1D1D] p-4 rounded-[2px] space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase">EXPERIMENT WIN RATE</span>
-            <Activity className="w-3.5 h-3.5 text-[#0066FF]" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">74.2%</span>
-            <span className="text-xs font-mono-tech text-[#00CC66]">
-              3 active A/B tests
-            </span>
-          </div>
-          <div className="text-[11px] text-[#8A8A8A]">
-            +18.4 bps gross conversion margin impact
-          </div>
-        </div>
-
-        <div className="bg-[#0A0A0A] border border-[#1D1D1D] p-4 rounded-[2px] space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase">DISPUTE AUTO-REFUND SLA</span>
-            <Clock className="w-3.5 h-3.5 text-[#FF9900]" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">18.4s</span>
-            <span className="text-xs font-mono-tech text-[#00CC66]">
-              -99.8% vs 48hr
-            </span>
-          </div>
-          <div className="text-[11px] text-[#8A8A8A]">
-            Zero human intervention refund resolution
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Urgent Causal Signals & Anomalies */}
-      <div className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 space-y-3">
-        <div className="flex items-center justify-between pb-3 border-b border-[#1D1D1D]">
+      {/* Optional Customizer Toolbar */}
+      {showCustomizer && (
+        <div className="p-3 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] flex flex-wrap items-center justify-between gap-3 text-xs font-mono-tech text-[#8A8A8A]">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-[#FF9900]" />
-            <span className="text-xs font-bold font-mono-tech text-[#F5F5F0]">
-              HIGH-CONFIDENCE TELEMETRY SIGNALS (REQUIRES PM DECISION)
+            <Layers className="w-3.5 h-3.5 text-[#0066FF]" />
+            <span>Active Preset: <strong className="text-white uppercase">{preset}</strong></span>
+          </div>
+          <div className="text-[11px] text-[#525252]">
+            Layout automatically adapts card priority and visibility for your current role.
+          </div>
+        </div>
+      )}
+
+      {/* ─── 1. LARGE CARD: ARGUS DAILY BRIEF ─── */}
+      <div className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#F5F5F0]" />
+            <span className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+              DAILY BRIEFING · IMMEDIATE ATTENTION
             </span>
           </div>
-          <button
-            onClick={() => onNavigateTab('signals')}
-            className="text-[11px] font-mono-tech text-[#0066FF] hover:underline"
-          >
-            Inspect All Signals →
-          </button>
+          <ArgusBadge variant="blue" size="sm">5 ACTION ITEMS</ArgusBadge>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="p-3.5 bg-[#0D0D0D] border border-[#FF3333]/30 rounded-[2px] space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono-tech text-[#FF3333] bg-[#FF3333]/10 px-1.5 py-0.2 rounded-[2px]">
-                ANOMALY DETECTED (+2.4σ)
-              </span>
-              <span className="text-[10px] font-mono-tech text-[#8A8A8A]">38m ago</span>
+        <p className="text-xs font-mono-tech text-[#8A8A8A] leading-relaxed">
+          Here is what requires your judgment before today's standup. Click any item to jump directly to its resolution:
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 pt-1">
+          {[
+            {
+              tab: 'signals' as NavigationTab,
+              label: '3 Signals Worth Reviewing',
+              desc: 'Checkout timeout spike in APAC (+14%)',
+              color: 'text-[#EF4444]',
+              border: 'border-[#EF4444]/30',
+            },
+            {
+              tab: 'roadmap' as NavigationTab,
+              label: '2 Roadmap Blockers',
+              desc: 'Vector Search dependency unaligned',
+              color: 'text-[#F59E0B]',
+              border: 'border-[#F59E0B]/30',
+            },
+            {
+              tab: 'experiments' as NavigationTab,
+              label: '1 Experiment Ready',
+              desc: 'Exp #104 reached 99.2% stat sig',
+              color: 'text-[#10B981]',
+              border: 'border-[#10B981]/30',
+            },
+            {
+              tab: 'intelligence' as NavigationTab,
+              label: '1 Competitor Move',
+              desc: 'Superhuman launched Smart Triage v2',
+              color: 'text-[#0066FF]',
+              border: 'border-[#0066FF]/30',
+            },
+            {
+              tab: 'decisions' as NavigationTab,
+              label: '4 Decisions Waiting',
+              desc: 'ADR-041 schema migration sign-off',
+              color: 'text-[#8B5CF6]',
+              border: 'border-[#8B5CF6]/30',
+            },
+          ].map((item) => (
+            <button
+              key={item.label}
+              onClick={() => onNavigateTab(item.tab)}
+              className={`text-left p-2.5 rounded-[2px] bg-[#0E0E0E] hover:bg-[#141414] border ${item.border} transition-colors group cursor-pointer space-y-1`}
+            >
+              <div className={`text-xs font-mono-tech font-bold flex items-center justify-between ${item.color}`}>
+                <span className="truncate">{item.label}</span>
+                <ArrowUpRight className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="text-[11px] font-mono-tech text-[#8A8A8A] leading-tight truncate">
+                {item.desc}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ─── 2. LARGE CARD: PRODUCT HEALTH HUD ─── */}
+      <div className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-[#1D1D1D]">
+          <div className="flex items-center gap-2">
+            <Activity className="w-4 h-4 text-[#10B981]" />
+            <h2 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+              PRODUCT HEALTH HUD · NORTH STAR METRICS
+            </h2>
+          </div>
+          <span className="text-[10px] font-mono-tech text-[#525252]">ROLLING 30-DAY COHORT</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Activation Rate */}
+          <div className="bg-[#0E0E0E] border border-[#1D1D1D] p-3.5 rounded-[2px] space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A]">
+              <span>ACTIVATION RATE</span>
+              <span className="text-[#10B981] font-bold">+2.4% MoM</span>
             </div>
-            <h3 className="text-xs font-bold font-display text-[#F5F5F0]">
-              NPCI Switch Settlement Delay in Karnataka Region
-            </h3>
-            <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
-              p99 latency spiked from 180ms to 920ms for UPI intent calls. 14% drop in second-attempt checkout retry.
-            </p>
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-[10px] font-mono-tech text-[#0066FF]">Causal Prob: 0.94</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">43.8%</span>
+              <span className="text-[11px] font-mono-tech text-[#525252]">/ 40.0% goal</span>
+            </div>
+            {/* Progress Bar */}
+            <div className="w-full bg-[#1A1A1A] h-1.5 rounded-full overflow-hidden">
+              <div className="bg-[#10B981] h-full rounded-full" style={{ width: '87.6%' }} />
+            </div>
+            <div className="text-[10px] font-mono-tech text-[#8A8A8A] flex justify-between">
+              <span>Time to first PRD created</span>
+              <span className="text-zinc-400">14.2 min</span>
+            </div>
+          </div>
+
+          {/* Retention Rate */}
+          <div className="bg-[#0E0E0E] border border-[#1D1D1D] p-3.5 rounded-[2px] space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A]">
+              <span>WEEK 4 RETENTION</span>
+              <span className="text-[#10B981] font-bold">+5.1% MoM</span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">61.2%</span>
+              <span className="text-[11px] font-mono-tech text-[#525252]">/ 55.0% goal</span>
+            </div>
+            <div className="w-full bg-[#1A1A1A] h-1.5 rounded-full overflow-hidden">
+              <div className="bg-[#0066FF] h-full rounded-full" style={{ width: '92%' }} />
+            </div>
+            <div className="text-[10px] font-mono-tech text-[#8A8A8A] flex justify-between">
+              <span>Core power users</span>
+              <span className="text-zinc-400">3,420 PMs</span>
+            </div>
+          </div>
+
+          {/* Engagement Rate */}
+          <div className="bg-[#0E0E0E] border border-[#1D1D1D] p-3.5 rounded-[2px] space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A]">
+              <span>FEATURE ENGAGEMENT</span>
+              <span className="text-[#0066FF] font-bold">Stable</span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold font-mono-tech text-[#F5F5F0]">72.4%</span>
+              <span className="text-[11px] font-mono-tech text-[#525252]">DAU/MAU</span>
+            </div>
+            <div className="w-full bg-[#1A1A1A] h-1.5 rounded-full overflow-hidden">
+              <div className="bg-[#8B5CF6] h-full rounded-full" style={{ width: '72.4%' }} />
+            </div>
+            <div className="text-[10px] font-mono-tech text-[#8A8A8A] flex justify-between">
+              <span>Avg session length</span>
+              <span className="text-zinc-400">28 min/day</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 3. STRATEGIC ROADMAP Q4 (LARGE CARD) ─── */}
+      <div
+        onClick={(e) =>
+          handleBoxInteraction(e, 'roadmap', {
+            title: 'Strategic Roadmap Q4 2026',
+            subtitle: 'Initiative status, milestones, and blockers',
+            badge: 'ROADMAP',
+            targetTab: 'roadmap',
+            what: 'Roadmap execution tracking across 3 cross-functional product pillars.',
+            state: '78% completed for current milestone. 2 critical blockers awaiting architecture sign-off.',
+            whyThisMatters:
+              'Delivering the autonomous PRD compiler on time directly unblocks enterprise adoption targets for Q4.',
+            evidence: [
+              'Sprint 24 velocity: 48 story points shipped (+12% above estimate)',
+              'Dependency on Vector Search pipeline requires ADR-041 approval',
+              'Beta customer interest: 18 design partners waiting for canary release',
+            ],
+            recommendation:
+              'Review and merge ADR-041 to release the engineering blocker before Friday cutoff.',
+          })
+        }
+        className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Target className="w-4 h-4 text-[#F5F5F0]" />
+            <h2 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+              STRATEGIC ROADMAP · Q4 EXECUTION
+            </h2>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={(e) =>
+                handleOpenDrawerDirect(e, {
+                  title: 'Strategic Roadmap Q4 2026',
+                  subtitle: 'Initiative status, milestones, and blockers',
+                  badge: 'ROADMAP',
+                  targetTab: 'roadmap',
+                  what: 'Roadmap execution tracking across 3 cross-functional product pillars.',
+                  state: '78% completed for current milestone. 2 critical blockers awaiting architecture sign-off.',
+                  whyThisMatters:
+                    'Delivering the autonomous PRD compiler on time directly unblocks enterprise adoption targets for Q4.',
+                  evidence: [
+                    'Sprint 24 velocity: 48 story points shipped (+12% above estimate)',
+                    'Dependency on Vector Search pipeline requires ADR-041 approval',
+                    'Beta customer interest: 18 design partners waiting for canary release',
+                  ],
+                  recommendation:
+                    'Review and merge ADR-041 to release the engineering blocker before Friday cutoff.',
+                })
+              }
+              className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
+            >
+              <Info className="w-3 h-3" />
+              <span>Why this matters</span>
+            </button>
+            <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <div className="p-3 bg-[#0E0E0E] rounded-[2px] border border-[#1D1D1D] space-y-1">
+            <div className="flex justify-between text-[11px] font-mono-tech">
+              <span className="text-[#8A8A8A]">Pillar 1: Discovery</span>
+              <span className="text-[#10B981]">92% Done</span>
+            </div>
+            <div className="text-xs font-bold text-[#F5F5F0]">Realtime POS Parser</div>
+            <div className="w-full bg-[#1A1A1A] h-1 rounded-full overflow-hidden mt-2">
+              <div className="bg-[#10B981] h-full" style={{ width: '92%' }} />
+            </div>
+          </div>
+
+          <div className="p-3 bg-[#0E0E0E] rounded-[2px] border border-[#1D1D1D] space-y-1">
+            <div className="flex justify-between text-[11px] font-mono-tech">
+              <span className="text-[#8A8A8A]">Pillar 2: AI Core</span>
+              <span className="text-[#0066FF]">74% In Progress</span>
+            </div>
+            <div className="text-xs font-bold text-[#F5F5F0]">PRD & BDD Autonomous Studio</div>
+            <div className="w-full bg-[#1A1A1A] h-1 rounded-full overflow-hidden mt-2">
+              <div className="bg-[#0066FF] h-full" style={{ width: '74%' }} />
+            </div>
+          </div>
+
+          <div className="p-3 bg-[#0E0E0E] rounded-[2px] border border-[#1D1D1D] space-y-1">
+            <div className="flex justify-between text-[11px] font-mono-tech">
+              <span className="text-[#8A8A8A]">Pillar 3: Infrastructure</span>
+              <span className="text-[#F59E0B]">Blocked (ADR-041)</span>
+            </div>
+            <div className="text-xs font-bold text-[#F5F5F0]">ClickHouse Telemetry Sync</div>
+            <div className="w-full bg-[#1A1A1A] h-1 rounded-full overflow-hidden mt-2">
+              <div className="bg-[#F59E0B] h-full" style={{ width: '45%' }} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 4. MEDIUM CARDS (OPPORTUNITIES, AI LAB, SIGNALS, RESEARCH) ─── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Card 1: Opportunities with Progress Bar */}
+        <div
+          onClick={(e) =>
+            handleBoxInteraction(e, 'opportunities', {
+              title: 'Opportunity Tree Execution',
+              subtitle: 'Validated problems with expected business yield',
+              badge: 'OPPORTUNITIES',
+              targetTab: 'opportunities',
+              what: 'Structured opportunity solution tree mapping customer churn to validated bets.',
+              state: '82% of current quarterly opportunity value allocated to active initiatives.',
+              whyThisMatters:
+                'Focusing exclusively on high-leverage opportunities prevents engineering drift and feature creep.',
+              evidence: [
+                'Top bet: Zero-friction checkout fallback has estimated +$320k ARR impact',
+                'Validation score: 9.4/10 based on 42 customer interview transcripts',
+                'Engineering complexity: Low (estimated 1.5 sprints)',
+              ],
+              recommendation:
+                'Promote Zero-friction checkout from Tree into sprint backlog.',
+            })
+          }
+          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <GitFork className="w-4 h-4 text-[#0066FF]" />
+              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                OPPORTUNITIES · PIPELINE HEALTH
+              </h3>
+            </div>
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => onInvestigateSignal('sig-npci-latency')}
-                className="text-xs font-mono-tech text-[#0066FF] hover:text-[#0052CC] font-semibold flex items-center gap-1"
+                onClick={(e) =>
+                  handleOpenDrawerDirect(e, {
+                    title: 'Opportunity Tree Execution',
+                    subtitle: 'Validated problems with expected business yield',
+                    badge: 'OPPORTUNITIES',
+                    targetTab: 'opportunities',
+                    what: 'Structured opportunity solution tree mapping customer churn to validated bets.',
+                    state: '82% of current quarterly opportunity value allocated to active initiatives.',
+                    whyThisMatters:
+                      'Focusing exclusively on high-leverage opportunities prevents engineering drift and feature creep.',
+                    evidence: [
+                      'Top bet: Zero-friction checkout fallback has estimated +$320k ARR impact',
+                      'Validation score: 9.4/10 based on 42 customer interview transcripts',
+                      'Engineering complexity: Low (estimated 1.5 sprints)',
+                    ],
+                    recommendation:
+                      'Promote Zero-friction checkout from Tree into sprint backlog.',
+                  })
+                }
+                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
               >
-                Investigate & Mitigate →
+                <Info className="w-3 h-3" />
+                <span>Why</span>
               </button>
+              <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
             </div>
           </div>
 
-          <div className="p-3.5 bg-[#0D0D0D] border border-[#0066FF]/30 rounded-[2px] space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono-tech text-[#0066FF] bg-[#0066FF]/10 px-1.5 py-0.2 rounded-[2px]">
-                OPPORTUNITY SIGNAL
-              </span>
-              <span className="text-[10px] font-mono-tech text-[#8A8A8A]">2h ago</span>
+          <div className="flex items-baseline justify-between text-xs font-mono-tech">
+            <span className="text-[#8A8A8A]">Active Opportunity Allocation</span>
+            <span className="text-sm font-bold text-[#F5F5F0]">82% Allocated</span>
+          </div>
+
+          {/* Explicit 82% Progress Bar */}
+          <div className="w-full bg-[#1A1A1A] h-2 rounded-full overflow-hidden">
+            <div className="bg-[#0066FF] h-full rounded-full" style={{ width: '82%' }} />
+          </div>
+
+          <div className="flex items-center justify-between text-[11px] font-mono-tech text-[#8A8A8A] pt-1">
+            <span>Top Bet: POS Fallback</span>
+            <span className="text-[#10B981] font-bold">+$320k ARR Est.</span>
+          </div>
+        </div>
+
+        {/* Card 2: AI Product Lab (Eval Stats) */}
+        <div
+          onClick={(e) =>
+            handleBoxInteraction(e, 'ai_lab', {
+              title: 'AI Product Lab & Model Telemetry',
+              subtitle: 'LLM benchmark evaluations, latency, and drift monitoring',
+              badge: 'AI LAB',
+              targetTab: 'ai_lab',
+              what: 'Automated evaluation harness verifying prompt accuracy and hallucination rates.',
+              state: '98.8% eval pass rate across 1,240 automated test assertions.',
+              whyThisMatters:
+                'Maintains rigorous model trust and prevents regressions before prompts are deployed to production.',
+              evidence: [
+                'Latency p95: 340ms (comfortably within 500ms budget)',
+                'Drift score: 0.012 (statistically negligible)',
+                'Cost per execution: $0.0014 (-40% after prompt distillation)',
+              ],
+              recommendation:
+                'Promote distilled system prompt v4 to canary rollout.',
+            })
+          }
+          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Cpu className="w-4 h-4 text-[#10B981]" />
+              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                AI PRODUCT LAB · EVAL BENCHMARK
+              </h3>
             </div>
-            <h3 className="text-xs font-bold font-display text-[#F5F5F0]">
-              Quick-Commerce POS Surge (Blinkit & Zepto)
-            </h3>
-            <p className="text-[11px] text-[#8A8A8A] leading-relaxed">
-              31,200 transactions misclassified as Miscellaneous POS instead of Supermarket MCC 5411, costing users 5% cashbacks.
-            </p>
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-[10px] font-mono-tech text-[#00CC66]">+₹1.24 Cr GMV Opportunity</span>
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => onNavigateTab('opportunities')}
-                className="text-xs font-mono-tech text-[#0066FF] hover:text-[#0052CC] font-semibold flex items-center gap-1"
+                onClick={(e) =>
+                  handleOpenDrawerDirect(e, {
+                    title: 'AI Product Lab & Model Telemetry',
+                    subtitle: 'LLM benchmark evaluations, latency, and drift monitoring',
+                    badge: 'AI LAB',
+                    targetTab: 'ai_lab',
+                    what: 'Automated evaluation harness verifying prompt accuracy and hallucination rates.',
+                    state: '98.8% eval pass rate across 1,240 automated test assertions.',
+                    whyThisMatters:
+                      'Maintains rigorous model trust and prevents regressions before prompts are deployed to production.',
+                    evidence: [
+                      'Latency p95: 340ms (comfortably within 500ms budget)',
+                      'Drift score: 0.012 (statistically negligible)',
+                      'Cost per execution: $0.0014 (-40% after prompt distillation)',
+                    ],
+                    recommendation:
+                      'Promote distilled system prompt v4 to canary rollout.',
+                  })
+                }
+                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
               >
-                Promote to Opportunity →
+                <Info className="w-3 h-3" />
+                <span>Why</span>
               </button>
+              <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 text-center pt-1">
+            <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
+              <div className="text-base font-bold font-mono-tech text-[#10B981]">98.8%</div>
+              <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">Eval Pass</div>
+            </div>
+            <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
+              <div className="text-base font-bold font-mono-tech text-[#F5F5F0]">340ms</div>
+              <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">p95 Latency</div>
+            </div>
+            <div className="bg-[#0E0E0E] p-2.5 rounded-[2px] border border-[#1D1D1D]">
+              <div className="text-base font-bold font-mono-tech text-[#0066FF]">0.012</div>
+              <div className="text-[10px] font-mono-tech text-[#8A8A8A] mt-0.5">Drift Score</div>
+            </div>
+          </div>
+
+          <div className="text-[11px] font-mono-tech text-[#8A8A8A] flex justify-between">
+            <span>Model in Prod: Sonnet-3.5-Turbo</span>
+            <span className="text-[#10B981]">Zero Hallucination Flag</span>
+          </div>
+        </div>
+
+        {/* Card 3: Telemetry Signals */}
+        <div
+          onClick={(e) =>
+            handleBoxInteraction(e, 'signals', {
+              title: 'Production Telemetry Signals',
+              subtitle: 'Causal anomaly detection and event streaming',
+              badge: 'SIGNALS',
+              targetTab: 'signals',
+              what: 'Automated telemetry ingestion highlighting deviations from steady-state user behavior.',
+              state: '2 active anomalies flagged in APAC payment checkout pipeline.',
+              whyThisMatters:
+                'Early detection allows PMs to triage issues before they degrade App Store ratings or user trust.',
+              evidence: [
+                'Timeout rates increased from 0.4% to 2.8% at 04:15 UTC',
+                'Impacted gateway: Razorpay UPI fallback route',
+                'Affected users: ~480 active checkouts in India region',
+              ],
+              recommendation:
+                'Inspect Telemetry Signals to review trace logs or trigger circuit breaker.',
+            })
+          }
+          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-[#EF4444]" />
+              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                TELEMETRY SIGNALS · LIVE FEED
+              </h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={(e) =>
+                  handleOpenDrawerDirect(e, {
+                    title: 'Production Telemetry Signals',
+                    subtitle: 'Causal anomaly detection and event streaming',
+                    badge: 'SIGNALS',
+                    targetTab: 'signals',
+                    what: 'Automated telemetry ingestion highlighting deviations from steady-state user behavior.',
+                    state: '2 active anomalies flagged in APAC payment checkout pipeline.',
+                    whyThisMatters:
+                      'Early detection allows PMs to triage issues before they degrade App Store ratings or user trust.',
+                    evidence: [
+                      'Timeout rates increased from 0.4% to 2.8% at 04:15 UTC',
+                      'Impacted gateway: Razorpay UPI fallback route',
+                      'Affected users: ~480 active checkouts in India region',
+                    ],
+                    recommendation:
+                      'Inspect Telemetry Signals to review trace logs or trigger circuit breaker.',
+                  })
+                }
+                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
+              >
+                <Info className="w-3 h-3" />
+                <span>Why</span>
+              </button>
+              <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="p-2.5 bg-[#0E0E0E] rounded-[2px] border border-[#EF4444]/25 flex items-center justify-between text-xs font-mono-tech">
+              <span className="text-[#EF4444] font-bold">APAC Checkout Drop</span>
+              <span className="text-[#8A8A8A]">45m ago</span>
+            </div>
+            <div className="p-2.5 bg-[#0E0E0E] rounded-[2px] border border-[#1D1D1D] flex items-center justify-between text-xs font-mono-tech">
+              <span className="text-[#10B981]">Onboarding Flow Normal</span>
+              <span className="text-[#525252]">Steady</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4: Research & Radar */}
+        <div
+          onClick={(e) =>
+            handleBoxInteraction(e, 'research', {
+              title: 'Customer Research & Competitive Radar',
+              subtitle: 'Synthesized qualitative feedback and market monitoring',
+              badge: 'DISCOVER',
+              targetTab: 'research',
+              what: 'Qualitative customer research synthesis paired with automated competitor changelog analysis.',
+              state: '18 customer interviews synthesized. Superhuman changelog updated.',
+              whyThisMatters:
+                'Ensures product decisions reflect actual user pain points while anticipating competitor strategic moves.',
+              evidence: [
+                'Cluster #1 theme: 74% of enterprise PMs request automated BDD scenario generation',
+                'Competitor alert: Superhuman added AI automated triage',
+                'NPS qualitative sentiment: 68 (+4 pts this month)',
+              ],
+              recommendation:
+                'Synthesize BDD scenario user requests directly into PRD Studio backlog.',
+            })
+          }
+          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-4 sm:p-5 space-y-3 argus-card-interactive cursor-pointer group"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FlaskConical className="w-4 h-4 text-[#8B5CF6]" />
+              <h3 className="text-xs font-mono-tech font-bold uppercase tracking-wider text-[#F5F5F0]">
+                RESEARCH & RADAR · SYNTHESIS
+              </h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={(e) =>
+                  handleOpenDrawerDirect(e, {
+                    title: 'Customer Research & Competitive Radar',
+                    subtitle: 'Synthesized qualitative feedback and market monitoring',
+                    badge: 'DISCOVER',
+                    targetTab: 'research',
+                    what: 'Qualitative customer research synthesis paired with automated competitor changelog analysis.',
+                    state: '18 customer interviews synthesized. Superhuman changelog updated.',
+                    whyThisMatters:
+                      'Ensures product decisions reflect actual user pain points while anticipating competitor strategic moves.',
+                    evidence: [
+                      'Cluster #1 theme: 74% of enterprise PMs request automated BDD scenario generation',
+                      'Competitor alert: Superhuman added AI automated triage',
+                      'NPS qualitative sentiment: 68 (+4 pts this month)',
+                    ],
+                    recommendation:
+                      'Synthesize BDD scenario user requests directly into PRD Studio backlog.',
+                  })
+                }
+                className="text-[10px] font-mono-tech text-[#8A8A8A] hover:text-white flex items-center gap-1"
+              >
+                <Info className="w-3 h-3" />
+                <span>Why</span>
+              </button>
+              <ChevronRight className="w-3.5 h-3.5 text-[#525252] group-hover:text-white transition-colors" />
+            </div>
+          </div>
+
+          <div className="space-y-1.5 text-xs font-mono-tech">
+            <div className="flex justify-between text-[#8A8A8A]">
+              <span>Customer Pain Point:</span>
+              <span className="text-[#F5F5F0]">Manual BDD Writing</span>
+            </div>
+            <div className="flex justify-between text-[#8A8A8A]">
+              <span>Competitor Signal:</span>
+              <span className="text-[#0066FF]">Superhuman v2 Triage</span>
+            </div>
+            <div className="flex justify-between text-[#8A8A8A]">
+              <span>Qualitative Sentiment:</span>
+              <span className="text-[#10B981] font-bold">NPS 68 (Strong)</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 3. Product Flywheel Status */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-        {/* DISCOVER */}
+      {/* ─── 5. COMPACT CARDS (EXPERIMENTS, LAUNCH, DECISIONS) ─── */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        {/* Experiments */}
         <div
-          onClick={() => onNavigateTab('customers')}
-          className="bg-[#0A0A0A] border border-[#1D1D1D] hover:border-[#0066FF]/50 p-4 rounded-[2px] cursor-pointer transition-all space-y-2"
+          onClick={(e) =>
+            handleBoxInteraction(e, 'experiments', {
+              title: 'A/B Experimentation Engine',
+              subtitle: 'Bayesian sequential analysis and guardrail protection',
+              badge: 'EXPERIMENTS',
+              targetTab: 'experiments',
+              what: 'Live statistical hypothesis testing on new product flows.',
+              state: 'Exp #104 reaching 99.2% statistical significance (+4.8% conversion lift).',
+              whyThisMatters:
+                'Prevents subjective opinion from dictating product launches; relies on cold hard causal evidence.',
+              evidence: [
+                'Sample size: 48,200 unique sessions evaluated',
+                'Bayesian probability to beat control: 99.2%',
+                'Guardrail metrics (crash rate, latency): Zero degradation',
+              ],
+              recommendation: 'Graduate Exp #104 from 50% to 100% full rollout.',
+            })
+          }
+          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-3.5 space-y-2 argus-card-interactive cursor-pointer group"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#0066FF] font-bold">1. DISCOVER</span>
-            <ChevronRight className="w-3.5 h-3.5 text-[#8A8A8A]" />
+          <div className="flex items-center justify-between text-[11px] font-mono-tech">
+            <div className="flex items-center gap-1.5 text-[#10B981]">
+              <TestTube2 className="w-3.5 h-3.5" />
+              <span className="font-bold">EXPERIMENTS</span>
+            </div>
+            <span className="text-[10px] text-[#10B981]">99.2% SIG</span>
           </div>
-          <div className="text-sm font-bold font-display text-[#F5F5F0]">Feedback Engine</div>
-          <p className="text-xs text-[#8A8A8A]">
-            1,480 qualitative user feedback tickets parsed across App Store, Reddit, and Zendesk.
+          <div className="text-xs font-bold text-[#F5F5F0] truncate">Exp #104: Instant POS</div>
+          <p className="text-[11px] font-mono-tech text-[#8A8A8A] leading-tight">
+            +4.8% conversion lift detected over control. Ready to ship.
           </p>
-          <div className="text-[10px] font-mono-tech text-[#00CC66] pt-1">
-            Top Theme: Card Exclusion Fine-Print
-          </div>
         </div>
 
-        {/* DECIDE */}
+        {/* Launch Center */}
         <div
-          onClick={() => onNavigateTab('opportunities')}
-          className="bg-[#0A0A0A] border border-[#1D1D1D] hover:border-[#0066FF]/50 p-4 rounded-[2px] cursor-pointer transition-all space-y-2"
+          onClick={(e) =>
+            handleBoxInteraction(e, 'launch', {
+              title: 'Release Center & Canary Deployments',
+              subtitle: 'Feature flag progression and rollback circuit breakers',
+              badge: 'LAUNCH',
+              targetTab: 'launch',
+              what: 'Progressive canary deployment controller with automated health checks.',
+              state: 'Canary v2.4 running at 15% traffic with zero rollbacks.',
+              whyThisMatters:
+                'Enables safe continuous shipping without risking widespread customer disruption.',
+              evidence: [
+                'Error rate in canary cohort: 0.02% (below 0.1% SLA threshold)',
+                'Health score: 99.8/100',
+                'Next progression: Automatically expand to 50% at 14:00 UTC',
+              ],
+              recommendation:
+                'Monitor canary telemetry for another 60 minutes, then proceed to 50% stage.',
+            })
+          }
+          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-3.5 space-y-2 argus-card-interactive cursor-pointer group"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#0066FF] font-bold">2. DECIDE</span>
-            <ChevronRight className="w-3.5 h-3.5 text-[#8A8A8A]" />
+          <div className="flex items-center justify-between text-[11px] font-mono-tech">
+            <div className="flex items-center gap-1.5 text-[#0066FF]">
+              <Rocket className="w-3.5 h-3.5" />
+              <span className="font-bold">RELEASE CENTER</span>
+            </div>
+            <span className="text-[10px] text-[#0066FF]">15% CANARY</span>
           </div>
-          <div className="text-sm font-bold font-display text-[#F5F5F0]">Opportunity Tree</div>
-          <p className="text-xs text-[#8A8A8A]">
-            Hierarchical Teresa Torres trees mapping user pain points to technical bets.
+          <div className="text-xs font-bold text-[#F5F5F0] truncate">Argus OS v2.4 Rollout</div>
+          <p className="text-[11px] font-mono-tech text-[#8A8A8A] leading-tight">
+            15% user cohort active. 0 rollbacks. Healthy error budget.
           </p>
-          <div className="text-[10px] font-mono-tech text-[#0066FF] pt-1">
-            7 Prioritized Initiatives in RICE
-          </div>
         </div>
 
-        {/* BUILD */}
+        {/* Decisions (ADR) */}
         <div
-          onClick={() => onNavigateTab('prds')}
-          className="bg-[#0A0A0A] border border-[#1D1D1D] hover:border-[#0066FF]/50 p-4 rounded-[2px] cursor-pointer transition-all space-y-2"
+          onClick={(e) =>
+            handleBoxInteraction(e, 'decisions', {
+              title: 'Architectural & Product Decision Log (ADR)',
+              subtitle: 'Immutable record of product trade-offs and rationale',
+              badge: 'DECISIONS',
+              targetTab: 'decisions',
+              what: 'Structured record of high-stakes architectural and product decisions.',
+              state: '4 ADRs waiting for stakeholder sign-off (ADR-041 is highest urgency).',
+              whyThisMatters:
+                'Eliminates circular debates and prevents teams from re-litigating settled trade-offs 6 months later.',
+              evidence: [
+                'ADR-041: Schema migration for ClickHouse columnar telemetry',
+                'Stakeholders: Lead Architect (Signed), Security Lead (Signed), Lead PM (Pending)',
+                'Deadline: Today before sprint close',
+              ],
+              recommendation:
+                'Sign off ADR-041 to unblock infrastructure engineering sprint.',
+            })
+          }
+          className="bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] p-3.5 space-y-2 argus-card-interactive cursor-pointer group"
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#0066FF] font-bold">3. BUILD</span>
-            <ChevronRight className="w-3.5 h-3.5 text-[#8A8A8A]" />
+          <div className="flex items-center justify-between text-[11px] font-mono-tech">
+            <div className="flex items-center gap-1.5 text-[#8B5CF6]">
+              <History className="w-3.5 h-3.5" />
+              <span className="font-bold">DECISION LOG</span>
+            </div>
+            <span className="text-[10px] text-[#F59E0B]">4 PENDING</span>
           </div>
-          <div className="text-sm font-bold font-display text-[#F5F5F0]">PRD & BDD Studio</div>
-          <p className="text-xs text-[#8A8A8A]">
-            Autonomous specification writer with automated Gherkin scenarios & edge cases.
+          <div className="text-xs font-bold text-[#F5F5F0] truncate">ADR-041 Schema Migration</div>
+          <p className="text-[11px] font-mono-tech text-[#8A8A8A] leading-tight">
+            Awaiting Lead PM sign-off to release engineering blocker.
           </p>
-          <div className="text-[10px] font-mono-tech text-[#00CC66] pt-1">
-            3 Ready for Eng Review
-          </div>
-        </div>
-
-        {/* MEASURE */}
-        <div
-          onClick={() => onNavigateTab('experiments')}
-          className="bg-[#0A0A0A] border border-[#1D1D1D] hover:border-[#0066FF]/50 p-4 rounded-[2px] cursor-pointer transition-all space-y-2"
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono-tech text-[#0066FF] font-bold">4. MEASURE</span>
-            <ChevronRight className="w-3.5 h-3.5 text-[#8A8A8A]" />
-          </div>
-          <div className="text-sm font-bold font-display text-[#F5F5F0]">A/B Experiments</div>
-          <p className="text-xs text-[#8A8A8A]">
-            Bayesian sequential testing with automated rollback circuit breakers.
-          </p>
-          <div className="text-[10px] font-mono-tech text-[#FF9900] pt-1">
-            Exp #104 reaching 99% significance
-          </div>
         </div>
       </div>
 
-      {/* 4. Quick Action Dock */}
-      <div className="p-4 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[2px] flex flex-wrap items-center justify-between gap-3 text-xs font-mono-tech">
-        <div className="text-[#8A8A8A]">INSTANT PM ACTIONS:</div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => onNavigateTab('ai_lab')}
-            className="px-2.5 py-1.5 bg-[#141414] hover:bg-[#1D1D1D] border border-[#222] text-[#F5F5F0] rounded-[2px] transition-colors"
-          >
-            ⚡ Run LLM Evals
-          </button>
-          <button
-            onClick={() => onNavigateTab('prds')}
-            className="px-2.5 py-1.5 bg-[#141414] hover:bg-[#1D1D1D] border border-[#222] text-[#F5F5F0] rounded-[2px] transition-colors"
-          >
-            📝 Draft New PRD
-          </button>
-          <button
-            onClick={() => onNavigateTab('roadmap')}
-            className="px-2.5 py-1.5 bg-[#141414] hover:bg-[#1D1D1D] border border-[#222] text-[#F5F5F0] rounded-[2px] transition-colors"
-          >
-            🗺️ Inspect Roadmaps
-          </button>
-          <button
-            onClick={() => onNavigateTab('launch')}
-            className="px-2.5 py-1.5 bg-[#141414] hover:bg-[#1D1D1D] border border-[#222] text-[#F5F5F0] rounded-[2px] transition-colors"
-          >
-            🚀 Launch Center
-          </button>
-        </div>
-      </div>
+      {/* ─── 6. Slide-Out Inspection Drawer ─── */}
+      {activeDrawer && (
+        <ArgusDrawer
+          isOpen={Boolean(activeDrawer)}
+          onClose={() => setActiveDrawer(null)}
+          title={activeDrawer.title}
+          subtitle={activeDrawer.subtitle}
+          badge={activeDrawer.badge}
+          width="lg"
+        >
+          <div className="space-y-5 select-text">
+            {/* What is happening */}
+            <div className="space-y-1.5 bg-[#0E0E0E] p-3.5 rounded-[2px] border border-[#1D1D1D]">
+              <div className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase font-bold">
+                WHAT IS HAPPENING
+              </div>
+              <p className="text-xs font-mono-tech text-[#F5F5F0] leading-relaxed">
+                {activeDrawer.what}
+              </p>
+              <div className="text-xs font-mono-tech text-[#0066FF] pt-1">
+                Current Status: <strong>{activeDrawer.state}</strong>
+              </div>
+            </div>
+
+            {/* Why This Matters */}
+            <div className="space-y-1.5 bg-[#0E0E0E] p-3.5 rounded-[2px] border border-[#0066FF]/30">
+              <div className="text-[10px] font-mono-tech text-[#0066FF] uppercase font-bold flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5" />
+                <span>WHY THIS MATTERS</span>
+              </div>
+              <p className="text-xs font-mono-tech text-[#F5F5F0] leading-relaxed">
+                {activeDrawer.whyThisMatters}
+              </p>
+            </div>
+
+            {/* Key Evidence */}
+            <div className="space-y-2 bg-[#0E0E0E] p-3.5 rounded-[2px] border border-[#1D1D1D]">
+              <div className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase font-bold">
+                EVIDENCE & DATA POINTS
+              </div>
+              <ul className="space-y-1.5 text-xs font-mono-tech text-[#8A8A8A]">
+                {activeDrawer.evidence.map((point, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] flex-shrink-0 mt-0.5" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Recommended Action */}
+            <div className="space-y-2 bg-[#121212] p-3.5 rounded-[2px] border border-[#2E2E2E]">
+              <div className="text-[10px] font-mono-tech text-[#10B981] uppercase font-bold">
+                RECOMMENDED ACTION
+              </div>
+              <p className="text-xs font-mono-tech text-[#F5F5F0] leading-relaxed">
+                {activeDrawer.recommendation}
+              </p>
+
+              <div className="pt-2 flex items-center gap-2">
+                <ArgusButton
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    const tab = activeDrawer.targetTab;
+                    setActiveDrawer(null);
+                    onNavigateTab(tab);
+                  }}
+                  rightIcon={<ExternalLink className="w-3.5 h-3.5" />}
+                >
+                  Open Full Workspace
+                </ArgusButton>
+                <ArgusButton
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setActiveDrawer(null)}
+                >
+                  Dismiss
+                </ArgusButton>
+              </div>
+            </div>
+          </div>
+        </ArgusDrawer>
+      )}
     </div>
   );
 };

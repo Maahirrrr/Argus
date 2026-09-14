@@ -10,9 +10,11 @@ import {
   Compass,
   LayoutDashboard,
   Menu,
-  GraduationCap
+  GraduationCap,
+  Layers
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
+import { ArgusLogo } from '../ui/ArgusLogo';
 
 interface AppHeaderProps {
   activeTab: NavigationTab;
@@ -30,6 +32,8 @@ interface AppHeaderProps {
   onGoForward: () => void;
   onOpenTutorial: () => void;
   aiPmMode: boolean;
+  density?: 'compact' | 'balanced' | 'comfortable';
+  onCycleDensity?: () => void;
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({
@@ -48,6 +52,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onGoForward,
   onOpenTutorial,
   aiPmMode,
+  density = 'balanced',
+  onCycleDensity,
 }) => {
   const getTabBreadcrumb = (tab: NavigationTab): string => {
     switch (tab) {
@@ -112,26 +118,24 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           <Menu className="w-4 h-4" />
         </button>
 
-        {/* Brand */}
+        {/* Pure Monochrome SVG Brand Logo */}
         <a
-          href="./#"
+          href="https://maahirrrr.github.io/Argus/#"
           onClick={(e) => {
             e.preventDefault();
-            onSelectTab('landing');
-            window.location.hash = '#';
+            onSelectTab('home');
+            window.location.hash = '#/cockpit';
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className="flex items-center gap-2 cursor-pointer group no-underline text-inherit"
-          title="Argus — Operating System (https://maahirrrr.github.io/Argus/#)"
+          className="flex items-center gap-2 cursor-pointer no-underline text-inherit group select-none"
+          title="ARGUS — AI Product Manager Operating System (https://maahirrrr.github.io/Argus/#)"
         >
-          <div className="w-6 h-6 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs tracking-wider shadow-md shadow-[#0066FF]/20 group-hover:scale-105 transition-transform">
-            A
-          </div>
-          <div className="flex flex-col">
-            <span className="font-display font-extrabold text-sm tracking-widest text-[#F5F5F0] group-hover:text-[#0066FF] transition-colors">
-              ARGUS
-            </span>
-          </div>
+          <ArgusLogo
+            size="md"
+            variant="default"
+            withText
+            textClassName="text-sm font-extrabold tracking-widest text-[#F5F5F0] group-hover:text-white transition-colors"
+          />
         </a>
 
         {/* Browser History Nav Buttons */}
@@ -173,10 +177,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
       <div className="flex-1 max-w-xs sm:max-w-md mx-2 sm:mx-4">
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between bg-[#0D0D0D] hover:bg-[#121212] border border-[#1D1D1D] hover:border-[#0066FF]/40 rounded-[2px] px-3 py-1.5 text-xs text-[#8A8A8A] transition-all group"
+          className="w-full flex items-center justify-between bg-[#0D0D0D] hover:bg-[#121212] border border-[#1D1D1D] hover:border-[#2E2E2E] rounded-[2px] px-3 py-1.5 text-xs text-[#8A8A8A] transition-all group"
         >
           <div className="flex items-center gap-2 truncate">
-            <Command className="w-3.5 h-3.5 text-[#0066FF] group-hover:scale-105 transition-transform" />
+            <Command className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
             <span className="truncate">Search workspaces, PRDs, models...</span>
           </div>
           <kbd className="hidden sm:inline-flex items-center text-[10px] font-mono-tech px-1.5 py-0.5 rounded-[2px] bg-[#171717] border border-[#262626] text-[#8A8A8A]">
@@ -187,6 +191,18 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
       {/* Right: AI PM Status & Utilities */}
       <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Density Selector */}
+        {onCycleDensity && (
+          <button
+            onClick={onCycleDensity}
+            className="hidden md:flex items-center gap-1 px-2 py-1 text-[10px] font-mono-tech uppercase text-[#8A8A8A] hover:text-[#F5F5F0] hover:bg-[#121212] border border-[#1D1D1D] rounded-[2px] transition-colors"
+            title={`Information Density: ${density}. Click to cycle.`}
+          >
+            <Layers className="w-3 h-3 text-[#0066FF]" />
+            <span className="capitalize">{density}</span>
+          </button>
+        )}
+
         {/* AI PM Status Pill */}
         {aiPmMode && (
           <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-[2px] bg-[#0066FF]/10 border border-[#0066FF]/30 text-[10px] font-mono-tech text-[#0066FF]">
@@ -231,7 +247,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           <span>Case Study</span>
         </button>
 
-        {/* Landing / App View Mode Toggle */}
+        {/* Landing / Cockpit View Mode Toggle */}
         <button
           onClick={onToggleMode}
           className="flex items-center gap-1 px-2.5 py-1 text-xs font-mono-tech bg-[#121212] hover:bg-[#1A1A1A] border border-[#222] text-[#F5F5F0] rounded-[2px] transition-colors ml-1"
@@ -243,7 +259,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             </>
           ) : (
             <>
-              <Compass className="w-3.5 h-3.5 text-[#0066FF]" />
+              <Compass className="w-3.5 h-3.5 text-zinc-400" />
               <span className="hidden sm:inline">Tour</span>
             </>
           )}

@@ -8,6 +8,7 @@ import {
   X
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
+import { ArgusLogo } from '../ui/ArgusLogo';
 
 interface MobileNavigationProps {
   activeTab: NavigationTab;
@@ -62,13 +63,13 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#050505]/95 backdrop-blur-xl border-t border-[#1D1D1D] px-2 py-1.5 flex items-center justify-around">
         {bottomTabs.map((t) => {
           const Icon = t.icon;
-          const isActive = activeTab === t.id;
+          const isActive = activeTab === t.id || (t.id === 'home' && activeTab === 'overview');
           return (
             <button
               key={t.id}
               onClick={() => onSelectTab(t.id)}
               className={`flex flex-col items-center justify-center py-1 px-3 rounded-[2px] transition-colors ${
-                isActive ? 'text-[#0066FF]' : 'text-[#8A8A8A]'
+                isActive ? 'text-white' : 'text-[#8A8A8A]'
               }`}
             >
               <Icon className="w-4 h-4 mb-0.5" />
@@ -80,7 +81,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
         <button
           onClick={onToggleDrawer}
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-[2px] transition-colors ${
-            isDrawerOpen ? 'text-[#0066FF]' : 'text-[#8A8A8A]'
+            isDrawerOpen ? 'text-white' : 'text-[#8A8A8A]'
           }`}
         >
           <Menu className="w-4 h-4 mb-0.5" />
@@ -95,18 +96,13 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
             <div className="flex items-center justify-between pb-3 border-b border-[#1D1D1D]">
               <div
                 onClick={() => {
-                  onSelectTab('landing');
+                  onSelectTab('home');
                   onToggleDrawer();
                 }}
-                className="flex items-center gap-2 cursor-pointer group"
+                className="cursor-pointer"
                 title="Argus — Operating System (https://maahirrrr.github.io/Argus/#)"
               >
-                <div className="w-5 h-5 rounded-[2px] bg-[#0066FF] flex items-center justify-center text-white font-bold text-xs shadow-md shadow-[#0066FF]/20">
-                  A
-                </div>
-                <span className="font-display font-extrabold text-sm text-[#F5F5F0] group-hover:text-[#0066FF] transition-colors">
-                  ARGUS
-                </span>
+                <ArgusLogo size="sm" variant="default" withText textClassName="text-sm font-extrabold text-[#F5F5F0]" />
               </div>
               <button
                 onClick={onToggleDrawer}
@@ -128,7 +124,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                     }}
                     className={`p-2.5 rounded-[2px] text-left transition-all border ${
                       isActive
-                        ? 'bg-[#0066FF]/15 border-[#0066FF] text-[#0066FF]'
+                        ? 'bg-[#141414] border-[#0066FF] text-[#F5F5F0]'
                         : 'bg-[#0D0D0D] border-[#1D1D1D] text-[#8A8A8A]'
                     }`}
                   >

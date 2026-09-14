@@ -40,23 +40,56 @@ import { InsightsModule } from './components/modules/InsightsModule';
 export default function App() {
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
-  // 1. Initial State from URL Hash or Default
-  const getInitialTab = (): NavigationTab => {
-    const hash = window.location.hash.replace('#', '') as NavigationTab;
-    const validTabs: NavigationTab[] = [
-      'landing', 'home', 'overview', 'inbox', 'customers', 'feedback',
-      'research', 'intelligence', 'signals', 'insights', 'opportunities',
-      'prioritize', 'roadmap', 'prds', 'prototypes', 'ai_lab',
-      'experiments', 'analytics', 'ai_copilot', 'launch', 'decisions',
-      'documents', 'settings', 'data_sources'
-    ];
-    return validTabs.includes(hash) ? hash : 'landing';
+  // 1. Clean URL Hash Routing Engine
+  const tabToHash = (tab: NavigationTab): string => {
+    if (tab === 'home' || tab === 'overview') return '#/cockpit';
+    if (tab === 'landing') return '#/landing';
+    if (tab === 'ai_lab') return '#/ai-lab';
+    if (tab === 'ai_copilot') return '#/copilot';
+    return `#/${tab}`;
   };
 
-  const [activeTab, setActiveTab] = useState<NavigationTab>(getInitialTab);
-  const [isLandingMode, setIsLandingMode] = useState<boolean>(() => getInitialTab() === 'landing');
-  const [historyStack, setHistoryStack] = useState<NavigationTab[]>(() => [getInitialTab()]);
+  const hashToTab = (hashStr: string): NavigationTab => {
+    const clean = hashStr.replace(/^#\/?/, '').toLowerCase();
+    if (clean === 'landing') return 'landing';
+    if (clean === 'ai-lab' || clean === 'ai_lab') return 'ai_lab';
+    if (clean === 'copilot' || clean === 'ai_copilot') return 'ai_copilot';
+    if (clean === 'cockpit' || clean === 'home' || clean === 'overview' || clean === '') return 'home';
+    if (clean === 'feedback' || clean === 'customers') return 'customers';
+    if (clean === 'radar') return 'intelligence';
+    const validTabs: NavigationTab[] = [
+      'home', 'inbox', 'customers', 'research', 'intelligence', 'signals', 'insights',
+      'opportunities', 'prioritize', 'roadmap', 'prds', 'prototypes', 'ai_lab',
+      'experiments', 'analytics', 'ai_copilot', 'launch', 'decisions', 'documents', 'settings'
+    ];
+    return validTabs.includes(clean as NavigationTab) ? (clean as NavigationTab) : 'home';
+  };
+
+  const initialTab = hashToTab(window.location.hash);
+  const [activeTab, setActiveTab] = useState<NavigationTab>(initialTab);
+  const [isLandingMode, setIsLandingMode] = useState<boolean>(() => initialTab === 'landing');
+  const [historyStack, setHistoryStack] = useState<NavigationTab[]>([initialTab]);
   const [historyIndex, setHistoryIndex] = useState<number>(0);
+
+  // Density Engine (Compact, Balanced, Comfortable)
+  const [density, setDensity] = useState<'compact' | 'balanced' | 'comfortable'>(() => {
+    const saved = localStorage.getItem('argus_density');
+    return (saved as any) || 'balanced';
+  });
+
+  const handleCycleDensity = () => {
+    setDensity((prev) => {
+      const next = prev === 'compact' ? 'balanced' : prev === 'balanced' ? 'comfortable' : 'compact';
+      localStorage.setItem('argus_density', next);
+      showToast(`Information density set to ${next}.`);
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    document.body.classList.remove('density-compact', 'density-balanced', 'density-comfortable');
+    document.body.classList.add(`density-${density}`);
+  }, [density]);
 
   // Modals & Guided Loop
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
@@ -112,13 +145,13 @@ export default function App() {
     });
   };
 
-  // 2. Centralized Navigation Handler with Browser History Push
+  // 2. Centralized Navigation Handler with Clean URL Hash
   const navigateTo = (tab: NavigationTab, replace: boolean = false) => {
     if (tab === 'landing') {
       setIsLandingMode(true);
       setActiveTab('landing');
-      if (window.location.hash !== '#' && window.location.hash !== '') {
-        window.history.pushState({ tab: 'landing' }, '', '#');
+      if (window.location.hash !== '#/landing') {
+        window.history.pushState({ tab: 'landing' }, '', '#/landing');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -129,7 +162,7 @@ export default function App() {
     setIsLandingMode(false);
     setActiveTab(tab);
 
-    const hashUrl = `#${tab}`;
+    const hashUrl = tabToHash(tab);
     if (replace) {
       window.history.replaceState({ tab }, '', hashUrl);
     } else {
@@ -142,17 +175,20 @@ export default function App() {
     }
   };
 
-  // 3. Browser Back / Forward (popstate) Listener
+  // 3. Browser Back / Forward (popstate & hashchange) Listener
   useEffect(() => {
-    const handlePopState = (e: PopStateEvent) => {
-      const hash = window.location.hash.replace('#', '') as NavigationTab;
-      const targetTab = (e.state?.tab || hash || 'landing') as NavigationTab;
+    const handleHashSync = () => {
+      const targetTab = hashToTab(window.location.hash);
       setActiveTab(targetTab);
       setIsLandingMode(targetTab === 'landing');
     };
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('popstate', handleHashSync);
+    window.addEventListener('hashchange', handleHashSync);
+    return () => {
+      window.removeEventListener('popstate', handleHashSync);
+      window.removeEventListener('hashchange', handleHashSync);
+    };
   }, []);
 
   // 4. In-App History Controls
@@ -355,6 +391,8 @@ export default function App() {
         onGoForward={handleGoForward}
         onOpenTutorial={() => setIsTutorialOpen(true)}
         aiPmMode={aiPmMode}
+        density={density}
+        onCycleDensity={handleCycleDensity}
       />
 
       {/* 6. Main Workspace Layout */}
