@@ -4,7 +4,7 @@ import { DEMO_OPPORTUNITIES, DEMO_INITIATIVES } from './data/demoData';
 
 import { LoadingSequence } from './components/landing/LoadingSequence';
 import { AppHeader } from './components/layout/AppHeader';
-import { AppSidebar } from './components/layout/AppSidebar';
+import { AppShell } from './components/app-shell';
 import { MobileNavigation } from './components/layout/MobileNavigation';
 import { CommandPalette } from './components/layout/CommandPalette';
 import { KeyboardShortcutsModal } from './components/layout/KeyboardShortcutsModal';
@@ -403,26 +403,28 @@ export default function App() {
         </div>
       )}
 
-      {/* 5. Institutional App Header */}
-      <AppHeader
-        activeTab={activeTab}
-        onSelectTab={(tab) => navigateTo(tab)}
-        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-        onOpenCaseStudy={() => setIsCaseStudyOpen(true)}
-        onOpenKeyboardShortcuts={() => setIsShortcutsOpen(true)}
-        onOpenHelpCenter={() => setIsHelpCenterOpen(true)}
-        isLandingMode={isLandingMode}
-        onToggleMode={handleToggleMode}
-        onToggleMobileDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
-        canGoBack={canGoBack}
-        canGoForward={canGoForward}
-        onGoBack={handleGoBack}
-        onGoForward={handleGoForward}
-        onOpenTutorial={() => setIsTutorialOpen(true)}
-        aiPmMode={aiPmMode}
-        density={density}
-        onCycleDensity={handleCycleDensity}
-      />
+      {/* 5. Institutional App Header (Marketing Landing Mode) */}
+      {isLandingMode && (
+        <AppHeader
+          activeTab={activeTab}
+          onSelectTab={(tab) => navigateTo(tab)}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          onOpenCaseStudy={() => setIsCaseStudyOpen(true)}
+          onOpenKeyboardShortcuts={() => setIsShortcutsOpen(true)}
+          onOpenHelpCenter={() => setIsHelpCenterOpen(true)}
+          isLandingMode={isLandingMode}
+          onToggleMode={handleToggleMode}
+          onToggleMobileDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
+          canGoBack={canGoBack}
+          canGoForward={canGoForward}
+          onGoBack={handleGoBack}
+          onGoForward={handleGoForward}
+          onOpenTutorial={() => setIsTutorialOpen(true)}
+          aiPmMode={aiPmMode}
+          density={density}
+          onCycleDensity={handleCycleDensity}
+        />
+      )}
 
       {/* 6. Main Workspace Layout */}
       {isLandingMode ? (
@@ -430,19 +432,11 @@ export default function App() {
           <LandingPage onOpenApp={handleOpenApp} onOpenCaseStudy={() => setIsCaseStudyOpen(true)} />
         </main>
       ) : (
-        <div className="flex-1 flex w-full relative z-10">
-          {/* Grouped Modular Sidebar (Desktop) */}
-          <AppSidebar
-            activeTab={activeTab}
-            onSelectTab={(tab) => navigateTo(tab)}
-            unresolvedSignalsCount={2}
-            unresolvedOpportunitiesCount={opportunities.filter((o) => o.status === 'inbox').length}
-            enabledModules={enabledModules}
-            aiPmMode={aiPmMode}
-          />
-
-          {/* Module Content Viewport */}
-          <main className="flex-1 overflow-x-hidden min-w-0 bg-[#050505]">
+        <AppShell
+          activeTab={activeTab}
+          onNavigateTab={(t) => navigateTo(t)}
+          onOpenShortcuts={() => setIsShortcutsOpen(true)}
+        >
             {/* WORK GROUP */}
             {(activeTab === 'home' || activeTab === 'overview') && (
               <PageTransition>
@@ -597,23 +591,24 @@ export default function App() {
                 onToggleModule={handleToggleModule}
               />
             )}
-          </main>
-        </div>
+        </AppShell>
       )}
 
       {/* 7. Touch-Optimized Mobile Navigation Bar & Drawer */}
-      <MobileNavigation
-        activeTab={activeTab}
-        onSelectTab={(tab) => navigateTo(tab)}
-        isDrawerOpen={isMobileDrawerOpen}
-        onToggleDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
-        onOpenCaseStudy={() => {
-          setIsMobileDrawerOpen(false);
-          setIsCaseStudyOpen(true);
-        }}
-        unresolvedSignalsCount={2}
-        unresolvedOpportunitiesCount={opportunities.filter((o) => o.status === 'inbox').length}
-      />
+      {!isLandingMode && (
+        <MobileNavigation
+          activeTab={activeTab}
+          onSelectTab={(tab) => navigateTo(tab)}
+          isDrawerOpen={isMobileDrawerOpen}
+          onToggleDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
+          onOpenCaseStudy={() => {
+            setIsMobileDrawerOpen(false);
+            setIsCaseStudyOpen(true);
+          }}
+          unresolvedSignalsCount={2}
+          unresolvedOpportunitiesCount={opportunities.filter((o) => o.status === 'inbox').length}
+        />
+      )}
 
       {/* 8. Global Modals */}
       <CommandPalette
