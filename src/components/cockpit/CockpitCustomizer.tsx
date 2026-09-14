@@ -74,7 +74,7 @@ export const CockpitCustomizer: React.FC<CockpitCustomizerProps> = ({
     >
       {/* 1. Information Density Selector */}
       <div className="space-y-2 pb-4 border-b border-[rgba(255,255,255,0.06)]">
-        <label className="text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#8A8A8A]">
+        <label className="text-[11px] font-medium font-sans text-[var(--text-tertiary)]">
           Display Density
         </label>
         <div className="grid grid-cols-3 gap-2">
@@ -96,7 +96,7 @@ export const CockpitCustomizer: React.FC<CockpitCustomizerProps> = ({
 
       {/* 2. Card Modules Visibility & Pinning */}
       <div className="space-y-2">
-        <label className="text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#8A8A8A]">
+        <label className="text-[11px] font-medium font-sans text-[var(--text-tertiary)]">
           Card Modules ({cards.filter((c) => c.visible).length}/{cards.length} Visible)
         </label>
         <div className="space-y-1.5">

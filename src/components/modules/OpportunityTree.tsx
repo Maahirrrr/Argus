@@ -102,7 +102,7 @@ export const OpportunityTree: React.FC<OpportunityTreeProps> = ({
                   className="btn-magnetic flex items-center gap-1 px-2.5 py-1 rounded-[2px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-[11px] font-mono-tech font-bold cursor-pointer transition-colors shadow-sm shadow-[#0066FF]/20"
                 >
                   <SlidersHorizontal className="w-3 h-3" />
-                  <span>Prioritize →</span>
+                  <span>Prioritize</span>
                 </button>
               )}
 
@@ -155,7 +155,7 @@ export const OpportunityTree: React.FC<OpportunityTreeProps> = ({
             <div>
               <h1 className="text-xl font-bold font-display tracking-tight text-[#F5F5F0]">Visual Opportunity Solution Tree</h1>
               <p className="text-xs font-mono-tech text-[#8A8A8A]">
-                Teresa Torres OST methodology: Business Outcome → User Problem → Need → Opportunity → Solution → Experiment
+                Teresa Torres OST methodology: Business outcome · User problem · Need · Opportunity · Solution · Experiment
               </p>
             </div>
           </div>
@@ -184,15 +184,15 @@ export const OpportunityTree: React.FC<OpportunityTreeProps> = ({
       <div className="flex items-center gap-3 p-3 rounded-[2px] bg-[#0A0A0A] border border-[#1D1D1D] overflow-x-auto text-[10px] font-mono-tech uppercase">
         <span className="text-[#525252]">Tree Hierarchy:</span>
         <span className="text-[#0066FF]">1. Outcome</span>
-        <span className="text-[#525252]">→</span>
+        <span className="text-[var(--text-tertiary)] px-0.5 font-sans">/</span>
         <span className="text-[#EF4444]">2. Problem</span>
-        <span className="text-[#525252]">→</span>
+        <span className="text-[var(--text-tertiary)] px-0.5 font-sans">/</span>
         <span className="text-[#F59E0B]">3. User Need</span>
-        <span className="text-[#525252]">→</span>
+        <span className="text-[var(--text-tertiary)] px-0.5 font-sans">/</span>
         <span className="text-[#0070F3]">4. Opportunity</span>
-        <span className="text-[#525252]">→</span>
+        <span className="text-[var(--text-tertiary)] px-0.5 font-sans">/</span>
         <span className="text-[#10B981]">5. Solution</span>
-        <span className="text-[#525252]">→</span>
+        <span className="text-[var(--text-tertiary)] px-0.5 font-sans">/</span>
         <span className="text-[#D4D4D4]">6. Experiment</span>
       </div>
 

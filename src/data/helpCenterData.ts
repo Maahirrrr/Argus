@@ -12,7 +12,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     category: 'Getting Started',
     title: 'The Argus Product Lifecycle Loop',
     summary: 'How signals transform into causal insights, prioritized roadmaps, PRDs, and experiments.',
-    content: 'Argus connects fragmented PM workflows into a unified flywheel: Raw Signals → Causal Insights → Opportunity Solution Trees → Dynamic RICE Prioritization → PRD with BDD Scenarios → Prototype Lab → A/B Experiments → Product Analytics → Permanent Decision Records.',
+    content: 'Argus connects fragmented PM workflows into a unified flywheel: Raw Signals · Causal Insights · Opportunity Solution Trees · Dynamic RICE Prioritization · PRD with BDD Scenarios · Prototype Lab · A/B Experiments · Product Analytics · Permanent Decision Records.',
   },
   {
     id: 'help-02',

@@ -27,20 +27,19 @@ export const CockpitHeader: React.FC<CockpitHeaderProps> = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[rgba(255,255,255,0.08)] select-none">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border-subtle)] select-none">
       {/* Title & Subtitle */}
       <div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono-tech uppercase tracking-wider text-[#666666]">
-            OVERVIEW
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-green)]" />
+          <span className="text-[11px] font-normal text-[var(--text-tertiary)] font-sans">
+            System optimal
           </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#46A758]" />
-          <span className="text-[10px] font-mono-tech text-[#46A758]">SYSTEM OPTIMAL</span>
         </div>
-        <h1 className="text-[20px] font-semibold tracking-tight text-[#EDEDED] mt-0.5">
+        <h1 className="text-[20px] font-bold font-['Space_Grotesk',sans-serif] tracking-tight text-[var(--text-primary)] mt-0.5">
           Cockpit
         </h1>
-        <p className="text-xs text-[#A1A1A1] mt-0.5">
+        <p className="text-[12px] text-[var(--text-secondary)] font-sans mt-0.5">
           Product intelligence across your workspace.
         </p>
       </div>
@@ -51,15 +50,15 @@ export const CockpitHeader: React.FC<CockpitHeaderProps> = ({
         <div className="relative">
           <button
             onClick={() => setDateDropdownOpen(!dateDropdownOpen)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] bg-[#0A0A0A] hover:bg-[#121212] border border-[rgba(255,255,255,0.08)] text-xs text-[#EDEDED] font-mono-tech transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[var(--radius-sm)] bg-[var(--surface-1)] hover:bg-[var(--surface-2)] border border-[var(--border-default)] text-xs text-[var(--text-primary)] font-sans transition-colors cursor-pointer"
           >
-            <Calendar className="w-3.5 h-3.5 text-[#666666]" />
+            <Calendar className="w-3.5 h-3.5 text-[var(--text-tertiary)]" />
             <span>{dateRange}</span>
-            <ChevronDown className="w-3 h-3 text-[#666666]" />
+            <ChevronDown className="w-3 h-3 text-[var(--text-tertiary)]" />
           </button>
 
           {dateDropdownOpen && (
-            <div className="absolute right-0 top-full mt-1 z-40 w-36 p-1 bg-[#0A0A0A] border border-[rgba(255,255,255,0.10)] rounded-[6px] shadow-2xl animate-fade-in-scale">
+            <div className="absolute right-0 top-full mt-1 z-40 w-36 p-1 bg-[var(--surface-3)] border border-[var(--border-default)] rounded-[var(--radius-sm)] shadow-xl">
               {ranges.map((r) => (
                 <button
                   key={r}
@@ -67,8 +66,10 @@ export const CockpitHeader: React.FC<CockpitHeaderProps> = ({
                     setDateRange(r);
                     setDateDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-2 py-1 text-xs rounded-[3px] font-mono-tech transition-colors cursor-pointer ${
-                    dateRange === r ? 'bg-[#141414] text-[#EDEDED] font-bold' : 'text-[#A1A1A1] hover:text-[#EDEDED] hover:bg-[#101010]'
+                  className={`w-full text-left px-2 py-1 text-xs rounded-[var(--radius-sm)] font-sans transition-colors cursor-pointer ${
+                    dateRange === r
+                      ? 'bg-[var(--surface-2)] text-[var(--text-primary)] font-medium'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-2)]'
                   }`}
                 >
                   {r}
@@ -81,34 +82,34 @@ export const CockpitHeader: React.FC<CockpitHeaderProps> = ({
         {/* Refresh Button */}
         <button
           onClick={handleRefresh}
-          className="p-1.5 rounded-[6px] bg-[#0A0A0A] hover:bg-[#121212] border border-[rgba(255,255,255,0.08)] text-[#A1A1A1] hover:text-[#EDEDED] transition-colors cursor-pointer"
+          className="p-1.5 rounded-[var(--radius-sm)] bg-[var(--surface-1)] hover:bg-[var(--surface-2)] border border-[var(--border-default)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
           title="Refresh workspace telemetry"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#0070F3]' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[var(--signal-blue)]' : ''}`} />
         </button>
 
         {/* Customize Toggle */}
         <button
           onClick={onToggleCustomize}
-          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] border text-xs font-mono-tech transition-colors cursor-pointer ${
+          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-[var(--radius-sm)] border text-xs font-sans transition-colors cursor-pointer ${
             isCustomizing
-              ? 'bg-[#121214] border-[#0070F3] text-[#0070F3]'
-              : 'bg-[#0A0A0A] border-[rgba(255,255,255,0.08)] text-[#A1A1A1] hover:text-[#EDEDED] hover:bg-[#121212]'
+              ? 'bg-[var(--surface-2)] border-[var(--signal-blue)] text-[var(--signal-blue)]'
+              : 'bg-[var(--surface-1)] border-[var(--border-default)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-2)]'
           }`}
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Customize</span>
         </button>
 
-        {/* Chaos Simulator Trigger */}
+        {/* Chaos Mode shortcut */}
         {onOpenChaosSimulator && (
           <button
             onClick={onOpenChaosSimulator}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] bg-[#0A0A0A] hover:bg-[#141414] border border-[rgba(255,255,255,0.08)] hover:border-[#F5A524]/40 text-xs text-[#A1A1A1] hover:text-[#F5A524] font-mono-tech transition-colors cursor-pointer"
-            title="Simulate sudden telemetry spike"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-[var(--radius-sm)] bg-[var(--surface-1)] hover:bg-[var(--surface-2)] border border-[var(--border-default)] text-xs font-sans text-[var(--signal-amber)] transition-colors cursor-pointer"
+            title="Simulate failure mode"
           >
-            <Zap className="w-3.5 h-3.5 text-[#F5A524]" />
-            <span className="hidden sm:inline">Simulate Spike</span>
+            <Zap className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Chaos test</span>
           </button>
         )}
       </div>

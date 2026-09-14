@@ -43,8 +43,8 @@ export const AppShell: React.FC<AppShellProps> = ({
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#050505] text-[#FFFFFF] overflow-hidden select-none">
-      {/* 1. Persistent Left Sidebar (240px / 48px rail) */}
+    <div className="flex h-screen w-full bg-[var(--surface-0)] text-[var(--text-primary)] overflow-hidden select-none">
+      {/* 1. Persistent Left Sidebar (220px / 44px rail) */}
       <Sidebar
         activeTab={activeTab}
         onNavigateTab={onNavigateTab}
@@ -54,8 +54,8 @@ export const AppShell: React.FC<AppShellProps> = ({
       />
 
       {/* 2. Main Content Column */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-[#050505]">
-        {/* TopBar (strictly 48px) */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-[var(--surface-0)]">
+        {/* TopBar (strictly 44px) */}
         <TopBar
           activeTab={activeTab}
           onNavigateTab={onNavigateTab}
@@ -63,8 +63,8 @@ export const AppShell: React.FC<AppShellProps> = ({
           onOpenShortcuts={onOpenShortcuts}
         />
 
-        {/* Dynamic Tool Workspace: Left-aligned, max-width 1200px, 24px top / 32px side padding */}
-        <main className="flex-1 overflow-y-auto bg-[#050505] pt-6 px-4 sm:px-8 pb-20 md:pb-8">
+        {/* Dynamic Tool Workspace: Left-aligned, max-width 1200px, 20px top / 32px side padding */}
+        <main className="flex-1 overflow-y-auto bg-[var(--surface-0)] pt-5 px-4 sm:px-8 pb-20 md:pb-8">
           <div className="max-w-[1200px] w-full mr-auto">
             {children}
           </div>

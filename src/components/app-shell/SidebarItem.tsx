@@ -9,6 +9,7 @@ interface SidebarItemProps {
   isActive: boolean;
   isCollapsed: boolean;
   badge?: number | string;
+  badgeType?: 'inbox' | 'opportunities' | 'today';
   badgeColor?: string;
   onClick: () => void;
 }
@@ -19,48 +20,96 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   isActive,
   isCollapsed,
   badge,
+  badgeType,
   badgeColor,
   onClick,
 }) => {
-  const buttonElement = (
+  const renderBadge = () => {
+    if (badge === undefined || badge === null) return null;
+
+    if (badgeType === 'inbox' || badge === 4 || badge === '4') {
+      return (
+        <span className="w-4 h-4 rounded-full bg-[var(--signal-red)] text-white text-[11px] font-semibold font-sans flex items-center justify-center flex-shrink-0">
+          {badge}
+        </span>
+      );
+    }
+
+    if (badgeType === 'today' || badge === 'NEW') {
+      return (
+        <span className="h-5 px-1.5 rounded-full bg-[var(--signal-blue)] text-white text-[10px] font-semibold font-sans flex items-center justify-center flex-shrink-0">
+          {badge}
+        </span>
+      );
+    }
+
+    if (badgeType === 'opportunities' || badge === 19 || badge === '19') {
+      return (
+        <span className="h-4 px-1.5 rounded-full bg-[var(--surface-3)] text-[var(--text-secondary)] text-[11px] font-medium font-sans flex items-center justify-center flex-shrink-0">
+          {badge}
+        </span>
+      );
+    }
+
+    return (
+      <span
+        className={`h-4 px-1.5 rounded-full text-[11px] font-medium font-sans flex items-center justify-center flex-shrink-0 ${
+          badgeColor || 'bg-[var(--surface-3)] text-[var(--text-secondary)]'
+        }`}
+      >
+        {badge}
+      </span>
+    );
+  };
+
+  if (isCollapsed) {
+    return (
+      <ArgusTooltip content={label} position="right">
+        <button
+          onClick={onClick}
+          className={`w-full h-8 flex items-center justify-center transition-colors duration-150 cursor-pointer select-none relative group ${
+            isActive
+              ? 'border-l-2 border-[var(--signal-blue)] bg-transparent'
+              : 'border-l-2 border-transparent hover:bg-[var(--surface-2)]'
+          }`}
+        >
+          <Icon
+            className={`w-4 h-4 transition-colors ${
+              isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]'
+            }`}
+          />
+        </button>
+      </ArgusTooltip>
+    );
+  }
+
+  return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center ${
-        isCollapsed ? 'justify-center p-2' : 'justify-between px-3 py-2'
-      } text-xs font-mono-tech transition-colors duration-150 cursor-pointer select-none relative group border-l-2 ${
+      className={`w-full h-8 flex items-center justify-between px-3 rounded-[var(--radius-sm)] transition-colors duration-150 cursor-pointer select-none relative group ${
         isActive
-          ? 'border-[#0066FF] text-[#FFFFFF] font-medium bg-[#0A0A0A]'
-          : 'border-transparent text-[#6B7280] hover:text-[#FFFFFF] hover:bg-[#0A0A0A]/50'
+          ? 'bg-transparent border-l-2 border-[var(--signal-blue)] rounded-l-none'
+          : 'bg-transparent border-l-2 border-transparent hover:bg-[var(--surface-2)]'
       }`}
     >
       <div className="flex items-center gap-2.5 truncate">
         <Icon
           className={`w-4 h-4 flex-shrink-0 transition-colors ${
-            isActive ? 'text-[#0066FF]' : 'text-[#6B7280] group-hover:text-[#FFFFFF]'
+            isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]'
           }`}
         />
-        {!isCollapsed && <span className="truncate text-[13px] tracking-tight">{label}</span>}
-      </div>
-
-      {!isCollapsed && badge !== undefined && (
         <span
-          className={`text-[10px] font-mono font-medium px-1.5 py-0.5 rounded-[2px] text-white flex-shrink-0 ${
-            badgeColor || 'bg-[#1A1A1A] text-[#9CA3AF]'
+          className={`truncate text-[13px] font-sans transition-colors ${
+            isActive
+              ? 'text-[var(--text-primary)] font-medium'
+              : 'text-[var(--text-secondary)] font-normal group-hover:text-[var(--text-primary)]'
           }`}
         >
-          {badge}
+          {label}
         </span>
-      )}
+      </div>
+
+      {renderBadge()}
     </button>
   );
-
-  if (isCollapsed) {
-    return (
-      <ArgusTooltip content={label} position="right">
-        {buttonElement}
-      </ArgusTooltip>
-    );
-  }
-
-  return buttonElement;
 };

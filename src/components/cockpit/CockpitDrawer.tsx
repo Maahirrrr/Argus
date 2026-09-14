@@ -106,7 +106,7 @@ export const CockpitDrawer: React.FC<CockpitDrawerProps> = ({
       {/* 2. Analytical Reasoning Steps (For AI Recommendations) */}
       {data.reasoningSteps && data.reasoningSteps.length > 0 && (
         <div className="space-y-2">
-          <div className="flex items-center gap-1.5 text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#A1A1A1]">
+          <div className="flex items-center gap-1.5 text-[11px] font-medium font-sans text-[var(--text-tertiary)]">
             <Layers className="w-3.5 h-3.5 text-[#0066FF]" />
             <span>Analytical Reasoning Trace</span>
           </div>
@@ -127,7 +127,7 @@ export const CockpitDrawer: React.FC<CockpitDrawerProps> = ({
       {/* 3. Verified Evidence Clusters */}
       {data.evidence && data.evidence.length > 0 && (
         <div className="space-y-2">
-          <div className="flex items-center gap-1.5 text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#A1A1A1]">
+          <div className="flex items-center gap-1.5 text-[11px] font-medium font-sans text-[var(--text-tertiary)]">
             <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
             <span>Verified Causal Evidence</span>
           </div>
@@ -148,7 +148,7 @@ export const CockpitDrawer: React.FC<CockpitDrawerProps> = ({
       {/* 4. Raw Telemetry Payload (For Signals) */}
       {data.payload && (
         <div className="space-y-2">
-          <div className="text-[11px] font-mono-tech font-bold uppercase tracking-wider text-[#A1A1A1]">
+          <div className="text-[11px] font-medium font-sans text-[var(--text-tertiary)]">
             Raw Event Payload
           </div>
           <pre className="p-3 rounded-[6px] bg-[#050505] border border-[rgba(255,255,255,0.06)] text-[11px] text-[#A1A1A1] font-mono-tech overflow-x-auto">

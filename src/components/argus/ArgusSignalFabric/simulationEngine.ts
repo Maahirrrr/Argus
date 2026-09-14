@@ -50,7 +50,7 @@ export class DemoSignalProvider implements ISignalProvider {
       delta: '+18.4%',
       analyzingMsg: 'payment anomaly...',
       insightMsg: 'Checkout friction (92% confidence)',
-      eventTitle: 'PAYMENT SPIKE',
+      eventTitle: 'Payment spike',
       severity: 'critical' as const,
     },
     {
@@ -60,7 +60,7 @@ export class DemoSignalProvider implements ISignalProvider {
       delta: '+24.1%',
       analyzingMsg: 'feedback cluster...',
       insightMsg: 'Checkout navigation friction (89% confidence)',
-      eventTitle: 'FEEDBACK CLUSTER',
+      eventTitle: 'Feedback cluster',
       severity: 'warning' as const,
     },
     {

@@ -17,7 +17,7 @@ import { GuidedProductLoop } from './components/layout/GuidedProductLoop';
 import { HelpCenterModal } from './components/layout/HelpCenterModal';
 
 import { LandingPage } from './components/landing/LandingPage';
-import { OverviewDashboard } from './components/modules/OverviewDashboard';
+import { CockpitGrid } from './components/cockpit/CockpitGrid';
 import { UnifiedInbox } from './components/modules/UnifiedInbox';
 import { CustomerFeedback } from './components/modules/CustomerFeedback';
 import { ResearchLab } from './components/modules/ResearchLab';
@@ -466,7 +466,7 @@ export default function App() {
             {/* WORK GROUP */}
             {(activeTab === 'home' || activeTab === 'overview') && (
               <PageTransition>
-                <OverviewDashboard
+                <CockpitGrid
                 onNavigateTab={(t) => navigateTo(t)}
                 onInvestigateSignal={handleInvestigateSignal}
                 onOpenChaosSimulator={() => setIsChaosSimulatorOpen(true)}

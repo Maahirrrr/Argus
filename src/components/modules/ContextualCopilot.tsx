@@ -162,7 +162,7 @@ export const ContextualCopilot: React.FC<ContextualCopilotProps> = ({
                       }}
                       className="text-xs font-mono-tech text-[#0066FF] hover:underline flex items-center gap-1 font-semibold"
                     >
-                      {m.suggestedAction.label} →
+                      {m.suggestedAction.label}
                     </button>
                   </div>
                 )}

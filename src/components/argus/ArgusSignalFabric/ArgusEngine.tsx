@@ -110,7 +110,7 @@ export const ArgusEngine: React.FC<ArgusEngineProps> = ({
       {isHovered && (
         <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 z-50 w-56 p-2.5 bg-[#0E0E0E] border border-[#262626] rounded-[2px] shadow-2xl text-left animate-fade-in-scale">
           <div className="text-[10px] font-mono-tech font-bold text-[#F5F5F0] uppercase tracking-wider">
-            ARGUS ENGINE / SIGNAL FUSION
+            Signal fusion
           </div>
           <div className="text-[9px] font-mono-tech text-[#0066FF] mt-0.5">
             06 active streams
@@ -123,7 +123,7 @@ export const ArgusEngine: React.FC<ArgusEngineProps> = ({
           </div>
           <div className="mt-1.5 pt-1 border-t border-[#1D1D1D] flex items-center justify-between text-[8px] font-mono-tech text-[#8A8A8A]">
             <span>04 downstream actions</span>
-            <span className="text-[#0066FF] font-semibold">Open Intelligence →</span>
+            <span className="text-[#0066FF] font-semibold">View intelligence</span>
           </div>
         </div>
       )}

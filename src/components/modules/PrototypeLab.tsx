@@ -264,7 +264,7 @@ export const PreviewComponent = () => {
                 <div className="bg-[#050505] p-3 rounded-[2px] border border-[#1D1D1D] text-xs font-mono-tech space-y-1">
                   <div className="text-[#8A8A8A] text-[10px]">ACTIVE CAUSAL PROBE</div>
                   <div className="text-[#F5F5F0]">SELECT count(*) FROM telemetry.checkout_events WHERE error_code IS NOT NULL;</div>
-                  <div className="text-[#00CC66] text-[11px]">→ 0 errors in preceding 120s window</div>
+                  <div className="text-[#00CC66] text-[11px]">0 errors in preceding 120s window</div>
                 </div>
               </div>
             ) : (

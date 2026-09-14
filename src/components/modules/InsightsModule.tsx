@@ -75,7 +75,7 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
             className="btn-magnetic w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-lg shadow-[#0066FF]/20 min-h-[44px]"
           >
             <Inbox className="w-3.5 h-3.5" />
-            <span>Create Opportunity →</span>
+            <span>Create opportunity</span>
           </button>
         </div>
       </div>
@@ -83,12 +83,12 @@ export const InsightsModule: React.FC<InsightsModuleProps> = ({
       {/* Metrics Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
         <div className="p-3.5 sm:p-4 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px]">
-          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">FAILURE SURGE</span>
+          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">Failure surge</span>
           <p className="text-xl sm:text-2xl font-bold font-mono-tech text-[#EF4444]">+7.4%</p>
-          <p className="text-[9px] sm:text-[10px] font-mono-tech text-[#525252] mt-0.5">94.2% → 90.1%</p>
+          <p className="text-[9px] sm:text-[10px] font-mono-tech text-[#525252] mt-0.5">94.2% to 90.1%</p>
         </div>
         <div className="p-3.5 sm:p-4 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[3px]">
-          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">USERS AFFECTED</span>
+          <span className="text-[10px] font-mono-tech text-[#8A8A8A] uppercase block mb-1">Users affected</span>
           <p className="text-xl sm:text-2xl font-bold font-mono-tech text-[#F5F5F0]">18,421</p>
           <p className="text-[9px] sm:text-[10px] font-mono-tech text-[#525252] mt-0.5">active transactors</p>
         </div>

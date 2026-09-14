@@ -17,7 +17,7 @@ export const SignalEventStream: React.FC<SignalEventStreamProps> = ({
     <div className={`space-y-1.5 ${className}`}>
       <div className="text-[9px] font-mono-tech text-[#525252] uppercase tracking-wider flex items-center gap-1.5 pb-1 border-b border-[#1A1A1A]">
         <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-        <span>LIVE EVENT STREAM</span>
+        <span>Live events</span>
       </div>
 
       <div className="space-y-1 overflow-hidden">

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Breadcrumbs } from './Breadcrumbs';
-import { Command } from 'lucide-react';
+import { ChevronDown, Bell } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
+import { demoSignalProvider } from '../argus/ArgusSignalFabric/simulationEngine';
 
 interface TopBarProps {
   activeTab: NavigationTab;
@@ -15,32 +16,69 @@ export const TopBar: React.FC<TopBarProps> = ({
   onNavigateTab,
   onOpenCommandPalette,
 }) => {
+  const [isSimulating, setIsSimulating] = useState(() => demoSignalProvider.isSimulating());
+  const [hasAlerts] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = demoSignalProvider.subscribe(() => {
+      setIsSimulating(demoSignalProvider.isSimulating());
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 w-full h-[48px] bg-[#050505] border-b border-[#1A1A1A] px-4 sm:px-6 flex items-center justify-between select-none">
-      {/* Left: Breadcrumbs showing current module + sub-view */}
+    <header className="sticky top-0 z-40 w-full h-[44px] bg-[var(--surface-0)] border-b border-[var(--border-subtle)] px-4 sm:px-6 flex items-center justify-between select-none">
+      {/* Left: Breadcrumbs */}
       <div className="flex items-center gap-3">
         <Breadcrumbs activeTab={activeTab} onNavigateTab={onNavigateTab} />
       </div>
 
-      {/* Center/Right: Live System Status Indicator & ⌘K Trigger. Nothing else. */}
-      <div className="flex items-center gap-3 sm:gap-4">
-        {/* Live system status indicator: 7px dot with 3s subtle pulse + label */}
-        <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#0A0A0A] border border-[#1A1A1A] text-xs font-mono text-[#D1D5DB]">
-          <span className="argus-status-dot bg-[#00FF88] argus-status-dot-pulse" />
-          <span className="text-[11px] text-[#9CA3AF]">UPI Gateway Nominal</span>
-        </div>
-
-        {/* Command palette trigger (⌘K) */}
+      {/* Center: Project Selector & Simulation Indicator */}
+      <div className="flex items-center gap-4">
         <button
           onClick={onOpenCommandPalette}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0A0A0A] hover:bg-[#111111] border border-[#1A1A1A] hover:border-[rgba(255,255,255,0.16)] text-xs text-[#9CA3AF] hover:text-[#FFFFFF] transition-colors cursor-pointer"
-          title="Command Palette (⌘K)"
+          className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-[var(--radius-sm)] text-[13px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-2)] transition-colors cursor-pointer"
         >
-          <span className="text-[11px] font-sans">Command</span>
-          <kbd className="text-[10px] font-mono text-[#6B7280] flex items-center">
-            <Command className="w-2.5 h-2.5 inline mr-0.5" />K
-          </kbd>
+          <span>All Projects</span>
+          <ChevronDown className="w-3 h-3 text-[var(--text-tertiary)]" />
         </button>
+
+        {/* Simulation mode indicator: small 6px dot + text, no pulse, only visible when running */}
+        {isSimulating && (
+          <div className="flex items-center gap-1.5 text-[11px] font-sans text-[var(--signal-amber)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal-amber)]" />
+            <span>Simulation</span>
+          </div>
+        )}
+      </div>
+
+      {/* Right Cluster: "New" button, Bell icon, 28px avatar */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => onNavigateTab('prds')}
+          className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--signal-blue)] hover:bg-[var(--signal-blue-dim)] text-white text-[13px] font-medium font-sans transition-colors cursor-pointer"
+        >
+          New
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('inbox')}
+          className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer relative"
+          title="Alerts"
+        >
+          <Bell className="w-4 h-4" />
+          {hasAlerts && (
+            <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-[var(--signal-red)]" />
+          )}
+        </button>
+
+        <div
+          onClick={() => onNavigateTab('settings')}
+          className="w-7 h-7 rounded-full bg-[var(--surface-3)] border border-[var(--border-default)] flex items-center justify-center text-[11px] font-medium text-[var(--text-primary)] font-sans cursor-pointer hover:border-[var(--border-strong)] transition-colors"
+          title="Account Settings"
+        >
+          PM
+        </div>
       </div>
     </header>
   );

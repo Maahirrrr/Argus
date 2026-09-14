@@ -287,7 +287,7 @@ export const CustomerFeedback: React.FC<CustomerFeedbackProps> = ({
                   className="flex items-center gap-1 px-2.5 py-1.5 rounded-[4px] bg-[#0066FF]/10 hover:bg-[#0066FF]/20 border border-[#0066FF]/30 text-xs font-mono-tech text-[#0066FF] hover:text-[#3B82F6] cursor-pointer transition-colors"
                 >
                   <Layers className="w-3 h-3" />
-                  <span>Promote to Opportunity →</span>
+                  <span>Promote to opportunity</span>
                 </button>
               </div>
             </div>

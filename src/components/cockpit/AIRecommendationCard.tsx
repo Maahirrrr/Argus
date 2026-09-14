@@ -16,7 +16,7 @@ export const AIRecommendationCard: React.FC<AIRecommendationCardProps> = ({
         <div className="flex items-center justify-between pb-2 border-b border-[rgba(255,255,255,0.06)]">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono-tech uppercase font-bold text-[#0066FF] px-1.5 py-0.5 rounded-[3px] bg-[#0066FF]/10 border border-[#0066FF]/30">
-              ARGUS INTELLIGENCE
+              Argus intelligence
             </span>
             <span className="text-xs font-semibold text-[#EDEDED]">Recommendation</span>
           </div>
@@ -58,7 +58,7 @@ export const AIRecommendationCard: React.FC<AIRecommendationCardProps> = ({
           onClick={onCreateOpportunity}
           className="px-3 py-1.5 rounded-[4px] bg-[#0E0E0E] hover:bg-[#161616] text-[#EDEDED] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.16)] text-xs font-medium cursor-pointer transition-colors"
         >
-          Create Opportunity
+          Create opportunity
         </button>
       </div>
     </div>

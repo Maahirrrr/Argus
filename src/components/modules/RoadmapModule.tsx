@@ -131,7 +131,7 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
           onClick={() => onShowToast('Conflict flagged to Lead Systems Architect.')}
           className="text-[11px] font-mono-tech text-[#FF3333] hover:underline whitespace-nowrap self-center"
         >
-          Flag to Architect →
+          Flag to architect
         </button>
       </div>
 
@@ -240,7 +240,7 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
                               className="hover:text-[#0066FF] px-1"
                               title="Advance Status"
                             >
-                              Next →
+                              Advance
                             </button>
                           )}
                         </div>
@@ -391,7 +391,7 @@ export const RoadmapModule: React.FC<RoadmapModuleProps> = ({
                 onClick={() => onNavigateTab('prds')}
                 className="px-2.5 py-1 text-xs font-mono-tech bg-[#0066FF] text-white rounded-[2px] hover:bg-[#0052CC]"
               >
-                Inspect PRD →
+                Inspect PRD
               </button>
             </div>
           </div>

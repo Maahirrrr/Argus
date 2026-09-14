@@ -125,7 +125,7 @@ export const SEED_EVENTS: SignalEvent[] = [
     confidence: 0.92,
     impact: 'HIGH (+$320k ARR)',
     destination: 'opportunities',
-    title: 'PAYMENT SPIKE +18.4%',
+    title: 'Payment spike +18.4%',
     metricDelta: '+18.4%',
     usersAffected: '18.2K returning users',
     evidence: [
@@ -146,7 +146,7 @@ export const SEED_EVENTS: SignalEvent[] = [
     confidence: 0.94,
     impact: 'MODERATE (+5.1% W4)',
     destination: 'roadmap',
-    title: 'RETENTION SIGNAL HIGH',
+    title: 'Retention signal HIGH',
     metricDelta: '+5.1%',
     usersAffected: '3,420 PM power users',
     evidence: [

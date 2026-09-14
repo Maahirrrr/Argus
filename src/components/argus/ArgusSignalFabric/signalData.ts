@@ -40,7 +40,7 @@ export interface IntelligenceOutput {
 export const INITIAL_SIGNAL_SOURCES: SignalSource[] = [
   {
     id: 'src-payments',
-    name: 'PAYMENTS',
+    name: 'Payments',
     category: 'product',
     metric: '1.42M txns/day',
     status: 'critical',
@@ -51,7 +51,7 @@ export const INITIAL_SIGNAL_SOURCES: SignalSource[] = [
   },
   {
     id: 'src-transactions',
-    name: 'TRANSACTIONS',
+    name: 'Transactions',
     category: 'product',
     metric: '18.4K vol',
     status: 'healthy',
@@ -62,7 +62,7 @@ export const INITIAL_SIGNAL_SOURCES: SignalSource[] = [
   },
   {
     id: 'src-support',
-    name: 'SUPPORT',
+    name: 'Support',
     category: 'users',
     metric: '47 users',
     status: 'healthy',
@@ -73,7 +73,7 @@ export const INITIAL_SIGNAL_SOURCES: SignalSource[] = [
   },
   {
     id: 'src-retention',
-    name: 'RETENTION',
+    name: 'Retention',
     category: 'users',
     metric: '61.2% WAU',
     status: 'healthy',
@@ -84,7 +84,7 @@ export const INITIAL_SIGNAL_SOURCES: SignalSource[] = [
   },
   {
     id: 'src-feedback',
-    name: 'FEEDBACK',
+    name: 'Feedback',
     category: 'users',
     metric: '520 reports/wk',
     status: 'healthy',
@@ -95,7 +95,7 @@ export const INITIAL_SIGNAL_SOURCES: SignalSource[] = [
   },
   {
     id: 'src-competitor',
-    name: 'COMPETITOR',
+    name: 'Competitor',
     category: 'market',
     metric: 'Superhuman v2',
     status: 'healthy',
@@ -110,7 +110,7 @@ export const INITIAL_OUTPUTS: IntelligenceOutput[] = [
   {
     id: 'out-opportunity',
     type: 'opportunity',
-    title: 'OPPORTUNITY',
+    title: 'Opportunity',
     code: '#014',
     subtitle: 'Zero-friction checkout failover',
     confidence: 94,
@@ -120,7 +120,7 @@ export const INITIAL_OUTPUTS: IntelligenceOutput[] = [
   {
     id: 'out-decision',
     type: 'decision',
-    title: 'DECISION',
+    title: 'Decision',
     code: 'ADR-041',
     subtitle: 'ClickHouse telemetry columnar migration',
     confidence: 91,
@@ -130,7 +130,7 @@ export const INITIAL_OUTPUTS: IntelligenceOutput[] = [
   {
     id: 'out-prd',
     type: 'prd',
-    title: 'PRD / SPEC',
+    title: 'Spec',
     code: 'Checkout redesign',
     subtitle: 'Autonomous PRD & Gherkin user stories',
     confidence: 89,
@@ -140,7 +140,7 @@ export const INITIAL_OUTPUTS: IntelligenceOutput[] = [
   {
     id: 'out-experiment',
     type: 'experiment',
-    title: 'EXPERIMENT',
+    title: 'Experiment',
     code: '#104',
     subtitle: 'Instant POS routing circuit breaker',
     confidence: 92,
@@ -154,7 +154,7 @@ export const INITIAL_EVENTS: SignalEvent[] = [
     id: 'ev-1',
     timestamp: '10:21:56',
     sourceId: 'src-payments',
-    title: 'PAYMENT SPIKE',
+    title: 'Payment spike',
     value: '+18.4%',
     severity: 'critical',
   },
@@ -162,7 +162,7 @@ export const INITIAL_EVENTS: SignalEvent[] = [
     id: 'ev-2',
     timestamp: '10:21:52',
     sourceId: 'src-feedback',
-    title: 'FEEDBACK CLUSTER',
+    title: 'Feedback cluster',
     value: '520 reports',
     severity: 'warning',
   },
@@ -170,7 +170,7 @@ export const INITIAL_EVENTS: SignalEvent[] = [
     id: 'ev-3',
     timestamp: '10:21:48',
     sourceId: 'src-retention',
-    title: 'RETENTION SIGNAL',
+    title: 'Retention signal',
     value: 'HIGH',
     severity: 'info',
   },
@@ -178,7 +178,7 @@ export const INITIAL_EVENTS: SignalEvent[] = [
     id: 'ev-4',
     timestamp: '10:21:43',
     sourceId: 'src-support',
-    title: 'SUPPORT CLUSTER',
+    title: 'Support cluster',
     value: '47 users',
     severity: 'info',
   },

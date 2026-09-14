@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
 import type { IntelligenceOutput as OutputType } from './signalData';
 
 interface IntelligenceOutputProps {
@@ -11,6 +10,13 @@ interface IntelligenceOutputProps {
   onClick: () => void;
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  opportunity: 'Opportunity',
+  decision: 'Decision',
+  prd: 'Spec',
+  experiment: 'Experiment',
+};
+
 export const IntelligenceOutput: React.FC<IntelligenceOutputProps> = ({
   output,
   isHovered,
@@ -19,29 +25,40 @@ export const IntelligenceOutput: React.FC<IntelligenceOutputProps> = ({
   onMouseLeave,
   onClick,
 }) => {
+  const categoryLabel = CATEGORY_LABELS[output.type] || output.type;
+  // Clean up ID: e.g. "OPPORTUNITY #014" -> "#014"
+  const cleanId = output.title.replace(/^[A-Z\s/]+/, '').trim() || output.title;
+
   return (
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
-      className={`p-1.5 sm:p-2 rounded-[2px] bg-[#0A0A0A] border cursor-pointer transition-all duration-150 select-none group ${
-        isHovered
-          ? 'border-[#0066FF] bg-[#101014] -translate-x-0.5 shadow-sm'
-          : isHighlighted
-          ? 'border-[#0066FF] bg-[#0c101a] shadow-[0_0_10px_rgba(0,102,255,0.25)]'
-          : 'border-[#1D1D1D] hover:border-[#2D2D2D]'
+      className={`p-2.5 sm:px-3 sm:py-2.5 bg-[var(--surface-1)] border-l-2 cursor-pointer select-none transition-colors rounded-none ${
+        isHighlighted || isHovered
+          ? 'border-l-[var(--signal-blue)] bg-[var(--surface-2)]'
+          : 'border-l-[var(--border-subtle)] hover:border-l-[var(--signal-blue)] hover:bg-[var(--surface-2)]'
       }`}
-      title={`Click to navigate to ${output.title}`}
+      title={`Open ${categoryLabel} ${cleanId}`}
     >
-      <div className="flex items-center justify-between text-[9px] font-mono-tech text-[#0066FF] font-bold">
-        <span>{output.title}</span>
-        <ArrowRight className="w-2.5 h-2.5 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+      {/* Top Row: category label left, ID right */}
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-normal text-[var(--text-tertiary)] font-sans">
+          {categoryLabel}
+        </span>
+        <span className="text-[11px] font-mono text-[var(--text-secondary)]">
+          {cleanId}
+        </span>
       </div>
-      <div className="text-[10px] font-bold text-[#F5F5F0] truncate mt-0.5">
+
+      {/* Bottom: Title */}
+      <div className="text-[13px] font-semibold font-['Space_Grotesk',sans-serif] text-[var(--text-primary)] truncate mt-1">
         {output.code}
       </div>
+
+      {/* Sub: Truncated description */}
       {output.subtitle && (
-        <div className="text-[8px] font-mono-tech text-[#8A8A8A] truncate mt-0.5">
+        <div className="text-[12px] font-normal text-[var(--text-secondary)] font-sans truncate mt-0.5">
           {output.subtitle}
         </div>
       )}

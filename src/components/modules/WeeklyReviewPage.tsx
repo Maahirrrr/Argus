@@ -62,7 +62,7 @@ export const WeeklyReviewPage: React.FC<WeeklyReviewPageProps> = ({ onNavigateTa
             onClick={() => onNavigateTab('prioritize')}
             className="btn-magnetic flex items-center gap-1.5 px-4 py-1.5 rounded-[3px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-semibold cursor-pointer shadow-md shadow-[#0066FF]/20"
           >
-            <span>Review Roadmap Priorities →</span>
+            <span>Review roadmap priorities</span>
           </button>
         </div>
       </div>

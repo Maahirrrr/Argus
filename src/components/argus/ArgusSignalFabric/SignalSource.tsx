@@ -84,7 +84,7 @@ export const SignalSource: React.FC<SignalSourceProps> = ({
             <div>
               <span className="text-[#555]">STATUS: </span>
               <span className={isActiveAnomaly || source.status === 'critical' ? 'text-[#EF4444] font-bold' : 'text-[#10B981]'}>
-                {isActiveAnomaly ? 'ANOMALY DETECTED' : source.status.toUpperCase()}
+                {isActiveAnomaly ? 'ANOMALY DETECTED' : 'Active'}
               </span>
             </div>
             <div>
@@ -94,7 +94,7 @@ export const SignalSource: React.FC<SignalSourceProps> = ({
           </div>
           <div className="mt-1 flex items-center justify-between text-[8px] font-mono-tech pt-1 border-t border-[#1D1D1D]/60 text-[#8A8A8A]">
             <span>CONFIDENCE: {source.confidence || 90}%</span>
-            <span className="text-[#0066FF] font-semibold">→ Open signal</span>
+            <span className="text-[#0066FF] font-semibold">Open signal</span>
           </div>
         </div>
       )}

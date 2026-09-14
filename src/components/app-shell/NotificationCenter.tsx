@@ -108,7 +108,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ onNaviga
               }}
               className="text-[#0070F3] hover:underline cursor-pointer"
             >
-              Open Center →
+              Open Center
             </button>
           </div>
         </div>

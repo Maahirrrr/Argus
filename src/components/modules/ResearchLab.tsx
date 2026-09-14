@@ -173,7 +173,7 @@ export const ResearchLab: React.FC<ResearchLabProps> = ({
                 onClick={() => handleCreateOpportunity(selectedProject.opportunityDiscovered)}
                 className="btn-magnetic flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-mono-tech font-bold cursor-pointer transition-colors shadow-sm shadow-[#0066FF]/30"
               >
-                <span>Promote to Opportunities Tree →</span>
+                <span>Promote to opportunity</span>
               </button>
             </div>
           </div>

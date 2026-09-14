@@ -61,7 +61,7 @@ export const OpportunitiesInbox: React.FC<OpportunitiesInboxProps> = ({
           className="btn-magnetic w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-[4px] bg-[#0066FF] hover:bg-[#1A75FF] text-white text-xs font-medium cursor-pointer min-h-[38px] transition-colors"
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
-          <span>Prioritize Roadmap →</span>
+          <span>Prioritize roadmap</span>
         </button>
       </div>
 

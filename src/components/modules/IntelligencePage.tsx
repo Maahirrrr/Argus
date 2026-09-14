@@ -489,7 +489,7 @@ export const IntelligencePage: React.FC<IntelligencePageProps> = ({
         </>
       )}
 
-      {/* ─── 5. Conversion Drawer: Signal → Opportunity Flow ─── */}
+      {/* ─── 5. Conversion Drawer: Signal to Opportunity Flow ─── */}
       {convertingSignal && (
         <ArgusDrawer
           isOpen={Boolean(convertingSignal)}
