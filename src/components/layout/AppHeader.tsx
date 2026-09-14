@@ -123,8 +123,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           href="https://maahirrrr.github.io/Argus/#"
           onClick={(e) => {
             e.preventDefault();
-            onSelectTab('home');
-            window.location.hash = '#/cockpit';
+            onSelectTab('landing');
+            window.location.hash = '#';
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           className="flex items-center gap-2 cursor-pointer no-underline text-inherit group select-none"

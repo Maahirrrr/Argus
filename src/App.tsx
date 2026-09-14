@@ -41,10 +41,23 @@ import { InsightsModule } from './components/modules/InsightsModule';
 export default function App() {
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
+  // Helper to detect browser reload / refresh
+  const isPageReload = (): boolean => {
+    try {
+      const navEntries = performance.getEntriesByType('navigation');
+      if (navEntries.length > 0) {
+        return (navEntries[0] as PerformanceNavigationTiming).type === 'reload';
+      }
+      return (performance as any).navigation?.type === 1;
+    } catch {
+      return false;
+    }
+  };
+
   // 1. Clean URL Hash Routing Engine
   const tabToHash = (tab: NavigationTab): string => {
+    if (tab === 'landing') return '#';
     if (tab === 'home' || tab === 'overview') return '#/cockpit';
-    if (tab === 'landing') return '#/landing';
     if (tab === 'ai_lab') return '#/ai-lab';
     if (tab === 'ai_copilot') return '#/copilot';
     return `#/${tab}`;
@@ -52,10 +65,10 @@ export default function App() {
 
   const hashToTab = (hashStr: string): NavigationTab => {
     const clean = hashStr.replace(/^#\/?/, '').toLowerCase();
-    if (clean === 'landing') return 'landing';
+    if (clean === 'landing' || clean === '' || clean === '#') return 'landing';
     if (clean === 'ai-lab' || clean === 'ai_lab') return 'ai_lab';
     if (clean === 'copilot' || clean === 'ai_copilot') return 'ai_copilot';
-    if (clean === 'cockpit' || clean === 'home' || clean === 'overview' || clean === '') return 'home';
+    if (clean === 'cockpit' || clean === 'home' || clean === 'overview') return 'home';
     if (clean === 'feedback' || clean === 'customers') return 'customers';
     if (clean === 'radar') return 'intelligence';
     const validTabs: NavigationTab[] = [
@@ -63,10 +76,25 @@ export default function App() {
       'opportunities', 'prioritize', 'roadmap', 'prds', 'prototypes', 'ai_lab',
       'experiments', 'analytics', 'ai_copilot', 'launch', 'decisions', 'documents', 'settings'
     ];
-    return validTabs.includes(clean as NavigationTab) ? (clean as NavigationTab) : 'home';
+    return validTabs.includes(clean as NavigationTab) ? (clean as NavigationTab) : 'landing';
   };
 
-  const initialTab = hashToTab(window.location.hash);
+  // Compute initial tab: on refresh or root load, ALWAYS take user to the main landing page
+  const getInitialTabOnMount = (): NavigationTab => {
+    if (isPageReload()) {
+      if (window.location.hash && window.location.hash !== '#') {
+        window.history.replaceState(null, '', window.location.pathname + '#');
+      }
+      return 'landing';
+    }
+    const hash = window.location.hash;
+    if (!hash || hash === '#' || hash === '#/' || hash === '#/landing') {
+      return 'landing';
+    }
+    return hashToTab(hash);
+  };
+
+  const initialTab = getInitialTabOnMount();
   const [activeTab, setActiveTab] = useState<NavigationTab>(initialTab);
   const [isLandingMode, setIsLandingMode] = useState<boolean>(() => initialTab === 'landing');
   const [historyStack, setHistoryStack] = useState<NavigationTab[]>([initialTab]);
@@ -151,8 +179,8 @@ export default function App() {
     if (tab === 'landing') {
       setIsLandingMode(true);
       setActiveTab('landing');
-      if (window.location.hash !== '#/landing') {
-        window.history.pushState({ tab: 'landing' }, '', '#/landing');
+      if (window.location.hash !== '#' && window.location.hash !== '') {
+        window.history.pushState({ tab: 'landing' }, '', window.location.pathname + '#');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -203,7 +231,7 @@ export default function App() {
       setHistoryIndex(newIndex);
       setActiveTab(targetTab);
       setIsLandingMode(targetTab === 'landing');
-      window.history.replaceState({ tab: targetTab }, '', targetTab === 'landing' ? '#' : `#${targetTab}`);
+      window.history.replaceState({ tab: targetTab }, '', tabToHash(targetTab));
     } else {
       window.history.back();
     }
@@ -216,7 +244,7 @@ export default function App() {
       setHistoryIndex(newIndex);
       setActiveTab(targetTab);
       setIsLandingMode(targetTab === 'landing');
-      window.history.replaceState({ tab: targetTab }, '', targetTab === 'landing' ? '#' : `#${targetTab}`);
+      window.history.replaceState({ tab: targetTab }, '', tabToHash(targetTab));
     } else {
       window.history.forward();
     }
