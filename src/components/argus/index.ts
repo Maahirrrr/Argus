@@ -15,3 +15,4 @@ export * from '../ui/MultiStepLoader';
 export * from '../ui/FloatingDock';
 export * from '../ui/PageTransition';
 export * from '../ui/AnimatedTooltip';
+export * from './ArgusSignalFabric';
