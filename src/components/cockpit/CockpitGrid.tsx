@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   TrendingUp,
   AlertTriangle,
-  ArrowRight,
   GitPullRequest,
   ChevronRight,
   Sparkles,
@@ -60,7 +59,7 @@ const SIGNALS_TABLE_DATA: SignalTableRow[] = [
     id: 'SIG-651',
     name: 'Android 15 Biometric Callback Drop',
     source: 'Mobile Client',
-    type: 'SDK Crash / Drop',
+    type: 'SDK Crash',
     severity: 'critical',
     delta: '+12.2% drop',
     affected: '2,190 users',
@@ -82,7 +81,7 @@ const SIGNALS_TABLE_DATA: SignalTableRow[] = [
     id: 'SIG-409',
     name: 'Competitor Superhuman Instant Checkout',
     source: 'Market Intelligence',
-    type: 'Feature Parity Risk',
+    type: 'Parity Risk',
     severity: 'warning',
     delta: '4.2s vs 11.4s',
     affected: 'Total Funnel',
@@ -395,6 +394,7 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
 
       {/* 3. STRUCTURAL PRIMITIVE 1: Horizontal Telemetry Anomaly Timeline / Sparkline */}
       <section className="p-4 sm:p-5 rounded-[var(--radius-md)] bg-[var(--surface-1)] border border-[var(--border-subtle)] space-y-3">
+        {/* Header with Title & Range Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2">
             <Activity className="w-3.5 h-3.5 text-[#0066FF]" />
@@ -406,14 +406,14 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {(['24h', '7d', '30d'] as const).map((r) => (
               <button
                 key={r}
                 onClick={() => setTimelineRange(r)}
-                className={`px-2 py-0.5 text-[10px] font-mono rounded-[2px] cursor-pointer transition-colors ${
+                className={`px-2.5 py-1 text-[10px] font-mono rounded-[3px] cursor-pointer transition-colors ${
                   timelineRange === r
-                    ? 'bg-[#1D1D1D] text-[#F5F5F0] border border-[#333]'
+                    ? 'bg-[#1D1D1D] text-[#F5F5F0] border border-[#333] font-semibold'
                     : 'text-[#666] hover:text-[#AAA]'
                 }`}
               >
@@ -423,80 +423,107 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
           </div>
         </div>
 
-        {/* Real Anomaly Timeline Chart Visualization */}
-        <div className="relative w-full h-[120px] bg-[#070707] border border-[#171717] rounded-[3px] p-3 flex flex-col justify-between overflow-hidden">
-          {/* Subtle Grid Lines */}
-          <div className="absolute inset-0 flex flex-col justify-between p-3 pointer-events-none opacity-20">
-            <div className="w-full h-px bg-[#333]" />
-            <div className="w-full h-px bg-[#333]" />
-            <div className="w-full h-px bg-[#333]" />
+        {/* Dedicated Chart Canvas Area (Height 160px with generous breathing room) */}
+        <div className="relative w-full h-[160px] bg-[#070707] border border-[#171717] rounded-[3px] p-3 overflow-hidden select-none">
+          {/* Subtle Y-Axis Grid & Guidelines */}
+          <div className="absolute inset-x-3 inset-y-3 flex flex-col justify-between pointer-events-none opacity-20">
+            <div className="w-full flex items-center justify-between border-b border-dashed border-[#555] pb-0.5">
+              <span className="text-[8px] font-mono text-[#888]">20%</span>
+            </div>
+            <div className="w-full flex items-center justify-between border-b border-dashed border-[#555] pb-0.5">
+              <span className="text-[8px] font-mono text-[#888]">10%</span>
+            </div>
+            <div className="w-full flex items-center justify-between border-b border-dashed border-[#555] pb-0.5">
+              <span className="text-[8px] font-mono text-[#888]">0%</span>
+            </div>
           </div>
 
           {/* SVG Sparkline Curve */}
-          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1000 120" preserveAspectRatio="none">
+          <svg className="absolute inset-x-3 inset-y-3 w-[calc(100%-24px)] h-[calc(100%-24px)]" viewBox="0 0 1000 120" preserveAspectRatio="none">
             <defs>
               <linearGradient id="failureGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#EF4444" stopOpacity="0.25" />
+                <stop offset="0%" stopColor="#EF4444" stopOpacity="0.22" />
                 <stop offset="100%" stopColor="#EF4444" stopOpacity="0.0" />
               </linearGradient>
             </defs>
+
+            {/* Red Failure Rate Gradient Area */}
             <path
-              d="M 0 90 Q 150 85, 300 88 T 450 82 T 550 40 T 600 25 T 650 45 T 750 80 T 900 82 L 1000 85 L 1000 120 L 0 120 Z"
+              d="M 0 110 Q 150 108, 300 110 T 450 105 T 550 55 T 600 20 T 650 45 T 750 102 T 900 106 L 1000 108 L 1000 120 L 0 120 Z"
               fill="url(#failureGrad)"
             />
+
+            {/* Red Failure Rate Stroke */}
             <path
-              d="M 0 90 Q 150 85, 300 88 T 450 82 T 550 40 T 600 25 T 650 45 T 750 80 T 900 82 L 1000 85"
+              d="M 0 110 Q 150 108, 300 110 T 450 105 T 550 55 T 600 20 T 650 45 T 750 102 T 900 106 L 1000 108"
               fill="none"
               stroke="#EF4444"
-              strokeWidth="1.8"
+              strokeWidth="2"
             />
-            {/* Baseline Normal Volume */}
+
+            {/* Baseline Normal Volume (Dashed Blue at 0.12%) */}
             <path
-              d="M 0 105 Q 200 100, 400 102 T 700 98 T 1000 100"
+              d="M 0 112 Q 250 112, 500 112 T 750 112 L 1000 112"
               fill="none"
               stroke="#0066FF"
               strokeWidth="1"
-              strokeDasharray="3 3"
-              strokeOpacity="0.5"
+              strokeDasharray="4 4"
+              strokeOpacity="0.4"
             />
           </svg>
 
-          {/* Annotated Incident Flags on Timeline */}
-          <div className="relative z-10 flex items-start justify-between text-[9px] font-mono text-[#666]">
-            <span>00:00</span>
-            <span>06:00</span>
-            <div
-              onClick={() =>
-                openDrawerWithData({
-                  type: 'signal',
-                  title: 'HDFC UPI Switch Latency Spike (14:22)',
-                  subtitle: '52% failure concentration in HDFC UPI switch timeout queues.',
-                  category: 'Critical Anomaly',
-                  metrics: [
-                    { label: 'Timestamp', value: '14:22:04 IST' },
-                    { label: 'Failure Rate', value: '18.4%' },
-                    { label: 'P99 Latency', value: '14.2s' },
-                    { label: 'Impacted GMV', value: '₹4.2Cr' },
-                  ],
-                  evidence: [
-                    'Switch queue backlog crossed 10,000 threshold.',
-                    'Connection pool exhaustion on secondary gateway.',
-                  ],
-                  targetTab: 'signals',
-                })
-              }
-              className="bg-[#141414] border border-[#EF4444] px-2 py-0.5 rounded text-[#EF4444] font-bold cursor-pointer hover:bg-[#1E1E1E] transition-colors"
-            >
-              ● 14:22 HDFC SPIKE (+18.4%)
+          {/* Annotated Incident Pin: Perfectly positioned above the curve peak */}
+          <div
+            onClick={() =>
+              openDrawerWithData({
+                type: 'signal',
+                title: 'HDFC UPI Switch Latency Spike (14:22)',
+                subtitle: '52% failure concentration in HDFC UPI switch timeout queues.',
+                category: 'Critical Anomaly',
+                metrics: [
+                  { label: 'Timestamp', value: '14:22:04 IST' },
+                  { label: 'Failure Rate', value: '18.4%' },
+                  { label: 'P99 Latency', value: '14.2s' },
+                  { label: 'Impacted GMV', value: '₹4.2Cr' },
+                ],
+                evidence: [
+                  'Switch queue backlog crossed 10,000 threshold.',
+                  'Connection pool exhaustion on secondary gateway.',
+                ],
+                targetTab: 'signals',
+              })
+            }
+            className="absolute left-[54%] top-4 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer group"
+          >
+            <div className="bg-[#111111] hover:bg-[#1A1A1A] border border-[#EF4444]/60 group-hover:border-[#EF4444] px-2.5 py-1 rounded-[3px] text-[10px] font-mono text-[#EF4444] font-semibold flex items-center gap-1.5 shadow-lg transition-all">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
+              <span>14:22 HDFC Spike (+18.4%)</span>
             </div>
-            <span>18:00</span>
-            <span>23:59</span>
+            {/* Guide line pointing to curve apex */}
+            <div className="w-px h-6 border-l border-dashed border-[#EF4444]/50 group-hover:border-[#EF4444]" />
           </div>
+        </div>
 
-          <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-[#8A8A8A] pt-4">
+        {/* Clean X-Axis Time Ticks Bar */}
+        <div className="flex items-center justify-between px-3 text-[9px] font-mono text-[#555] border-b border-[#141414] pb-2">
+          <span>00:00</span>
+          <span>04:00</span>
+          <span>08:00</span>
+          <span>12:00</span>
+          <span className="text-[#EF4444] font-semibold">14:22 [Spike]</span>
+          <span>16:00</span>
+          <span>20:00</span>
+          <span>23:59</span>
+        </div>
+
+        {/* Separated Status Footer Strip (Zero Overlap) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-[10px] font-mono">
+          <div className="flex items-center gap-2">
             <span className="text-[#EF4444] font-semibold">Peak Anomaly: 18.4% Failure @ 14:22</span>
+            <span className="text-[#333]">|</span>
             <span className="text-[#0066FF]">Baseline: 0.12% failure · Mean P99: 142ms</span>
           </div>
+          <span className="text-[#555]">ClickHouse Partition: 2026-09-16 · 0 dropped events</span>
         </div>
       </section>
 
@@ -509,11 +536,11 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
               Active Signals Operational Table
             </span>
             <span className="text-[11px] font-mono text-[var(--text-tertiary)]">
-              ({filteredSignals.length} filtered / 124 total)
+              ({filteredSignals.length} filtered of 124)
             </span>
           </div>
 
-          {/* Filter Pills */}
+          {/* Filter Pills with Subtle Border, No White Blocks */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
             {[
               { id: 'all', label: 'All Signals' },
@@ -526,8 +553,8 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
                 onClick={() => setActiveSignalFilter(f.id)}
                 className={`px-2.5 py-1 text-[11px] font-mono rounded-[3px] cursor-pointer transition-colors whitespace-nowrap ${
                   activeSignalFilter === f.id
-                    ? 'bg-[#1B1B1B] text-[#F5F5F0] border border-[#333] font-semibold'
-                    : 'text-[#777] hover:text-[#AAA] bg-transparent'
+                    ? 'bg-[#181818] text-[#F5F5F0] border border-[#0066FF]/60 font-semibold'
+                    : 'text-[#777] hover:text-[#AAA] bg-transparent border border-transparent'
                 }`}
               >
                 {f.label}
@@ -541,12 +568,12 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
           <table className="w-full text-left text-xs font-mono border-collapse">
             <thead>
               <tr className="border-b border-[#1A1A1A] text-[10px] text-[#555] uppercase tracking-wider">
-                <th className="py-2 px-3 font-semibold">SIGNAL / STREAM</th>
-                <th className="py-2 px-3 font-semibold">CLASSIFICATION</th>
-                <th className="py-2 px-3 font-semibold">METRIC DELTA</th>
-                <th className="py-2 px-3 font-semibold">AFFECTED</th>
-                <th className="py-2 px-3 font-semibold">CONVICTION</th>
-                <th className="py-2 px-3 font-semibold text-right">ACTION</th>
+                <th className="py-2.5 px-3 font-semibold">SIGNAL / STREAM</th>
+                <th className="py-2.5 px-3 font-semibold">CLASSIFICATION</th>
+                <th className="py-2.5 px-3 font-semibold">METRIC DELTA</th>
+                <th className="py-2.5 px-3 font-semibold">AFFECTED</th>
+                <th className="py-2.5 px-3 font-semibold">CONVICTION</th>
+                <th className="py-2.5 px-3 font-semibold text-right">ACTION</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#141414]">
@@ -572,32 +599,44 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
                     })
                   }
                 >
-                  <td className="py-2.5 px-3">
-                    <div className="font-bold text-[#F5F5F0] group-hover:text-[#0066FF] transition-colors flex items-center gap-1.5">
-                      <span className="text-[10px] text-[#0066FF]">{sig.id}</span>
+                  <td className="py-3 px-3">
+                    <div className="font-bold text-[#F5F5F0] group-hover:text-[#0066FF] transition-colors flex items-center gap-2">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#111] border border-[#222] text-[#888]">
+                        {sig.id}
+                      </span>
                       <span className="truncate max-w-[200px] sm:max-w-xs">{sig.name}</span>
                     </div>
-                    <div className="text-[10px] text-[#525252]">{sig.source}</div>
+                    <div className="text-[10px] text-[#525252] mt-0.5">{sig.source}</div>
                   </td>
-                  <td className="py-2.5 px-3">
+                  <td className="py-3 px-3">
+                    {/* Clean Title-Case Pill with Subtle Border */}
                     <span
-                      className={`inline-block px-1.5 py-0.5 rounded-[2px] text-[9px] uppercase font-bold border ${
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-[3px] text-[10px] font-sans font-medium border ${
                         sig.severity === 'critical'
-                          ? 'bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/30'
+                          ? 'bg-[#EF4444]/8 text-[#EF4444] border-[#EF4444]/25'
                           : sig.severity === 'warning'
-                          ? 'bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/30'
-                          : 'bg-[#10B981]/10 text-[#10B981] border-[#10B981]/30'
+                          ? 'bg-[#F59E0B]/8 text-[#F59E0B] border-[#F59E0B]/25'
+                          : 'bg-[#10B981]/8 text-[#10B981] border-[#10B981]/25'
                       }`}
                     >
-                      {sig.type}
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          sig.severity === 'critical'
+                            ? 'bg-[#EF4444]'
+                            : sig.severity === 'warning'
+                            ? 'bg-[#F59E0B]'
+                            : 'bg-[#10B981]'
+                        }`}
+                      />
+                      <span>{sig.type}</span>
                     </span>
                   </td>
-                  <td className="py-2.5 px-3 text-[#EF4444] font-bold">{sig.delta}</td>
-                  <td className="py-2.5 px-3 text-[#A3A3A3]">{sig.affected}</td>
-                  <td className="py-2.5 px-3">
+                  <td className="py-3 px-3 text-[#EF4444] font-bold">{sig.delta}</td>
+                  <td className="py-3 px-3 text-[#A3A3A3]">{sig.affected}</td>
+                  <td className="py-3 px-3">
                     <div className="flex items-center gap-2">
                       <span className="text-[#10B981] font-bold">{sig.conviction}%</span>
-                      <div className="w-12 h-1.5 bg-[#1C1C1C] rounded-full overflow-hidden hidden sm:block">
+                      <div className="w-12 h-1 bg-[#1C1C1C] rounded-full overflow-hidden hidden sm:block">
                         <div
                           className="h-full bg-[#10B981]"
                           style={{ width: `${sig.conviction}%` }}
@@ -605,7 +644,8 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
                       </div>
                     </div>
                   </td>
-                  <td className="py-2.5 px-3 text-right">
+                  <td className="py-3 px-3 text-right">
+                    {/* Clean Button Without -> Arrow */}
                     <button
                       type="button"
                       onClick={(e) => {
@@ -616,9 +656,9 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
                           onNavigateTab('signals');
                         }
                       }}
-                      className="px-2 py-1 rounded-[2px] bg-[#141414] hover:bg-[#1E1E1E] border border-[#2D2D2D] text-[10px] text-[#F5F5F0] hover:text-[#0066FF] transition-colors cursor-pointer"
+                      className="px-2.5 py-1 rounded-[3px] bg-[#141414] hover:bg-[#1E1E1E] border border-[#2D2D2D] text-[11px] text-[#F5F5F0] hover:text-[#0066FF] transition-colors cursor-pointer"
                     >
-                      Investigate →
+                      Investigate
                     </button>
                   </td>
                 </tr>
@@ -648,7 +688,7 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
                 onClick={() => onNavigateTab('opportunities')}
                 className="text-[11px] font-mono text-[#0066FF] hover:underline cursor-pointer"
               >
-                View all 19 →
+                View all 19
               </button>
             </div>
 
@@ -703,9 +743,9 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
                         e.stopPropagation();
                         onNavigateTab('prds');
                       }}
-                      className="px-2 py-1 rounded-[2px] bg-[#0066FF]/10 hover:bg-[#0066FF]/20 border border-[#0066FF]/40 text-[10px] font-mono text-[#0066FF] cursor-pointer"
+                      className="px-2.5 py-1 rounded-[3px] bg-[#0066FF]/10 hover:bg-[#0066FF]/20 border border-[#0066FF]/40 text-[10px] font-mono text-[#0066FF] cursor-pointer"
                     >
-                      PRD Spec →
+                      PRD Spec
                     </button>
                   </div>
                 </div>
@@ -717,10 +757,9 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
             <span>Conviction threshold: ≥ 80% for sprint commitment</span>
             <button
               onClick={() => onNavigateTab('prioritize')}
-              className="text-[#F5F5F0] hover:text-[#0066FF] flex items-center gap-1 cursor-pointer"
+              className="text-[#F5F5F0] hover:text-[#0066FF] transition-colors cursor-pointer"
             >
-              <span>Open Prioritize Workbench</span>
-              <ArrowRight className="w-3 h-3 text-[#0066FF]" />
+              Open Prioritize Workbench
             </button>
           </div>
         </section>
@@ -778,14 +817,14 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
             <button
               type="button"
               onClick={() => onNavigateTab('prds')}
-              className="flex-1 py-2 rounded-[2px] bg-[#0066FF] hover:bg-[#0055D4] text-white text-xs font-mono font-semibold text-center transition-colors cursor-pointer"
+              className="flex-1 py-2 rounded-[3px] bg-[#0066FF] hover:bg-[#0055D4] text-white text-xs font-mono font-semibold text-center transition-colors cursor-pointer"
             >
-              Open PRD Spec →
+              Open PRD Spec
             </button>
             <button
               type="button"
               onClick={() => onNavigateTab('intelligence')}
-              className="py-2 px-3 rounded-[2px] bg-[#141414] hover:bg-[#1E1E1E] border border-[#2D2D2D] text-xs font-mono text-[#AAA] transition-colors cursor-pointer"
+              className="py-2 px-3 rounded-[3px] bg-[#141414] hover:bg-[#1E1E1E] border border-[#2D2D2D] text-xs font-mono text-[#AAA] transition-colors cursor-pointer"
             >
               Inspect Graph
             </button>
@@ -810,7 +849,7 @@ export const CockpitGrid: React.FC<CockpitGridProps> = ({
             onClick={() => onNavigateTab('roadmap')}
             className="text-[11px] font-mono text-[#0066FF] hover:underline cursor-pointer"
           >
-            Full Roadmap View →
+            Full Roadmap View
           </button>
         </div>
 
