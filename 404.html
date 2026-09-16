@@ -2,52 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Argus — The AI Product Manager Operating System</title>
-    <meta name="description" content="See the signal. Make the decision. Ship the product. Everything an AI Product Manager needs to discover, decide, build, launch, and learn." />
-    <meta name="theme-color" content="#050505" />
-    <meta property="og:title" content="Argus — The AI Product Manager Operating System" />
-    <meta property="og:description" content="See the signal. Make the decision. Ship the product. Everything an AI Product Manager needs to discover, decide, build, launch, and learn." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://maahirrrr.github.io/Argus/" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Argus — The AI Product Manager Operating System" />
-    <meta name="twitter:description" content="See the signal. Make the decision. Ship the product. Everything an AI Product Manager needs to discover, decide, build, launch, and learn." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="./assets/index-Vmz-SswT.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BZ4CgJj4.css">
-  </head>
-  <body class="bg-[#050505] text-[#F5F5F0]">
-    <div id="root"></div>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <script>
-      // Graceful fallback for static GitHub Pages root deployment if Vite dev server is not active
-      if (window.location.hostname.includes('github.io')) {
-        window.addEventListener('DOMContentLoaded', function() {
-          setTimeout(function() {
-            var rootEl = document.getElementById('root');
-            if (rootEl && !rootEl.hasChildNodes()) {
-              console.warn('[Argus] Static environment detected. Injecting production bundle assets...');
-              var head = document.head || document.getElementsByTagName('head')[0];
-              var body = document.body || document.getElementsByTagName('body')[0];
-              
-              var cssLink = document.createElement('link');
-              cssLink.rel = 'stylesheet';
-              cssLink.crossOrigin = '';
-              cssLink.href = './assets/index-BZ4CgJj4.css';
-              head.appendChild(cssLink);
-
-              var jsScript = document.createElement('script');
-              jsScript.type = 'module';
-              jsScript.crossOrigin = '';
-              jsScript.src = './assets/index-Vmz-SswT.js';
-              body.appendChild(jsScript);
-            }
-          }, 350);
-        });
+      // Single Page App hash redirect for GitHub Pages
+      var fullPath = window.location.pathname;
+      var repoPrefix = '/Argus';
+      var cleanPath = fullPath;
+      if (cleanPath.startsWith(repoPrefix)) {
+        cleanPath = cleanPath.slice(repoPrefix.length);
+      }
+      cleanPath = cleanPath.replace(/^\/+/, '');
+      var hash = window.location.hash || '';
+      if (cleanPath && !hash) {
+        window.location.replace(repoPrefix + '/#/' + cleanPath);
+      } else {
+        window.location.replace(repoPrefix + '/' + (hash || '#'));
       }
     </script>
+  </head>
+  <body style="background:#050505;color:#F5F5F0;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+    <p style="font-family:monospace;font-size:12px;color:#8A8A8A;">INITIALIZING ARGUS COCKPIT...</p>
   </body>
 </html>
