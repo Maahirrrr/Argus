@@ -2,10 +2,18 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import {
   Sparkles,
-  BookOpen
+  BookOpen,
+  Activity,
+  FileText,
+  Compass,
+  Lock,
+  Database,
+  Zap,
 } from 'lucide-react';
 import type { NavigationTab } from '../../types/argus';
 import { SignalFabric } from '../argus/ArgusSignalFabric';
+import { InteractiveProductDemo } from './InteractiveProductDemo';
+import { ProductShowcaseLoop } from './ProductShowcaseLoop';
 
 interface LandingPageProps {
   onOpenApp: (tab?: NavigationTab) => void;
@@ -16,10 +24,8 @@ interface LandingPageProps {
 export const LandingPage: React.FC<LandingPageProps> = ({
   onOpenApp,
   onOpenCaseStudy,
-  onInvestigateSignal,
 }) => {
   const [isClarityActive, setIsClarityActive] = useState(false);
-  const [activeSystemStage, setActiveSystemStage] = useState<number>(1);
 
   const chaosSignals = [
     { id: 1, label: 'Payment failures', value: '+7.4%', category: 'TXNS', risk: true, xMobile: -60, yMobile: -50, x: -140, y: -40 },
@@ -31,108 +37,53 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     { id: 7, label: 'KYC drop-off', value: '18.2%', category: 'FEED', risk: true, xMobile: 0, yMobile: -95, x: -20, y: -100 },
   ];
 
-  const systemStages = [
-    {
-      num: '01',
-      title: 'SIGNALS',
-      subtitle: 'Continuous Telemetry Surveillance',
-      desc: 'Argus monitors 4.2M daily transactional events across payment gateways, banking switches, and user support queues to catch micro-anomalies before they escalate.',
-      metrics: [
-        { label: 'PAYMENT SUCCESS', val: '94.2%', delta: '↓ 4.1%', bad: true },
-        { label: 'TRANSACTION VOLUME', val: '₹18.4Cr', delta: '↑ 12.6%', bad: false },
-        { label: 'SUPPORT TICKETS', val: '1,284', delta: '↑ 18.2%', bad: true },
-        { label: '7D RETENTION', val: '41.8%', delta: '↓ 0.8%', bad: true },
-      ],
-      tagline: 'Argus watches what changes.',
-    },
-    {
-      num: '02',
-      title: 'INSIGHTS',
-      subtitle: 'Root Cause Decomposition',
-      desc: 'Instead of alerting you with noise, Argus correlates millions of log records to decompose why the failure occurred and pinpoints exact system contributors.',
-      metrics: [
-        { label: 'BANK X TIMEOUTS', val: '52% share', delta: '48% cluster', bad: true },
-        { label: 'ANDROID 15 OS', val: '24% share', delta: '1.7x risk', bad: true },
-        { label: 'TICKETS > ₹10K', val: '15% share', delta: '2.4x failure', bad: true },
-        { label: 'EVENING PEAK', val: '9% share', delta: '8-10 PM', bad: false },
-      ],
-      tagline: 'Argus doesn\'t just show the anomaly. It explains why it matters.',
-    },
-    {
-      num: '03',
-      title: 'PRIORITIES',
-      subtitle: 'Dynamic RICE Sensitivity Workbench',
-      desc: 'Fintech PMs test roadmap scenarios in real-time. Slide Reach, Impact, Confidence, or Effort to observe causal rank shifts and strategic trade-off commentary.',
-      metrics: [
-        { label: '#1 REDUCE PAYMENT FAILURES', val: 'RICE 74.6', delta: 'HIGH IMPACT', bad: false },
-        { label: '#2 REFUND VISIBILITY', val: 'RICE 68.2', delta: 'MED IMPACT', bad: false },
-        { label: '#3 AADHAAR FACE-RD', val: 'RICE 54.1', delta: 'COMPLIANCE', bad: false },
-        { label: '#4 REWARDS DASHBOARD', val: 'RICE 41.9', delta: 'ENGAGEMENT', bad: false },
-      ],
-      tagline: 'From "what could we build?" to "what should we build?"',
-    },
-    {
-      num: '04',
-      title: 'ACTION',
-      subtitle: 'PRD, Hypotheses & Guarded Rollouts',
-      desc: 'Bridge instantly from prioritization to execution. Generate engineering-ready PRDs with Gherkin user stories, and configure guarded A/B experiment circuit breakers.',
-      metrics: [
-        { label: 'HYPOTHESIS', val: 'Smart Failover', delta: 'Causal Inference', bad: false },
-        { label: 'PRIMARY METRIC', val: '+3.2% SR', delta: 'MDE: 1.8%', bad: false },
-        { label: 'CIRCUIT BREAKER', val: '< 4,500ms', delta: 'P99 Latency Cap', bad: false },
-        { label: 'FLAG STATUS', val: 'STATSIG READY', delta: '10/90 Split', bad: false },
-      ],
-      tagline: 'Opportunity → PRD → Experiment → Measurement.',
-    },
-  ];
-
   return (
     <div className="w-full flex flex-col bg-[#050505] text-[#F5F5F0] select-none">
-      {/* ───── HERO SECTION ───── */}
-      <section className="relative min-h-[85vh] max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-16 flex flex-col justify-center">
+      {/* ───── 01. HERO & ORIENTATION ───── */}
+      <section className="relative min-h-[90vh] max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-16 flex flex-col justify-center">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 w-full">
           {/* Left Column: Asymmetric Hero Typography (45%) */}
           <div className="w-full lg:w-[45%] flex flex-col items-start">
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-[#101010] border border-[#1D1D1D] text-[10px] sm:text-[11px] font-mono-tech text-[#8A8A8A] mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse-dot" />
-              <span>AI PRODUCT INTELLIGENCE / CONTINUOUS TELEMETRY</span>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[3px] bg-[#101010] border border-[#1D1D1D] text-[10px] sm:text-[11px] font-mono text-[#8A8A8A] mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0066FF] animate-pulse" />
+              <span>ARGUS · AI PRODUCT MANAGEMENT OPERATING SYSTEM</span>
             </div>
 
             {/* Massive Headline */}
-            <h1 className="font-editorial text-4xl sm:text-6xl md:text-7xl lg:text-[84px] text-[#F5F5F0] tracking-tight mb-6 leading-tight">
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-extrabold text-[#F5F5F0] tracking-tight mb-6 leading-[1.05]">
               MAKE SENSE<br />
               OF THE<br />
               <span className="text-[#0066FF]">SIGNALS.</span>
             </h1>
 
             {/* Subtext */}
-            <p className="text-sm sm:text-base md:text-lg text-[#8A8A8A] leading-relaxed max-w-[48ch] mb-8 font-normal">
-              Argus turns fragmented product signals into high-conviction decisions.
+            <p className="text-sm sm:text-base md:text-lg text-[#8A8A8A] leading-relaxed max-w-[48ch] mb-8 font-normal font-sans">
+              Argus connects fragmented telemetry across payment switches, support queues, and customer feedback to drive high-conviction product decisions.
             </p>
 
             {/* CTAs */}
             <div className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button
                 onClick={() => onOpenApp('overview')}
-                className="btn-magnetic flex items-center justify-center gap-2 px-6 py-3.5 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-semibold cursor-pointer shadow-lg shadow-white/5 min-h-[44px]"
+                className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-[4px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-mono font-bold cursor-pointer transition-colors shadow-lg shadow-white/5 min-h-[44px]"
               >
-                <span>Enter Argus →</span>
+                <span>Enter Argus Cockpit →</span>
               </button>
 
               <a
-                href="#problem"
-                className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-[3px] bg-[#101010] hover:bg-[#141414] border border-[#1D1D1D] text-xs font-mono-tech text-[#8A8A8A] hover:text-[#F5F5F0] transition-colors min-h-[44px]"
+                href="#demo"
+                className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-[4px] bg-[#101010] hover:bg-[#181818] border border-[#1D1D1D] text-xs font-mono text-[#8A8A8A] hover:text-[#F5F5F0] transition-colors min-h-[44px]"
               >
-                <span>Explore the system</span>
+                <span>Follow a Signal (Demo)</span>
               </a>
 
               <button
                 onClick={onOpenCaseStudy}
-                className="flex items-center justify-center gap-1.5 px-3.5 py-3 text-xs font-mono-tech text-[#525252] hover:text-[#8A8A8A] transition-colors cursor-pointer min-h-[44px]"
+                className="flex items-center justify-center gap-1.5 px-3.5 py-3 text-xs font-mono text-[#666] hover:text-[#AAA] transition-colors cursor-pointer min-h-[44px]"
               >
                 <BookOpen className="w-3.5 h-3.5 text-[#0066FF]" />
-                <span>Read AI PM Case Study</span>
+                <span>AI PM Architecture</span>
               </button>
             </div>
           </div>
@@ -144,27 +95,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </section>
 
-      {/* ───── THE PROBLEM & CHAOS → CLARITY ANIMATION ───── */}
-      <section id="problem" className="relative py-16 sm:py-24 border-t border-[#1D1D1D] bg-[#050505]">
+      {/* ───── 02. THE PROBLEM: CHAOS VS DECISION CLARITY ───── */}
+      <section id="problem" className="relative py-20 sm:py-28 border-t border-[#1D1D1D] bg-[#050505]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
-          <span className="text-[10px] sm:text-[11px] font-mono-tech uppercase tracking-[0.25em] text-[#8A8A8A] mb-3">
-            THE PROBLEM
+          <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.25em] text-[#8A8A8A] mb-3">
+            02 · THE PROBLEM
           </span>
-          <h2 className="font-editorial text-3xl sm:text-5xl md:text-6xl text-[#F5F5F0] tracking-tight max-w-[24ch] mb-4 sm:mb-6">
+          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold text-[#F5F5F0] tracking-tight max-w-[26ch] mb-4 sm:mb-6 leading-tight">
             THE DATA ISN'T THE PROBLEM.<br />
             <span className="text-[#0066FF]">THE DECISION IS.</span>
           </h2>
-          <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[58ch] mb-8 sm:mb-12 font-mono-tech leading-relaxed px-2">
-            Fintech generates hundreds of disconnected metrics across gateways, bank switches, and queues. Product managers are inundated with noise, yet starve for clear decision conviction.
+          <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[60ch] mb-8 sm:mb-12 font-mono leading-relaxed px-2">
+            Modern product teams drown in telemetry: ClickHouse logs, Sentry traces, Zendesk tickets, and Amplitude funnels. They have petabytes of data, but zero causal conviction on what to build next.
           </p>
 
           {/* Interactive Chaos to Clarity Canvas */}
-          <div className="w-full max-w-4xl p-4 sm:p-8 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] relative overflow-hidden min-h-[380px] flex flex-col justify-between">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#1D1D1D] text-[11px] font-mono-tech text-[#8A8A8A] gap-2">
-              <span className="text-left">INTERACTIVE TELEMETRY HARMONIZER</span>
+          <div className="w-full max-w-4xl p-4 sm:p-8 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[6px] relative overflow-hidden min-h-[380px] flex flex-col justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#1D1D1D] text-[11px] font-mono text-[#8A8A8A] gap-2">
+              <span className="text-left font-medium text-[#AAA]">TELEMETRY HARMONIZATION MATRIX</span>
               <button
                 onClick={() => setIsClarityActive(!isClarityActive)}
-                className="btn-magnetic flex items-center justify-center gap-1.5 px-3 py-2 rounded-[2px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer min-h-[40px] w-full sm:w-auto"
+                className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-[3px] bg-[#141414] hover:bg-[#1A1A1A] border border-[#2E2E2E] text-xs font-mono text-[#F5F5F0] cursor-pointer min-h-[36px] w-full sm:w-auto transition-colors"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
                 <span>{isClarityActive ? 'Reset to Chaos' : 'Demonstrate Clarity →'}</span>
@@ -172,9 +123,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Chaotic vs Structured Field */}
-            <div className="relative h-[250px] flex items-center justify-center my-4 overflow-hidden">
+            <div className="relative h-[240px] flex items-center justify-center my-4 overflow-hidden">
               {!isClarityActive ? (
-                /* Chaos State: Scattered metrics floating across space */
+                /* Chaos State: Scattered metrics */
                 <div className="relative w-full h-full flex items-center justify-center">
                   {chaosSignals.map((item) => (
                     <motion.div
@@ -189,10 +140,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       transition={{ type: 'spring', stiffness: 70, damping: 14 }}
                       className="absolute px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-[3px] bg-[#101010] border border-[#1D1D1D] shadow-xl flex items-center gap-2 select-none"
                     >
-                      <span className="text-[9px] sm:text-[10px] font-mono-tech text-[#8A8A8A]">{item.category}</span>
+                      <span className="text-[9px] sm:text-[10px] font-mono text-[#8A8A8A]">{item.category}</span>
                       <span className="text-[11px] sm:text-xs font-medium text-[#F5F5F0]">{item.label}</span>
                       <span
-                        className={`text-[11px] sm:text-xs font-mono-tech font-bold ${
+                        className={`text-[11px] sm:text-xs font-mono font-bold ${
                           item.risk ? 'text-[#EF4444]' : 'text-[#10B981]'
                         }`}
                       >
@@ -202,211 +153,328 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   ))}
                 </div>
               ) : (
-                /* Clarity State: Harmonized into 4 structured pillars */
+                /* Clarity State: Harmonized 4-pillar pipeline */
                 <motion.div
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4 }}
+                  transition={{ duration: 0.3 }}
                   className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-left"
                 >
-                  <div className="p-3 bg-[#101010] border border-[#1D1D1D] rounded-[3px]">
-                    <span className="text-[9px] sm:text-[10px] font-mono-tech text-[#0066FF] uppercase block mb-1">01 · SIGNALS</span>
+                  <div className="p-3.5 bg-[#101010] border border-[#1D1D1D] rounded-[4px]">
+                    <span className="text-[10px] font-mono text-[#0066FF] uppercase block mb-1 font-bold">01 · SIGNALS</span>
                     <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">4.2M Events</p>
-                    <p className="text-[10px] text-[#8A8A8A] font-mono-tech">Payment drop detected</p>
+                    <p className="text-[10px] text-[#8A8A8A] font-mono">Payment drop detected</p>
                   </div>
-                  <div className="p-3 bg-[#101010] border border-[#1D1D1D] rounded-[3px]">
-                    <span className="text-[9px] sm:text-[10px] font-mono-tech text-[#0066FF] uppercase block mb-1">02 · INSIGHT</span>
+                  <div className="p-3.5 bg-[#101010] border border-[#1D1D1D] rounded-[4px]">
+                    <span className="text-[10px] font-mono text-[#0066FF] uppercase block mb-1 font-bold">02 · INSIGHT</span>
                     <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">Bank X Timeout</p>
-                    <p className="text-[10px] text-[#8A8A8A] font-mono-tech">52% failure share</p>
+                    <p className="text-[10px] text-[#8A8A8A] font-mono">52% failure share</p>
                   </div>
-                  <div className="p-3 bg-[#101010] border border-[#1D1D1D] rounded-[3px]">
-                    <span className="text-[9px] sm:text-[10px] font-mono-tech text-[#0066FF] uppercase block mb-1">03 · OPPORTUNITY</span>
+                  <div className="p-3.5 bg-[#101010] border border-[#0066FF]/40 rounded-[4px] bg-[#0066FF]/5">
+                    <span className="text-[10px] font-mono text-[#0066FF] uppercase block mb-1 font-bold">03 · OPPORTUNITY</span>
                     <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">Smart Failover</p>
-                    <p className="text-[10px] text-[#8A8A8A] font-mono-tech">Ranked #1 on RICE</p>
+                    <p className="text-[10px] text-[#8A8A8A] font-mono">Ranked #1 on RICE</p>
                   </div>
-                  <div className="p-3 bg-[#101010] border border-[#0066FF]/40 rounded-[3px] bg-[#0066FF]/5">
-                    <span className="text-[9px] sm:text-[10px] font-mono-tech text-[#10B981] uppercase block mb-1">04 · ACTION</span>
-                    <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">PRD & Experiment</p>
-                    <p className="text-[10px] text-[#10B981] font-mono-tech">+3.2% Lift Expected</p>
+                  <div className="p-3.5 bg-[#101010] border border-emerald-900/40 rounded-[4px] bg-emerald-950/10">
+                    <span className="text-[10px] font-mono text-emerald-400 uppercase block mb-1 font-bold">04 · ACTION</span>
+                    <p className="text-xs font-bold text-[#F5F5F0] mb-0.5">PRD & Canary</p>
+                    <p className="text-[10px] text-emerald-400 font-mono">+3.2% Lift Expected</p>
                   </div>
                 </motion.div>
               )}
             </div>
 
-            <div className="pt-3 border-t border-[#1D1D1D] flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono-tech text-[#525252] gap-1.5">
-              <span>{isClarityActive ? 'STATUS: SYNTHESIS LOCKED' : 'STATUS: UNFILTERED TELEMETRY CHAOS'}</span>
-              <span className="text-[#8A8A8A]">TAP BUTTON ABOVE TO TOGGLE CLARITY</span>
+            <div className="pt-3 border-t border-[#1D1D1D] flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-[#525252] gap-1.5">
+              <span>{isClarityActive ? 'STATUS: CAUSAL CONTINUUM ACTIVE' : 'STATUS: UNFILTERED TELEMETRY CHAOS'}</span>
+              <span className="text-[#8A8A8A]">TOGGLE CLARITY ABOVE TO TEST HARMONIZATION</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ───── PRODUCT MANIFESTO ───── */}
-      <section className="py-16 sm:py-24 border-t border-[#1D1D1D] bg-[#080808]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="text-[10px] font-mono-tech uppercase tracking-[0.3em] text-[#8A8A8A] mb-3 block">
-            THE ARGUS MANIFESTO
-          </span>
-          <h2 className="font-editorial text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-[#F5F5F0] tracking-tight leading-tight mb-6">
-            Argus doesn't give PMs more information.{' '}
-            <span className="text-[#0066FF]">It gives them better decisions.</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[50ch] mx-auto leading-relaxed font-mono-tech px-2">
-            Traditional analytics dashboards show what happened yesterday. Argus acts as a cognitive copilot that isolates why it matters and what engineering initiative to ship next.
-          </p>
-        </div>
-      </section>
-
-      {/* ───── THE ARGUS SYSTEM (STAGED WORKFLOW) ───── */}
-      <section id="system" className="py-16 sm:py-24 border-t border-[#1D1D1D] bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4">
-            <div>
-              <span className="text-[10px] font-mono-tech uppercase tracking-[0.25em] text-[#8A8A8A] block mb-2">
-                OPERATING SYSTEM ARCHITECTURE
-              </span>
-              <h2 className="font-editorial text-2xl sm:text-4xl md:text-5xl text-[#F5F5F0] tracking-tight">
-                THE ARGUS SYSTEM.
-              </h2>
-            </div>
-
-            {/* Stage Selector Tabs (Swipeable on mobile) */}
-            <div className="flex items-center gap-1.5 p-1 bg-[#101010] border border-[#1D1D1D] rounded-[3px] overflow-x-auto no-scrollbar max-w-full">
-              {systemStages.map((stage, idx) => (
-                <button
-                  key={stage.num}
-                  onClick={() => setActiveSystemStage(idx)}
-                  className={`px-3 py-2 rounded-[2px] text-xs font-mono-tech transition-colors cursor-pointer flex-shrink-0 whitespace-nowrap min-h-[40px] ${
-                    activeSystemStage === idx
-                      ? 'bg-[#0066FF] text-white font-bold'
-                      : 'text-[#8A8A8A] hover:text-[#F5F5F0]'
-                  }`}
-                >
-                  {stage.num} {stage.title}
-                </button>
-              ))}
-            </div>
+      {/* ───── 03. THE SIGNAL FABRIC: CONTINUOUS SURVEILLANCE ───── */}
+      <section className="py-20 sm:py-28 border-t border-[#1D1D1D] bg-[#080808]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
+          <div className="max-w-2xl">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.25em] text-[#8A8A8A] mb-2 block">
+              03 · THE SIGNAL FABRIC
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              Six raw streams.<br />One unified intelligence layer.
+            </h2>
+            <p className="text-xs sm:text-sm font-mono text-[#8A8A8A] leading-relaxed">
+              Argus hooks directly into raw transaction feeds, core banking switches, user feedback repositories, and competitor changelogs.
+            </p>
           </div>
 
-          {/* Active Stage Presentation */}
-          <div className="p-4 sm:p-8 lg:p-12 bg-[#0A0A0A] border border-[#1D1D1D] rounded-[4px] relative overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Stage Details */}
-              <div className="lg:col-span-6 flex flex-col items-start">
-                <span className="text-xs font-mono-tech font-bold text-[#0066FF] mb-2">
-                  STAGE {systemStages[activeSystemStage].num} / 04
-                </span>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F5F5F0] tracking-tight mb-2">
-                  {systemStages[activeSystemStage].subtitle}
-                </h3>
-                <p className="text-xs sm:text-sm text-[#8A8A8A] leading-relaxed mb-6 font-mono-tech max-w-[48ch]">
-                  {systemStages[activeSystemStage].desc}
-                </p>
-
-                <div className="w-full p-3.5 rounded-[3px] bg-[#101010] border border-[#1D1D1D] text-xs font-mono-tech text-[#F5F5F0] mb-6">
-                  <span className="text-[#8A8A8A]">Core Proposition: </span>
-                  <span className="text-[#0066FF] font-medium">"{systemStages[activeSystemStage].tagline}"</span>
-                </div>
-
-                <button
-                  onClick={() => {
-                    if (activeSystemStage === 1 && onInvestigateSignal) {
-                      onInvestigateSignal('sig-001');
-                    } else if (activeSystemStage === 2) {
-                      onOpenApp('prioritize');
-                    } else if (activeSystemStage === 3) {
-                      onOpenApp('prds');
-                    } else {
-                      onOpenApp('overview');
-                    }
-                  }}
-                  className="btn-magnetic w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 rounded-[3px] bg-[#141414] hover:bg-[#1C1C1C] border border-[#2E2E2E] text-xs font-mono-tech text-[#F5F5F0] cursor-pointer min-h-[44px]"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              {
+                source: 'Payment Gateways',
+                streams: 'HDFC, SBI, ICICI, Axis switches',
+                metric: '4.2M events/day',
+                action: 'Isolates rolling p99 latency deterioration before hard gateway disconnects.',
+                icon: Activity,
+                tab: 'signals' as NavigationTab,
+              },
+              {
+                source: 'Customer Support & Feedback',
+                streams: 'Zendesk, Intercom, App Store',
+                metric: '1,284 tickets/week',
+                action: 'Clusters dispute complaints ("Money debited but order failed") to quantify ARR at risk.',
+                icon: FileText,
+                tab: 'feedback' as NavigationTab,
+              },
+              {
+                source: 'Competitor Intelligence',
+                streams: 'Razorpay, Stripe, PhonePe',
+                metric: '24 feature launches tracked',
+                action: 'Surfaces product capability gaps and reverse-engineers pricing shifts.',
+                icon: Compass,
+                tab: 'intelligence' as NavigationTab,
+              },
+            ].map((stream, idx) => {
+              const Icon = stream.icon;
+              return (
+                <div
+                  key={idx}
+                  onClick={() => onOpenApp(stream.tab)}
+                  className="p-5 bg-[#0D0D0D] border border-[#1A1A1A] hover:border-[#0066FF] rounded-[6px] transition-all cursor-pointer group space-y-3"
                 >
-                  <span>Experience this stage in OS →</span>
-                </button>
-              </div>
-
-              {/* Right Stage Live Feed / Telemetry Preview */}
-              <div className="lg:col-span-6 grid grid-cols-2 gap-2.5 sm:gap-3">
-                {systemStages[activeSystemStage].metrics.map((m, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 sm:p-4 bg-[#101010] border border-[#1D1D1D] rounded-[3px] flex flex-col justify-between h-24 sm:h-28"
-                  >
-                    <span className="text-[9px] sm:text-[10px] font-mono-tech text-[#8A8A8A] truncate">{m.label}</span>
-                    <div>
-                      <p className="text-lg sm:text-xl font-bold font-mono-tech text-[#F5F5F0]">{m.val}</p>
-                      <span
-                        className={`text-[9px] sm:text-[10px] font-mono-tech ${
-                          m.bad ? 'text-[#EF4444]' : 'text-[#10B981]'
-                        }`}
-                      >
-                        {m.delta}
-                      </span>
+                  <div className="flex items-center justify-between">
+                    <div className="w-8 h-8 rounded-[3px] bg-[#141414] border border-[#222] flex items-center justify-center text-[#0066FF]">
+                      <Icon className="w-4 h-4" />
                     </div>
+                    <span className="text-[10px] font-mono text-[#888] bg-[#161616] px-2 py-0.5 rounded-[2px]">
+                      {stream.metric}
+                    </span>
                   </div>
-                ))}
+                  <div>
+                    <h3 className="text-sm font-mono font-bold text-white group-hover:text-[#0066FF] transition-colors">
+                      {stream.source}
+                    </h3>
+                    <p className="text-[11px] font-mono text-[#666] mt-0.5">
+                      {stream.streams}
+                    </p>
+                  </div>
+                  <p className="text-xs font-sans text-[#8A8A8A] leading-relaxed pt-2 border-t border-[#161616]">
+                    {stream.action}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ───── 04 & 05. INTERACTIVE PRODUCT DEMO: "FOLLOW A SIGNAL" ───── */}
+      <section id="demo" className="py-20 sm:py-28 border-t border-[#1D1D1D] bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
+          <div className="max-w-3xl">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.25em] text-[#0066FF] mb-2 block font-bold">
+              04 · INTERACTIVE DEMONSTRATION
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              Follow a signal from anomaly to production PRD.
+            </h2>
+            <p className="text-xs sm:text-sm font-mono text-[#8A8A8A] leading-relaxed">
+              Step through a real operational incident. Trace how Argus ingests an evening failure spike, isolates root cause, formulates an opportunity, ranks it on RICE, drafts the PRD, and configures a canary experiment.
+            </p>
+          </div>
+
+          {/* Interactive 6-stage component */}
+          <InteractiveProductDemo onNavigateTab={(tab) => onOpenApp(tab)} />
+        </div>
+      </section>
+
+      {/* ───── 06. THE REAL PRODUCT INTERFACE SHOWCASE ───── */}
+      <section className="py-20 sm:py-28 border-t border-[#1D1D1D] bg-[#080808]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
+          <div className="max-w-2xl">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.25em] text-[#8A8A8A] mb-2 block">
+              05 · THE INTERFACES
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              Engineered for product leaders under pressure.
+            </h2>
+            <p className="text-xs sm:text-sm font-mono text-[#8A8A8A] leading-relaxed">
+              No hollow cards or generic AI chatbot boxes. Every screen in Argus is an operational surface built for speed, density, and causality.
+            </p>
+          </div>
+
+          <ProductShowcaseLoop onNavigateTab={(tab) => onOpenApp(tab)} />
+        </div>
+      </section>
+
+      {/* ───── 07. THE PM OPERATING CADENCE ───── */}
+      <section className="py-20 sm:py-28 border-t border-[#1D1D1D] bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
+          <div className="text-center max-w-3xl mx-auto">
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.25em] text-[#8A8A8A] mb-2 block">
+              06 · THE PM OPERATING CADENCE
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              Your entire daily rhythm in one operating system.
+            </h2>
+            <p className="text-xs sm:text-sm font-mono text-[#8A8A8A] leading-relaxed">
+              Replace the fragmented shuffle between Jira, Notion, Statsig, Amplitude, and bookmark folders of PRD templates.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[
+              {
+                time: '09:00 AM',
+                title: 'Telemetry Audit',
+                desc: 'Review overnight p99 latency curves and automated ClickHouse anomaly clusters.',
+                tab: 'signals' as NavigationTab,
+              },
+              {
+                time: '10:00 AM',
+                title: 'Sprint Execution',
+                desc: 'Unblock engineers on active sprint tickets and verify acceptance criteria checklists.',
+                tab: 'sprints' as NavigationTab,
+              },
+              {
+                time: '02:00 PM',
+                title: 'PRD Studio & AI Critic',
+                desc: 'Draft engineering specs with automated adversarial red-teaming for missing failover states.',
+                tab: 'prds' as NavigationTab,
+              },
+              {
+                time: '05:30 PM',
+                title: 'Release Guardrails',
+                desc: 'Monitor canary traffic splits in Statsig and ensure automated circuit breakers remain armed.',
+                tab: 'experiments' as NavigationTab,
+              },
+            ].map((cadence, i) => (
+              <div
+                key={i}
+                onClick={() => onOpenApp(cadence.tab)}
+                className="p-5 bg-[#0C0C0C] border border-[#1A1A1A] hover:border-[#0066FF] rounded-[4px] cursor-pointer transition-all space-y-2 group"
+              >
+                <span className="text-[11px] font-mono text-[#0066FF] font-bold block">
+                  {cadence.time}
+                </span>
+                <h3 className="text-sm font-mono font-bold text-white group-hover:text-[#0066FF] transition-colors">
+                  {cadence.title}
+                </h3>
+                <p className="text-xs font-sans text-[#8A8A8A] leading-relaxed">
+                  {cadence.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───── 08. OPERATIONAL GUARANTEES ───── */}
+      <section className="py-16 sm:py-24 border-t border-[#1D1D1D] bg-[#080808]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex items-start gap-3.5">
+              <Lock className="w-5 h-5 text-[#0066FF] flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider mb-1">
+                  Zero PII Architecture
+                </h4>
+                <p className="text-xs font-sans text-[#8A8A8A] leading-relaxed">
+                  Card numbers, CVVs, and user credentials never touch Argus servers. Operates strictly over anonymized transaction metadata and log tokens.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5">
+              <Database className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider mb-1">
+                  ClickHouse Native
+                </h4>
+                <p className="text-xs font-sans text-[#8A8A8A] leading-relaxed">
+                  Queries billions of transactional events in under 100ms. Direct analytical integration with PostgreSQL, BigQuery, and Snowflake.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5">
+              <Zap className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider mb-1">
+                  Sub-450ms Failover SLA
+                </h4>
+                <p className="text-xs font-sans text-[#8A8A8A] leading-relaxed">
+                  Circuit breakers trip autonomously within 450ms of threshold breach, protecting checkout conversion without human delay.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ───── SIGNATURE APP TRANSITION ───── */}
-      <section className="py-16 sm:py-24 border-t border-[#1D1D1D] bg-[#070707] text-center">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <span className="text-[10px] font-mono-tech uppercase tracking-[0.25em] text-[#8A8A8A] block mb-3">
-            SEAMLESS ENVIRONMENT SHIFT
+      {/* ───── 09. TERMINAL ENTRY POINT CTA ───── */}
+      <section className="py-20 sm:py-28 border-t border-[#1D1D1D] bg-[#050505]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
+          <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#8A8A8A]">
+            07 · ENTRY POINT
           </span>
-          <h2 className="font-editorial text-3xl sm:text-5xl text-[#F5F5F0] tracking-tight mb-4 sm:mb-6">
-            NOW LET'S MAKE A DECISION.
+          <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            Stop guessing.<br />Start orchestrating.
           </h2>
-          <p className="text-xs sm:text-sm text-[#8A8A8A] max-w-[50ch] mx-auto leading-relaxed mb-8 font-mono-tech px-2">
-            Step inside the Argus Operating System. Triage active payment anomalies, simulate roadmap trade-offs, challenge AI assumptions, and deploy guarded experiments.
+          <p className="text-xs sm:text-sm font-mono text-[#8A8A8A] max-w-[50ch] mx-auto leading-relaxed">
+            Enter the production demo workspace to inspect active bank signals, test RICE sensitivity, or review generated PRDs.
           </p>
 
-          <button
-            onClick={() => onOpenApp('overview')}
-            className="btn-magnetic w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-[3px] bg-[#F5F5F0] hover:bg-white text-[#050505] text-xs font-bold tracking-wider uppercase cursor-pointer shadow-xl shadow-white/5 min-h-[48px]"
-          >
-            <span>Enter Argus OS →</span>
-          </button>
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              onClick={() => onOpenApp('overview')}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-[4px] bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-mono font-bold cursor-pointer transition-colors shadow-lg shadow-[#0066FF]/20"
+            >
+              Enter Argus Cockpit →
+            </button>
+
+            <button
+              onClick={() => onOpenApp('sprints')}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-[4px] bg-[#111] hover:bg-[#181818] border border-[#262626] text-white text-xs font-mono cursor-pointer transition-colors"
+            >
+              Inspect Sprints & Backlog
+            </button>
+
+            <button
+              onClick={() => onOpenApp('documents')}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-[4px] bg-[#111] hover:bg-[#181818] border border-[#262626] text-white text-xs font-mono cursor-pointer transition-colors"
+            >
+              Notion Specs Studio
+            </button>
+          </div>
         </div>
       </section>
 
       {/* ───── FOOTER ───── */}
-      <footer className="border-t border-[#1D1D1D] py-8 sm:py-10 px-4 sm:px-6 bg-[#050505] text-[11px] font-mono-tech text-[#525252]">
+      <footer className="border-t border-[#1A1A1A] py-8 px-4 sm:px-6 bg-[#030303] text-xs font-mono text-[#555]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-5 h-5 bg-[#F5F5F0] rounded-[2px] flex items-center justify-center font-bold text-[10px] text-[#050505]">
-              TW
-            </div>
-            <div>
-              <span className="font-bold text-[#F5F5F0] tracking-wider">ARGUS</span>
-              <span className="text-[#8A8A8A] ml-2">AI PRODUCT INTELLIGENCE</span>
-            </div>
+          <div className="flex items-center gap-2 text-white font-bold tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-[#0066FF]" />
+            <span>ARGUS OS</span>
+            <span className="text-[#555] font-normal">/ Production Fintech Intelligence</span>
           </div>
 
-          <div className="flex items-center gap-6 text-[#8A8A8A]">
-            <button onClick={() => onOpenApp('overview')} className="hover:text-[#F5F5F0] cursor-pointer">
-              Product OS
+          <div className="flex items-center gap-4 text-[#777]">
+            <button onClick={() => onOpenApp('signals')} className="hover:text-white transition-colors">
+              Signals
             </button>
-            <button onClick={onOpenCaseStudy} className="hover:text-[#F5F5F0] cursor-pointer">
-              Case Study
+            <button onClick={() => onOpenApp('opportunities')} className="hover:text-white transition-colors">
+              Opportunities
             </button>
-            <a
-              href="https://github.com/Maahirrrr/Argus"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-[#F5F5F0]"
-            >
-              GitHub
-            </a>
+            <button onClick={() => onOpenApp('prds')} className="hover:text-white transition-colors">
+              PRDs
+            </button>
+            <button onClick={() => onOpenApp('sprints')} className="hover:text-white transition-colors">
+              Sprints
+            </button>
+            <button onClick={() => onOpenApp('settings')} className="hover:text-white transition-colors">
+              System
+            </button>
           </div>
-
-          <p className="text-[#525252] text-center sm:text-left">
-            Built as an AI Product Management portfolio project.
-          </p>
         </div>
       </footer>
     </div>
